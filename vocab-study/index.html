@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>CELPIP Vocab Study</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --primary:#4f46e5;--primary-dark:#3730a3;--primary-light:#e0e7ff;
+  --accent:#f59e0b;--green:#10b981;--red:#ef4444;
+  --bg:#f1f5f9;--card:#fff;--text:#0f172a;--text2:#475569;--text3:#94a3b8;
+  --border:#e2e8f0;--radius:16px;--shadow:0 4px 20px rgba(0,0,0,0.08);
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:80px}
+.app{max-width:600px;margin:0 auto;padding:0 16px}
+.header{padding:18px 0 6px;text-align:center}
+.header h1{font-size:22px;font-weight:800;background:linear-gradient(135deg,var(--primary),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.header p{font-size:12px;color:var(--text3);margin-top:2px}
+.section-tabs{display:flex;gap:6px;margin:10px 0;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding-bottom:2px}
+.section-tabs::-webkit-scrollbar{display:none}
+.stab{flex-shrink:0;padding:7px 14px;border-radius:20px;border:2px solid var(--border);background:var(--card);font-size:13px;font-weight:600;cursor:pointer;color:var(--text2);transition:all .2s}
+.stab.active{background:var(--primary);border-color:var(--primary);color:#fff}
+.view-toggle{display:flex;background:var(--border);border-radius:12px;padding:3px;margin:8px 0;gap:2px}
+.view-toggle button{flex:1;padding:8px;border:none;background:none;border-radius:10px;font-size:14px;font-weight:500;cursor:pointer;color:var(--text2);transition:all .2s}
+.view-toggle button.active{background:var(--card);color:var(--primary);box-shadow:0 1px 4px rgba(0,0,0,.1)}
+.prog-bar-wrap{background:var(--border);border-radius:4px;height:6px;margin:8px 0 14px}
+.prog-bar{background:linear-gradient(90deg,var(--primary),var(--accent));height:100%;border-radius:4px;transition:width .3s}
+/* Flashcard */
+.fc-wrap{perspective:1200px;margin:4px 0 8px;user-select:none}
+.flashcard{position:relative;width:100%;min-height:260px;cursor:pointer;transform-style:preserve-3d;transition:transform .5s cubic-bezier(.4,0,.2,1);border-radius:var(--radius)}
+.flashcard.flipped{transform:rotateY(180deg)}
+.card-face{position:absolute;inset:0;border-radius:var(--radius);backface-visibility:hidden;-webkit-backface-visibility:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px 24px;box-shadow:var(--shadow)}
+.card-front{background:linear-gradient(135deg,var(--primary) 0%,var(--primary-dark) 100%);color:#fff}
+.card-back{background:var(--card);transform:rotateY(180deg)}
+.card-num{position:absolute;top:12px;right:14px;font-size:11px;opacity:.65}
+.card-known-dot{position:absolute;top:14px;left:14px;width:8px;height:8px;border-radius:50%;background:#4ade80}
+.card-word{font-size:26px;font-weight:800;text-align:center;letter-spacing:-.3px}
+.card-hint{font-size:12px;opacity:.7;margin-top:14px}
+.card-pos{background:var(--primary-light);color:var(--primary);padding:3px 10px;border-radius:6px;font-size:11px;font-weight:700;text-transform:uppercase;margin-bottom:10px}
+.card-def{font-size:15px;color:var(--text);text-align:center;margin-bottom:12px;line-height:1.55;font-weight:500}
+.card-ex{font-size:13px;color:var(--text2);text-align:center;font-style:italic;padding:10px 14px;background:var(--bg);border-radius:10px;line-height:1.5;width:100%}
+.flip-hint{font-size:11px;color:var(--text3);text-align:center;margin-bottom:10px}
+.card-controls{display:flex;gap:10px;justify-content:center;align-items:center;margin:8px 0}
+.btn{display:flex;align-items:center;justify-content:center;gap:5px;padding:10px 18px;border-radius:12px;border:none;font-size:14px;font-weight:600;cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent}
+.btn:active{transform:scale(.95)}
+.btn-nav{background:var(--card);color:var(--text);box-shadow:var(--shadow);font-size:18px;padding:12px 16px}
+.btn-known{background:var(--green);color:#fff;flex:1;max-width:130px}
+.btn-unknown{background:var(--red);color:#fff;flex:1;max-width:130px}
+.btn-sm{background:var(--card);color:var(--text2);box-shadow:0 1px 6px rgba(0,0,0,.07);padding:8px 14px;border-radius:10px;font-size:13px}
+.btn-accent{background:var(--accent);color:#fff}
+/* Browse */
+.search-input{width:100%;padding:12px 16px;border-radius:12px;border:2px solid var(--border);font-size:14px;background:var(--card);color:var(--text);outline:none;margin-bottom:10px;transition:border .2s}
+.search-input:focus{border-color:var(--primary)}
+.word-list{display:flex;flex-direction:column;gap:7px}
+.wi{background:var(--card);border-radius:14px;padding:13px 15px;cursor:pointer;border:2px solid transparent;transition:all .2s;box-shadow:0 1px 5px rgba(0,0,0,.05)}
+.wi.expanded{border-color:var(--primary-light)}
+.wi.learned{border-color:var(--green);background:#f0fdf4}
+.wi-header{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.wi-title{font-size:15px;font-weight:700;color:var(--text);flex:1}
+.wi-pos{font-size:11px;color:var(--text3);font-style:italic;margin-right:4px;flex-shrink:0}
+.wi-check{width:24px;height:24px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;transition:all .2s;background:#fff}
+.wi.learned .wi-check{background:var(--green);border-color:var(--green);color:#fff}
+.wi-body{display:none;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
+.wi.expanded .wi-body{display:block}
+.wi-def{font-size:14px;color:var(--text);margin-bottom:8px;line-height:1.5}
+.wi-ex{font-size:13px;color:var(--text2);font-style:italic;background:var(--bg);padding:8px 12px;border-radius:8px;line-height:1.4}
+/* Bottom nav */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--border);display:flex;justify-content:space-around;padding:8px 0 max(8px,env(safe-area-inset-bottom));z-index:100}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:4px 14px;border-radius:10px;background:none;border:none;color:var(--text3);transition:all .15s;font-size:10px;font-weight:600}
+.nav-item.active{color:var(--primary)}
+.nav-icon{font-size:20px}
+/* Progress page */
+.stats-card{background:var(--card);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);margin:10px 0}
+.stats-title{font-size:15px;font-weight:700;margin-bottom:12px}
+.stat-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0}
+.stat-label{font-size:14px;color:var(--text2)}
+.stat-value{font-size:17px;font-weight:800;color:var(--primary)}
+.stat-pbar{height:8px;background:var(--border);border-radius:4px;margin-top:4px;margin-bottom:10px}
+.stat-pfill{height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));border-radius:4px;transition:width .5s}
+.btn-reset{background:#fff0f0;color:var(--red);border:1px solid #fecaca;padding:12px;border-radius:12px;font-size:14px;font-weight:600;cursor:pointer;margin-top:8px;width:100%;transition:all .2s}
+.btn-reset:hover{background:#fee2e2}
+/* Daily header */
+.daily-hdr{background:linear-gradient(135deg,var(--primary),var(--primary-dark));border-radius:var(--radius);padding:18px;color:#fff;margin:10px 0;text-align:center}
+.daily-hdr h2{font-size:17px;font-weight:700}
+.daily-hdr p{font-size:12px;opacity:.8;margin-top:3px}
+.badge{display:inline-block;background:rgba(255,255,255,.2);padding:3px 12px;border-radius:20px;font-size:12px;font-weight:600;margin-top:6px}
+.empty-state{text-align:center;padding:40px 20px;color:var(--text3)}
+.empty-state .emoji{font-size:48px;margin-bottom:12px}
+.empty-state p{font-size:15px}
+.hidden{display:none!important}
+/* swipe hint */
+.swipe-hint{display:flex;justify-content:space-between;font-size:11px;color:var(--text3);padding:0 4px;margin-bottom:4px}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <h1>CELPIP Vocab Study</h1>
+    <p>400 words & phrases · tap to flip · swipe to navigate</p>
+  </div>
+
+  <!-- STUDY PAGE -->
+  <div id="page-study">
+    <div class="section-tabs">
+      <button class="stab active" onclick="setSection('phrasal')">📝 Phrasal Verbs <small>200</small></button>
+      <button class="stab" onclick="setSection('vocab')">📖 Vocabulary <small>200</small></button>
+      <button class="stab" onclick="setSection('daily')">⭐ Daily Set <small id="daily-badge">20</small></button>
+    </div>
+    <div class="view-toggle">
+      <button class="active" onclick="setView('flashcard')">🃏 Flashcard</button>
+      <button onclick="setView('browse')">📋 Browse</button>
+    </div>
+
+    <!-- FLASHCARD VIEW -->
+    <div id="flashcard-view">
+      <div class="prog-bar-wrap"><div class="prog-bar" id="prog-bar" style="width:0%"></div></div>
+      <div class="swipe-hint"><span>← Again</span><span>Known →</span></div>
+      <div class="fc-wrap">
+        <div class="flashcard" id="flashcard" onclick="flipCard()">
+          <div class="card-face card-front">
+            <div class="card-known-dot" id="known-dot" style="display:none"></div>
+            <span class="card-num" id="card-num">1 / 200</span>
+            <div class="card-word" id="card-word">Loading...</div>
+            <div class="card-hint">Tap to reveal</div>
+          </div>
+          <div class="card-face card-back">
+            <div class="card-pos" id="card-pos">Phrasal Verb</div>
+            <div class="card-def" id="card-def"></div>
+            <div class="card-ex" id="card-ex"></div>
+          </div>
+        </div>
+      </div>
+      <p class="flip-hint">Tap card to flip · swipe left/right to navigate</p>
+      <div class="card-controls">
+        <button class="btn btn-nav" onclick="prevCard()">&#8592;</button>
+        <button class="btn btn-unknown" onclick="markCard(false)">✗ Again</button>
+        <button class="btn btn-known" onclick="markCard(true)">✓ Known</button>
+        <button class="btn btn-nav" onclick="nextCard()">&#8594;</button>
+      </div>
+      <div style="display:flex;gap:8px;justify-content:center;margin-top:10px">
+        <button class="btn btn-sm btn-accent" onclick="shuffleCards()">🔀 Shuffle</button>
+        <button class="btn btn-sm" onclick="showUnknownOnly()" id="filter-btn">🔍 Unknown Only</button>
+        <button class="btn btn-sm" onclick="resetSection()">↺ Reset</button>
+      </div>
+    </div>
+
+    <!-- BROWSE VIEW -->
+    <div id="browse-view" class="hidden">
+      <input type="text" class="search-input" id="search-input" placeholder="Search words..." oninput="filterWords()">
+      <div class="word-list" id="word-list"></div>
+    </div>
+  </div>
+
+  <!-- PROGRESS PAGE -->
+  <div id="page-progress" class="hidden">
+    <div class="stats-card">
+      <div class="stats-title">📊 Your Progress</div>
+      <div class="stat-row"><span class="stat-label">Phrasal Verbs Known</span><span class="stat-value" id="stat-pv">0 / 200</span></div>
+      <div class="stat-pbar"><div class="stat-pfill" id="fill-pv" style="width:0%"></div></div>
+      <div class="stat-row"><span class="stat-label">Vocabulary Known</span><span class="stat-value" id="stat-voc">0 / 200</span></div>
+      <div class="stat-pbar"><div class="stat-pfill" id="fill-voc" style="width:0%"></div></div>
+      <div class="stat-row"><span class="stat-label">Total Known</span><span class="stat-value" id="stat-tot">0 / 400</span></div>
+      <div class="stat-pbar"><div class="stat-pfill" id="fill-tot" style="width:0%"></div></div>
+    </div>
+    <div class="stats-card">
+      <div class="stats-title">🔥 Study Streak</div>
+      <div id="streak-val" style="font-size:38px;font-weight:800;color:var(--accent);text-align:center;padding:10px 0">0 days</div>
+      <div id="last-study" style="font-size:12px;color:var(--text3);text-align:center"></div>
+    </div>
+    <div class="stats-card">
+      <div class="stats-title">💡 CELPIP Word List</div>
+      <p style="font-size:13px;color:var(--text2);line-height:1.6">The Bonus 400 CELPIP Word List PDF couldn't be loaded (requires <code>poppler</code> to be installed). Install it with: <code>brew install poppler</code> then re-run to add those 400 words.</p>
+    </div>
+    <button class="btn-reset" onclick="if(confirm('Reset ALL progress?')) resetAll()">⚠ Reset All Progress</button>
+  </div>
+</div>
+
+<!-- Bottom Nav -->
+<nav class="bottom-nav">
+  <button class="nav-item active" onclick="showPage('study')" id="nav-study">
+    <span class="nav-icon">📚</span>Study
+  </button>
+  <button class="nav-item" onclick="showPage('progress')" id="nav-progress">
+    <span class="nav-icon">📊</span>Progress
+  </button>
+</nav>
+
+<script>
+// ═══════════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════════
+
+const phrasalVerbs = [
+  {id:"pv1",phrase:"Aim At",def:"To point at a specific target",ex:"It is important to never aim at a person when at the gun range."},
+  {id:"pv2",phrase:"Back Down",def:"To surrender your claim or position",ex:"Don't back down when he challenges you."},
+  {id:"pv3",phrase:"Beef Up",def:"To make better or bigger",ex:"Let's beef up this resume to help Carter get a job."},
+  {id:"pv4",phrase:"Blow Off",def:"When the wind moves something from its original place",ex:"Make sure the napkins don't blow off the table."},
+  {id:"pv5",phrase:"Blow Out",def:"To put out a flame",ex:"I can't wait to blow out my birthday candles and make a wish."},
+  {id:"pv6",phrase:"Boil Down To",def:"To determine a specific conclusion or reasoning",ex:"I think what it boils down to is her unwillingness to compromise."},
+  {id:"pv7",phrase:"Break Down",def:"When someone is mentally exhausted or frustrated",ex:"All of these events happening at once has caused her to have a break down."},
+  {id:"pv8",phrase:"Break Through",def:"To create a path through",ex:"You're going to have to break through this door to get inside the burning building."},
+  {id:"pv9",phrase:"Break Up",def:"To stop something from happening",ex:"Officer Brown had to break up a fight at the high school."},
+  {id:"pv10",phrase:"Bring Up",def:"To carry or take something low to a higher place",ex:"Can you bring up that table from downstairs?"},
+  {id:"pv11",phrase:"Brush Off",def:"To get rid of with your hand",ex:"Let's brush off that dirt on your pants and get going."},
+  {id:"pv12",phrase:"Brush Up",def:"To review a particular skill or piece of knowledge you haven't used in awhile",ex:"Brush up on your dinosaur facts before we go to the museum."},
+  {id:"pv13",phrase:"Build In/Into",def:"To construct something in a certain place",ex:"People often purchase homes with shelving that was built in."},
+  {id:"pv14",phrase:"Burn Down",def:"When fire is used to destroy something",ex:"Why did they burn down the abandoned amusement park?"},
+  {id:"pv15",phrase:"Burn Up",def:"To be destroyed with fire",ex:"Burn up this wood in the fireplace to keep warm."},
+  {id:"pv16",phrase:"Burst Out",def:"To say something suddenly or out of the blue",ex:"She burst out the answer before the class could figure it out."},
+  {id:"pv17",phrase:"Butt In",def:"To insert yourself into a conversation or event",ex:"I hate to butt in on your conversation, but did you say something about dragons?"},
+  {id:"pv18",phrase:"Call Back",def:"To call again",ex:"Let me call you back after lunch."},
+  {id:"pv19",phrase:"Call In",def:"To request someone's presence",ex:"I really hope they don't call me in to work on my day off."},
+  {id:"pv20",phrase:"Care For",def:"To be responsible for someone's wellbeing",ex:"I will care for my sister's dog while she's away."},
+  {id:"pv21",phrase:"Carry Away",def:"To act on emotions when doing something",ex:"Don't get too carried away decorating for Halloween."},
+  {id:"pv22",phrase:"Carry On",def:"To continue",ex:"I could barely carry on after my husband's passing."},
+  {id:"pv23",phrase:"Carry Out",def:"To move from one place to another",ex:"Let me carry this bag of ice out of here for you."},
+  {id:"pv24",phrase:"Catch On",def:"To eventually realize something",ex:"Someday he'll catch on when his brother tells inappropriate jokes, but he's too young."},
+  {id:"pv25",phrase:"Catch Up",def:"To get closer to something that became far away",ex:"We need to catch up to Larry's car."},
+  {id:"pv26",phrase:"Chicken Out",def:"To get too scared to do something",ex:"We went zip lining, but Grace chickened out before it was her turn."},
+  {id:"pv27",phrase:"Clear Up",def:"To solve a misunderstanding or issue",ex:"Jo thought I was mad, so I had to clear things up with her."},
+  {id:"pv28",phrase:"Clog Up",def:"To prevent something from coming through",ex:"The accident clogged up the intersection."},
+  {id:"pv29",phrase:"Close Off",def:"To block something",ex:"The cones on the road closed off one lane."},
+  {id:"pv30",phrase:"Come About",def:"To happen or occur",ex:"How did this come about?"},
+  {id:"pv31",phrase:"Come Across",def:"The way something is perceived; to move sides",ex:"Come across the street to my house."},
+  {id:"pv32",phrase:"Come Apart",def:"To break into pieces",ex:"The glue didn't hold, so her scrapbook started to come apart."},
+  {id:"pv33",phrase:"Come Down To",def:"To narrow down a situation",ex:"It's come down to three contestants left."},
+  {id:"pv34",phrase:"Come Down With",def:"To become ill or experience symptoms of an illness",ex:"Jay is starting to come down with a cold."},
+  {id:"pv35",phrase:"Come Off",def:"When something is removed; how something is perceived",ex:"She can come off a little rude, but she means well."},
+  {id:"pv36",phrase:"Come Through",def:"To arrive expectedly; to cause a result",ex:"I knew you would come through on your way to the city."},
+  {id:"pv37",phrase:"Come Up With",def:"To think of something",ex:"We have to come up with a plan."},
+  {id:"pv38",phrase:"Con Into",def:"To deceptively convince someone to do something",ex:"I got conned into driving everyone tonight."},
+  {id:"pv39",phrase:"Con Out Of",def:"To convince someone to give you something by lying",ex:"Heather conned me out of my last piece of gum."},
+  {id:"pv40",phrase:"Cross Off",def:"To mark as complete",ex:"I can cross washing my car off today's to do list."},
+  {id:"pv41",phrase:"Cut Back",def:"To reduce",ex:"Dolly had to cut back on spending this month to save money for her trip."},
+  {id:"pv42",phrase:"Cut Down",def:"To lessen something",ex:"I watched them cut down that giant tree in our neighborhood."},
+  {id:"pv43",phrase:"Do Away With",def:"To get rid of something",ex:"How about we do away with her pacifier once she starts teething."},
+  {id:"pv44",phrase:"Do Over",def:"To do again in a better way",ex:"Can I get a do over on that date?"},
+  {id:"pv45",phrase:"Do Without",def:"To be fine without",ex:"I could do without the yelling please."},
+  {id:"pv46",phrase:"Doze Off",def:"To fall asleep on accident",ex:"Todd dozed off on the couch while watching football."},
+  {id:"pv47",phrase:"Dress Up",def:"To look good or more formal",ex:"Let's dress up in costume for the party."},
+  {id:"pv48",phrase:"Drop In",def:"To come by unexpectedly",ex:"I hope you don't mind that I dropped in while I was in the area."},
+  {id:"pv49",phrase:"Dry Out",def:"To take away all water or liquid",ex:"We set the towels down to dry out."},
+  {id:"pv50",phrase:"Eat Up",def:"To consume all of",ex:"Kenna told her to eat up her vegetables to get stronger."},
+  {id:"pv51",phrase:"Empty Out",def:"To remove all items from",ex:"Empty out your backpack at the end of the year."},
+  {id:"pv52",phrase:"End Up",def:"The way something finishes",ex:"Harold may end up at my place tomorrow."},
+  {id:"pv53",phrase:"Fall Behind",def:"To progress slower than the rest",ex:"I started to fall behind in my classes."},
+  {id:"pv54",phrase:"Fall Out",def:"To drop down",ex:"Make sure nothing fell out of the cart on our walk to the car."},
+  {id:"pv55",phrase:"Fall Through",def:"To be cancelled; to fail",ex:"I hate it when plans fall through."},
+  {id:"pv56",phrase:"Feel Up To",def:"To feel well enough to participate",ex:"Abby doesn't feel up to going out tonight after being sick this week."},
+  {id:"pv57",phrase:"Fill Out",def:"To complete or finish",ex:"I will have you fill out this form before you go."},
+  {id:"pv58",phrase:"Flip Out",def:"To get uncontrollably angry",ex:"After the week she's had, I don't blame her for flipping out when she came home to a mess."},
+  {id:"pv59",phrase:"Follow Up",def:"To do more investigating",ex:"Please follow up with me after taking your medicine for two weeks."},
+  {id:"pv60",phrase:"Get Along",def:"To be able to do; to interact well with others",ex:"He should get along fine."},
+  {id:"pv61",phrase:"Get Back",def:"To return somewhere",ex:"Get back over here."},
+  {id:"pv62",phrase:"Get Back To",def:"To return an answer or fulfill a request",ex:"I will get back to you first thing tomorrow with that."},
+  {id:"pv63",phrase:"Get Behind",def:"To support; to be slower than others",ex:"Breakfast for dinner is something I can get behind."},
+  {id:"pv64",phrase:"Get By",def:"To survive; to pass",ex:"Her dad barely makes enough for their family to get by."},
+  {id:"pv65",phrase:"Get Over",def:"To stop being upset about; to clear an obstacle",ex:"I wasn't sure if he would get over that last hurdle."},
+  {id:"pv66",phrase:"Get Through",def:"To understand; to finish; to endure",ex:"You will get through this semester I promise."},
+  {id:"pv67",phrase:"Get Together",def:"To meet up for a specific reason; to gather",ex:"Let's get together this weekend for lunch."},
+  {id:"pv68",phrase:"Give In",def:"To accept defeat",ex:"His mom was disappointed that he gave in to peer pressure."},
+  {id:"pv69",phrase:"Give Out",def:"To produce or distribute",ex:"They're giving out coupons in the local newspaper."},
+  {id:"pv70",phrase:"Go About",def:"To act normally; to follow the correct process to get something done",ex:"The news anchor advised us to go about our day as normal."},
+  {id:"pv71",phrase:"Go After",def:"To follow even if it's difficult",ex:"Reba had to go after her dog when it escaped from her backyard."},
+  {id:"pv72",phrase:"Go Along With",def:"To agree with in order to avoid conflict",ex:"Just go along with his plan so he doesn't freak out."},
+  {id:"pv73",phrase:"Go Beyond",def:"To do more than what is expected of you",ex:"I commend your work; you always go beyond what I ask of you."},
+  {id:"pv74",phrase:"Go Off",def:"To express your anger verbally; to leave without warning; to leave the normal path",ex:"Don't go off into the woods alone."},
+  {id:"pv75",phrase:"Go With",def:"To join; to combine; to match",ex:"Those shoes don't go with that dress."},
+  {id:"pv76",phrase:"Gross Out",def:"To feel disgusted by something",ex:"The smell of that trash is grossing me out."},
+  {id:"pv77",phrase:"Hand Back",def:"To return something after borrowing it",ex:"Kyra handed the pencil back to me after her homework was finished."},
+  {id:"pv78",phrase:"Hang Around",def:"To be in a specific place for a period of time",ex:"He hangs around the mall a lot."},
+  {id:"pv79",phrase:"Hold Against",def:"To refuse forgiving someone",ex:"I hope you don't hold this against me, but I don't feel like going to the store with you."},
+  {id:"pv80",phrase:"Hold Off",def:"To delay or prevent something",ex:"Why don't you hold off on mowing the lawn since it rained."},
+  {id:"pv81",phrase:"Hurry Up",def:"To quickly do something",ex:"Hurry up with those burgers over there, we're starving!"},
+  {id:"pv82",phrase:"Keep At",def:"To continue trying",ex:"Keep at it, you'll succeed eventually."},
+  {id:"pv83",phrase:"Keep Down",def:"To minimize noise",ex:"Keep it down up there we're trying to sleep."},
+  {id:"pv84",phrase:"Keep Up",def:"To continue taking care of or doing something",ex:"Jenny is struggling to keep up with her garden."},
+  {id:"pv85",phrase:"Kick Back",def:"To hang out; to relax",ex:"Let's kick back at the pool today."},
+  {id:"pv86",phrase:"Knock Off",def:"To cause something to fall or stop",ex:"Knock it off boys, there's no reason to hit your brothers."},
+  {id:"pv87",phrase:"Knock Out",def:"To hit someone hard enough that they are unconscious; to be surprised",ex:"That smile could knock a guy out."},
+  {id:"pv88",phrase:"Lay Off",def:"To cut an employee's job; to stop doing",ex:"Lay off the chocolate son you're going to get a headache."},
+  {id:"pv89",phrase:"Lead Up To",def:"When a series of certain events cause something to happen or occur",ex:"All of your hard work has been leading up to this moment."},
+  {id:"pv90",phrase:"Leave Off",def:"To not include something, whether on purpose or by accident",ex:"Let's leave the Jones family off the guest list."},
+  {id:"pv91",phrase:"Leave Out",def:"To purposefully exclude",ex:"Grace got left out of the plans for tonight because of the way she acted last time."},
+  {id:"pv92",phrase:"Let Down",def:"To disappoint; to make lower or longer",ex:"Please don't let me down at the event this weekend."},
+  {id:"pv93",phrase:"Let In",def:"To allow; to invite",ex:"After he burnt the chicken, we opened the window to let in some fresh air."},
+  {id:"pv94",phrase:"Let On",def:"To allude to",ex:"Kayla let on that Jeremy doesn't really want to come tonight."},
+  {id:"pv95",phrase:"Let Up",def:"To ease up",ex:"Don't let up on him, he deserves to be punished for wrecking the house."},
+  {id:"pv96",phrase:"Lighten Up",def:"To make less serious",ex:"Oh, lighten up it was only a joke."},
+  {id:"pv97",phrase:"Line Up",def:"To create a row; to organize",ex:"Line up at the end of the field, you boys are running."},
+  {id:"pv98",phrase:"Lock In",def:"To secure; to save; to keep at a specific level",ex:"Let's lock in a date for vacation before our calendars fill up."},
+  {id:"pv99",phrase:"Lock Up",def:"To shut the doors or windows; to trap",ex:"Please lock up before you leave."},
+  {id:"pv100",phrase:"Look Down On",def:"To believe you are better than someone or something",ex:"Don't look down on me just because I'm younger than you."},
+  {id:"pv101",phrase:"Look Forward To",def:"To anticipate with excitement",ex:"I look forward to meeting you soon."},
+  {id:"pv102",phrase:"Look Into",def:"To investigate further",ex:"Police are still looking into the disappearance."},
+  {id:"pv103",phrase:"Look Out",def:"To stay alert; to do a favor for someone",ex:"Thanks for looking out for me, I wouldn't have made it through school without you."},
+  {id:"pv104",phrase:"Look Over",def:"To examine",ex:"Let's look over these papers together."},
+  {id:"pv105",phrase:"Look Up To",def:"To respect or revere someone",ex:"I look up to him as the father I never had."},
+  {id:"pv106",phrase:"Luck Out",def:"To unexpectedly experience luck",ex:"I guess we lucked out this time finding a parking spot near the front."},
+  {id:"pv107",phrase:"Make Up",def:"To create a story; to do something better than what you missed out on",ex:"That didn't happen, you're making that up."},
+  {id:"pv108",phrase:"Mess Up",def:"To be unorganized; to ruin",ex:"You messed up my hair."},
+  {id:"pv109",phrase:"Mix Up",def:"To combine; to confuse; to upgrade or change",ex:"Can you mix up the batter for me while I make the frosting?"},
+  {id:"pv110",phrase:"Monkey Around With",def:"To mess around; to be silly",ex:"That's enough monkeying around with your brothers."},
+  {id:"pv111",phrase:"Narrow Down",def:"To reduce your options",ex:"Please narrow down the lunch options to two restaurants."},
+  {id:"pv112",phrase:"Pay Back",def:"To return money that you owe; to reciprocate",ex:"I will pay you back when I find my wallet."},
+  {id:"pv113",phrase:"Pay Up",def:"To give all the money you owe",ex:"You are required to pay two months' rent up before moving day."},
+  {id:"pv114",phrase:"Pay Off",def:"To repay; to give money in exchange for secrecy; to be rewarded for hard work",ex:"Hard work pays off."},
+  {id:"pv115",phrase:"Pick On",def:"To tease or bully",ex:"Those kids always pick on my son."},
+  {id:"pv116",phrase:"Pile Up",def:"To place or be in a pile",ex:"That trash is really piling up."},
+  {id:"pv117",phrase:"Piss Off",def:"To make someone angry",ex:"You better take your shoes off inside the house before you piss off your mom."},
+  {id:"pv118",phrase:"Plan On",def:"To have the intention of doing",ex:"I plan on being there around noon."},
+  {id:"pv119",phrase:"Plug In",def:"To connect to electricity",ex:"My phone was about to die so I had to plug it in."},
+  {id:"pv120",phrase:"Point Out",def:"To bring attention to",ex:"You didn't have to point out the pimple on my chin, I know it's there."},
+  {id:"pv121",phrase:"Print Out",def:"To create a paper copy",ex:"Can you print out that flyer?"},
+  {id:"pv122",phrase:"Pull Off",def:"To do successfully",ex:"I can't believe they pulled off the surprise."},
+  {id:"pv123",phrase:"Pull Over",def:"To drive onto the side of the road and stop",ex:"The cops had her pull over because she had a taillight out."},
+  {id:"pv124",phrase:"Pull Through",def:"To recover; to continue through difficulty",ex:"Let's just pull through to the next parking spot."},
+  {id:"pv125",phrase:"Punch In",def:"To record time",ex:"I punched in to work at 6 o'clock in the morning every day this week."},
+  {id:"pv126",phrase:"Put Away",def:"To hide something in a specific place",ex:"Put those toys away before someone trips on one of them."},
+  {id:"pv127",phrase:"Put Back",def:"To return to its original place; to postpone",ex:"Put that broom back after you use it."},
+  {id:"pv128",phrase:"Put In",def:"To place inside; to install; to contribute money",ex:"Put those groceries in the refrigerator please."},
+  {id:"pv129",phrase:"Put Together",def:"To assemble; to plan; to position close together",ex:"We can put together her dresser later today."},
+  {id:"pv130",phrase:"Put Up With",def:"To tolerate something that you don't necessarily like",ex:"I put up with a lot in my last relationship."},
+  {id:"pv131",phrase:"Ring Up",def:"To call on the phone; to add up the total cost at a register",ex:"The grocery clerk offered to ring us up on the register she just opened."},
+  {id:"pv132",phrase:"Rip Off",def:"To be asked to pay too much for something; to remove something using force",ex:"Just rip off the band aid, it will only hurt for a second."},
+  {id:"pv133",phrase:"Rip Up",def:"To tear into pieces; to remove something off of a specific surface",ex:"We had to rip up the carpet in the house we were fixing up."},
+  {id:"pv134",phrase:"Rule Out",def:"To eliminate as possible",ex:"They ruled him out as a suspect after his alibi checked out."},
+  {id:"pv135",phrase:"Run Across",def:"To move from one side to another",ex:"The fox ran across the road."},
+  {id:"pv136",phrase:"Run Around",def:"To go from place to place quickly; to play while running",ex:"I have been running around town all day."},
+  {id:"pv137",phrase:"Run Down",def:"To gradually get worse; to explain a plan; to quickly get lower",ex:"Let me give you the run down of the night before we leave."},
+  {id:"pv138",phrase:"Run Into",def:"When two objects accidentally hit each other; to see someone you know unexpectedly",ex:"Can you run into the store and grab some apples for me please?"},
+  {id:"pv139",phrase:"Run Over",def:"To be injured by a car; to practice all the way through; to continue past the allotted time",ex:"Football practice always runs over after a loss."},
+  {id:"pv140",phrase:"Screw On",def:"To seal a container's lid; to connect parts with a screw",ex:"Screw that lid on tight or you'll spill your drink."},
+  {id:"pv141",phrase:"Screw Up",def:"To make a mess of something",ex:"I screwed up the date by talking about myself too much."},
+  {id:"pv142",phrase:"See About",def:"To look into doing something",ex:"Let's see about getting an extra bag of ice for the party."},
+  {id:"pv143",phrase:"Sell Out",def:"To be rid of all available inventory; to give up your morals when doing something",ex:"We better get there early before the tickets sell out."},
+  {id:"pv144",phrase:"Settle Down",def:"To start living routinely with more stability; to relax",ex:"Settle down before you get the dogs riled up."},
+  {id:"pv145",phrase:"Shake Up",def:"Shaking to mix something; to upset someone",ex:"Shake up the orange juice before drinking it."},
+  {id:"pv146",phrase:"Show Off",def:"To display something in a large way",ex:"He came by to show off his new truck."},
+  {id:"pv147",phrase:"Shut Up",def:"To not talk",ex:"My mom shouting at us is a great way to get us to shut up."},
+  {id:"pv148",phrase:"Sign In",def:"To write your name down with the time and date you arrived; to input a username and password online",ex:"We had to sign in at the front office before the doctor would see us."},
+  {id:"pv149",phrase:"Sign Out",def:"To signify your departure by signing your name; to exit online",ex:"Be sure to sign out of your account on the library computer."},
+  {id:"pv150",phrase:"Sit Down",def:"To start sitting; to assist someone in sitting",ex:"Please, sit down you've been on your feet all day."},
+  {id:"pv151",phrase:"Slow Down",def:"To start being slower",ex:"Slow down I can't understand what you're saying when you talk that fast."},
+  {id:"pv152",phrase:"Sneak In/Into",def:"To go inside somewhere without being detected",ex:"Sneak into the back pew, we're late and don't want to disturb the service."},
+  {id:"pv153",phrase:"Sneak Out",def:"To leave without being detected",ex:"Let's sneak out tonight and go to the club."},
+  {id:"pv154",phrase:"Sort Out",def:"To resolve a misunderstanding; to place things into specific groups",ex:"Paul wants to sort out the details before we leave for the trip."},
+  {id:"pv155",phrase:"Space Out",def:"To gravitate your attention elsewhere; to not focus on what's around you",ex:"I'm so tired that I keep spacing out and not hearing what she said to me."},
+  {id:"pv156",phrase:"Stand Around",def:"To gather in one area instead of doing what you need to",ex:"Quit standing around, we've got housework to do!"},
+  {id:"pv157",phrase:"Stand For",def:"To back up or support",ex:"The school won't stand for bullying of any kind."},
+  {id:"pv158",phrase:"Start Off",def:"To begin; to have intentions to do something",ex:"Jacob started off the weekend by sleeping in until noon."},
+  {id:"pv159",phrase:"Start Up",def:"To begin something; to make it work",ex:"Start up the car, I will be outside in a second."},
+  {id:"pv160",phrase:"Stay Out",def:"To leave your home; to not go inside; to remain uninvolved",ex:"We wanted to stay out past midnight but got too tired."},
+  {id:"pv161",phrase:"Stay Up",def:"To be above level ground; to be awake longer than usual",ex:"Don't stay up too late, you have school in the morning."},
+  {id:"pv162",phrase:"Step On",def:"To move quickly; to place your foot",ex:"They're coming after us, so step on the gas!"},
+  {id:"pv163",phrase:"Stick Around",def:"To remain in one place for a while",ex:"We better stick around for a bit after your grandmother's surgery."},
+  {id:"pv164",phrase:"Stick Out",def:"To extend outward; to be recognized; to persevere",ex:"It's only a few more weeks, just stick it out."},
+  {id:"pv165",phrase:"Stick Up",def:"To put something where it can be seen more easily; to stand out from the group",ex:"Your hair is all brushed and smooth besides one little piece that's sticking up over here."},
+  {id:"pv166",phrase:"Stick With",def:"To continue; to stay loyal; to endure an uncomfortable situation or person",ex:"They always stick us good kids with the troublemakers."},
+  {id:"pv167",phrase:"Stop Over",def:"To visit for a moment; to stop quickly",ex:"Can you stop over at the store for some milk before you get home?"},
+  {id:"pv168",phrase:"Straighten Out",def:"To make straight; to fix an issue; to make someone's attitude or behavior better",ex:"Let's straighten her out before the big day."},
+  {id:"pv169",phrase:"Switch Off",def:"To turn something previously on to be off",ex:"Switch off the oven once you're done baking, so it doesn't start a fire."},
+  {id:"pv170",phrase:"Switch On",def:"To turn something previously off to be on",ex:"Switch on those lights, it's way too dark in here."},
+  {id:"pv171",phrase:"Take Apart",def:"To disassemble or separate",ex:"We have to take apart the giant bookshelves to get them inside the building."},
+  {id:"pv172",phrase:"Take Out",def:"To remove; to withdraw money; to pay for a dinner or event",ex:"I had to take out $300 for the fair this weekend."},
+  {id:"pv173",phrase:"Take Up On",def:"To accept an invitation or offer",ex:"My night just freed up, so I will take you up on those tacos."},
+  {id:"pv174",phrase:"Talk Down To",def:"To talk to someone as if you are better and/or smarter than them",ex:"Frank always talks down to her when he's explaining something."},
+  {id:"pv175",phrase:"Talk Into",def:"To convince",ex:"I won't let you talk me into buying anything else today."},
+  {id:"pv176",phrase:"Talk Out Of",def:"To convince someone against something",ex:"Nothing will talk her out of getting this tattoo."},
+  {id:"pv177",phrase:"Talk To",def:"To converse with someone",ex:"Jackie will talk to him about borrowing the car tomorrow."},
+  {id:"pv178",phrase:"Tear Down",def:"To destroy physically or mentally",ex:"They tore down the old spaghetti factory last year."},
+  {id:"pv179",phrase:"Tear Off",def:"To remove forcefully",ex:"Nikki tore off a piece of chicken."},
+  {id:"pv180",phrase:"Tell Apart",def:"To differentiate",ex:"The Hollow twins are too similar, I can't tell them apart."},
+  {id:"pv181",phrase:"Tell On",def:"To inform someone of something that happened but was not supposed to",ex:"Poppy told on her brother after he broke their mom's vase."},
+  {id:"pv182",phrase:"Think About",def:"To ponder something before it happens; to have on your mind",ex:"Julia can't stop thinking about her date on Friday."},
+  {id:"pv183",phrase:"Think Ahead",def:"To plan for the future",ex:"Luckily, mom thought ahead for the boat trip and brought plenty of snacks and drinks."},
+  {id:"pv184",phrase:"Think Up",def:"To come up with an idea using your imagination",ex:"I could never think up a movie like The Matrix on my own."},
+  {id:"pv185",phrase:"Throw Away",def:"To get rid of",ex:"He threw those old muffins away once they started going bad."},
+  {id:"pv186",phrase:"Track Down",def:"To seek out and find",ex:"It took forever to track down a copy of her new book, but I finally got one."},
+  {id:"pv187",phrase:"Trade In",def:"To exchange an old item for something new",ex:"My dad traded in his old truck to the dealership, then bought a nicer one."},
+  {id:"pv188",phrase:"Trick Into",def:"To persuade using dishonesty",ex:"Josh tricked me into coming with him."},
+  {id:"pv189",phrase:"Try On",def:"To see how something fits on your body before buying it",ex:"You better try those shorts on to make sure they fit correctly."},
+  {id:"pv190",phrase:"Try Out",def:"To demonstrate a specific skill; to test something",ex:"I want to try out that new Mexican restaurant in town."},
+  {id:"pv191",phrase:"Turn Down",def:"To refuse an offer; to decrease something",ex:"Please turn down the radio, I am trying to talk on the phone."},
+  {id:"pv192",phrase:"Turn Off",def:"To stop from being on; to offend or cause someone to lose interest",ex:"Someone being lazy is such a turn off, I prefer a hardworking man."},
+  {id:"pv193",phrase:"Turn On",def:"To stop from being off; to entice or cause attraction; to suddenly become against someone",ex:"I never expected the butler to turn on the family after all of his years of service."},
+  {id:"pv194",phrase:"Turn Over",def:"To flip to the other side; to pass on authority duties; to replace continuously",ex:"After 25 years as HOA President, Bob turned over his duties to a younger member of the neighborhood."},
+  {id:"pv195",phrase:"Turn Up",def:"To increase volume; to be found; to learn through research",ex:"That missing vehicle is bound to turn up somewhere."},
+  {id:"pv196",phrase:"Use Up",def:"To exhaust the resources of something",ex:"Did you use up the last of the peanut butter yesterday?"},
+  {id:"pv197",phrase:"Wake Up",def:"To finish sleeping; to become aware",ex:"Hannah was supposed to wake up at 6 am, but she slept until noon."},
+  {id:"pv198",phrase:"Wash Off",def:"To clean using water",ex:"After we went hiking in the rain, I had to wash off my boots with the hose."},
+  {id:"pv199",phrase:"Wash Up",def:"To clean yourself; to be carried ashore by water; to no longer be of any use",ex:"You and your brothers need to go wash up before dinner."},
+  {id:"pv200",phrase:"Watch Out",def:"To be cautious of something happening",ex:"Watch out for deer when driving in the country at night."}
+];
+
+const vocabWords = [
+  {id:"vw1",word:"Abrupt",pos:"adj",def:"Sudden; out of the blue; appearing unkind or rude because you are in a hurry",ex:"The meeting ended abruptly because of the boss's family emergency."},
+  {id:"vw2",word:"Extraordinary",pos:"adj",def:"Not typical; special; surprising; not expected",ex:"The view from up here is extraordinary."},
+  {id:"vw3",word:"Utter",pos:"adj/verb",def:"Emphasis on something particularly bad (adj); to use your voice (verb)",ex:"She was so shocked that she couldn't even utter a single word."},
+  {id:"vw4",word:"Absurd",pos:"adj",def:"Especially ridiculous",ex:"Her idea was simply absurd."},
+  {id:"vw5",word:"Partial",pos:"adj",def:"Incomplete; not whole",ex:"She only offered a partial solution to selling more merchandise."},
+  {id:"vw6",word:"Robust",pos:"adj",def:"Extremely strong and sturdy",ex:"The bridge's structure is very robust."},
+  {id:"vw7",word:"Superb",pos:"adj",def:"Above average; very good",ex:"That vacation was superb."},
+  {id:"vw8",word:"Vicious",pos:"adj",def:"Purposely harmful or violent",ex:"The wild dog was very vicious."},
+  {id:"vw9",word:"Supreme",pos:"adj",def:"The best or greatest",ex:"In my mind, chocolate ice cream reigns supreme."},
+  {id:"vw10",word:"Verbal",pos:"adj",def:"Using words as opposed to writing",ex:"She gave her verbal agreement to seeing a movie tonight."},
+  {id:"vw11",word:"Authentic",pos:"adj",def:"The original or equally as genuine as it",ex:"He won an award for creating the most authentic representation of the artist's work."},
+  {id:"vw12",word:"Eligible",pos:"adj",def:"Able or permitted to do something",ex:"They will be eligible for parole after serving 10 years in prison."},
+  {id:"vw13",word:"Superficial",pos:"adj",def:"Surface level; shallow",ex:"Chloe's actions revealed her superficial attitude and values."},
+  {id:"vw14",word:"Vague",pos:"adj",def:"Unclear; little to no details",ex:"The assignment's instructions were vague."},
+  {id:"vw15",word:"Amateur",pos:"noun",def:"Beginner; not a professional",ex:"Tony signed up for his college's amateur tennis team."},
+  {id:"vw16",word:"Delicate",pos:"adj",def:"Easily breakable",ex:"Grandma's pottery is very delicate, so we aren't allowed to touch them."},
+  {id:"vw17",word:"Rash",pos:"adj",def:"Quick, unwise decision-making",ex:"Her decision to drop out of college seemed rash."},
+  {id:"vw18",word:"Swift",pos:"adj",def:"Completed quickly",ex:"The board was erased in one swift movement."},
+  {id:"vw19",word:"Vocal",pos:"adj/noun",def:"Verbally expressive (adj); music that involves the voice (noun)",ex:"Amanda is very vocal about community issues."},
+  {id:"vw20",word:"Brisk",pos:"adj",def:"Quickly with energy",ex:"It started raining while Isaac was taking a brisk walk."},
+  {id:"vw21",word:"Deliberate",pos:"adj/verb",def:"Purposeful; a planned action (adj); to plan or discuss (verb)",ex:"Her punishment was deliberate."},
+  {id:"vw22",word:"Efficient",pos:"adj",def:"The quickest and best possible way",ex:"She was in search of the most efficient way to organize her files."},
+  {id:"vw23",word:"Tremendous",pos:"adj",def:"Extremely or very good",ex:"That required a tremendous amount of work."},
+  {id:"vw24",word:"Vital",pos:"adj/noun",def:"Essential; crucial (adj); having to do with the body's internal organs (noun)",ex:"It is of vital importance that we complete our homework on time."},
+  {id:"vw25",word:"Artificial",pos:"adj",def:"Unnatural; made to look like something else",ex:"There are way too many artificial sweeteners in this drink."},
+  {id:"vw26",word:"Legitimate",pos:"adj/verb",def:"Legally accepted (adj); to make legal (verb)",ex:"That is a legitimate source."},
+  {id:"vw27",word:"Rigorous",pos:"adj",def:"Complex; detailed; severe",ex:"Calculus 4 is a rigorous course."},
+  {id:"vw28",word:"Scarce",pos:"adj/adv",def:"Difficult to acquire (adj); barely (adv)",ex:"During a drought, water is very scarce."},
+  {id:"vw29",word:"Vivid",pos:"adj",def:"Detailed; brightly colored",ex:"The painting was very vivid."},
+  {id:"vw30",word:"Vulnerable",pos:"adj",def:"Easily harmed or in danger",ex:"We must protect the minds of the vulnerable youth."},
+  {id:"vw31",word:"Vast",pos:"adj",def:"Especially large",ex:"A vast majority of people prefer mountains over the beach."},
+  {id:"vw32",word:"Magnificent",pos:"adj",def:"Awe inspiring; admirable",ex:"The sunset is magnificent."},
+  {id:"vw33",word:"Apparent",pos:"adj",def:"Obvious; easily seen",ex:"Her feelings were very apparent on her face."},
+  {id:"vw34",word:"Antique",pos:"noun/adj",def:"An item from an earlier period of time (noun); made in a different time period (adj)",ex:"My great grandma's dresser is an antique."},
+  {id:"vw35",word:"Compact",pos:"adj/noun",def:"Fashioned in a tidy way with little space (adj); a small, flat makeup case (noun)",ex:"The apartment's layout is very compact."},
+  {id:"vw36",word:"Substantial",pos:"adj",def:"Significant in size or importance",ex:"There is substantial evidence that points to him being the killer."},
+  {id:"vw37",word:"Toxic",pos:"adj",def:"Harmful",ex:"Mr. Holland warned us that the chemicals were toxic."},
+  {id:"vw38",word:"Unanimous",pos:"adj",def:"All individuals agree about a certain issue",ex:"The vote to remove her from the committee was unanimous."},
+  {id:"vw39",word:"Ample",pos:"adj",def:"Sufficient; plenty",ex:"You must provide ample evidence of the occurrence."},
+  {id:"vw40",word:"Bizarre",pos:"adj",def:"Strange; odd; unusual",ex:"Her outfit is so bizarre."},
+  {id:"vw41",word:"Moderate",pos:"adj/noun/verb",def:"Medium in size (adj); a person with neutral opinions (noun); to keep a specific standard (verb)",ex:"The company is experiencing moderate growth."},
+  {id:"vw42",word:"Particular",pos:"adj",def:"A certain one",ex:"My mom asked me to get a particular kind of milk, but I can't remember which one it was."},
+  {id:"vw43",word:"Prompt",pos:"verb/adj/noun",def:"To cause something (verb); completed in a timely manner (adj); a sign to act upon (noun)",ex:"What prompted you to get a puppy?"},
+  {id:"vw44",word:"Rapid",pos:"adj/noun",def:"Acting quickly or swiftly (adj); a fast stream of water within a river (noun)",ex:"Get this done rapidly."},
+  {id:"vw45",word:"Subtle",pos:"adj",def:"Blending in but still holding a certain importance",ex:"There was a subtle difference between the two drafts."},
+  {id:"vw46",word:"Applaud",pos:"verb",def:"To clap; hitting your palms together",ex:"I have to applaud you on all of your hard work."},
+  {id:"vw47",word:"Rehearse",pos:"verb",def:"To practice before a performance or speech",ex:"The band chose to rehearse one last time before the concert."},
+  {id:"vw48",word:"Guilt",pos:"noun",def:"Feeling responsible for an unfortunate event",ex:"After sneaking out of the house, Nicole felt extreme guilt."},
+  {id:"vw49",word:"Verdict",pos:"noun",def:"An official result or outcome",ex:"What's the final verdict?"},
+  {id:"vw50",word:"Condemn",pos:"verb",def:"Disapprove; to be strongly against",ex:"There are many laws that condemn that sort of behavior."},
+  {id:"vw51",word:"Smuggle",pos:"verb",def:"To secretly obtain something",ex:"We smuggled snacks into the movie theater."},
+  {id:"vw52",word:"Cautious",pos:"adj",def:"Avoiding risks and potential harm",ex:"My sister is a cautious driver."},
+  {id:"vw53",word:"Envy",pos:"verb",def:"To want something someone else has",ex:"I envy her ability to sing."},
+  {id:"vw54",word:"Fond",pos:"adj",def:"Showing a liking to",ex:"She is very fond of this game."},
+  {id:"vw55",word:"Coward",pos:"noun",def:"A person who lacks bravery or courage",ex:"Kaleb wouldn't eat a ghost pepper, he's too much of a coward."},
+  {id:"vw56",word:"Dread",pos:"verb",def:"To not look forward to doing something",ex:"I always dread going to the dentist."},
+  {id:"vw57",word:"Generous",pos:"adj",def:"Happy and willing to give back time and resources",ex:"The Humane Society relies on generous donors to stay open."},
+  {id:"vw58",word:"Boast",pos:"verb",def:"To brag; to talk proudly about yourself",ex:"I don't mean to boast, I'm just proud of how far I've come."},
+  {id:"vw59",word:"Sophisticated",pos:"adj",def:"Having a lot of experience and knowledge; advanced",ex:"The Queen of England has a very sophisticated way of life."},
+  {id:"vw60",word:"Stubborn",pos:"adj",def:"Not easily persuaded; stuck in a specific mindset",ex:"What made you so stubborn?"},
+  {id:"vw61",word:"Admire",pos:"verb",def:"To respect someone because of the things they've done or the way they act",ex:"I admire you for your patience."},
+  {id:"vw62",word:"Cruel",pos:"adj",def:"Being unkind on purpose",ex:"Don't be cruel."},
+  {id:"vw63",word:"Detest",pos:"verb",def:"To largely dislike",ex:"After their fight, Romeo detests Juliet."},
+  {id:"vw64",word:"Elegant",pos:"adj",def:"Simply beautiful; timeless",ex:"The wedding turned out very elegant and amazing."},
+  {id:"vw65",word:"Modest",pos:"adj",def:"Moderate; not drawing attention",ex:"Her style tends to be very modest."},
+  {id:"vw66",word:"Relief",pos:"noun",def:"A feeling of easement; an alleviation",ex:"Mallory uttered a sigh of relief once her exam was over."},
+  {id:"vw67",word:"Bitter",pos:"adj",def:"Generally unhappy or unpleasant",ex:"Ronald is the bitter old man that lives across the street."},
+  {id:"vw68",word:"Bland",pos:"adj",def:"Lacking taste or anything special",ex:"The sandwich was a little bland."},
+  {id:"vw69",word:"Fatigue",pos:"noun",def:"Immense tired feeling",ex:"After working a 12-hour shift, the nurse was filled with fatigue."},
+  {id:"vw70",word:"Immune",pos:"adj",def:"Unaffected by a problem, illness, or occurrence",ex:"Luna hopes to be immune to the disease after enduring it once."},
+  {id:"vw71",word:"Paralyze",pos:"verb",def:"To cause a person or object to be immoveable",ex:"The haunted house paralyzed her with fear."},
+  {id:"vw72",word:"Appetite",pos:"noun",def:"The amount of desire for a specific food or activity",ex:"He has an appetite for waffles every morning."},
+  {id:"vw73",word:"Conscious",pos:"adj",def:"Able to understand what is going on around you; mentally aware",ex:"Be conscious of how your words might affect her."},
+  {id:"vw74",word:"Diagnose",pos:"verb",def:"To determine the cause or reason something happened; examine to find the cause of an illness",ex:"It took a very long time to diagnose the issue."},
+  {id:"vw75",word:"Fatal",pos:"adj",def:"Detrimental to someone's health and wellbeing",ex:"Polly called to tell us she survived the fatal car crash."},
+  {id:"vw76",word:"Sanitary",pos:"adj",def:"Clean; no threat to anyone's health",ex:"The cabins were kept in sanitary condition."},
+  {id:"vw77",word:"Dose",pos:"noun",def:"An amount of something to be administered or required",ex:"The doctor made sure to administer the correct dose of morphine."},
+  {id:"vw78",word:"Slender",pos:"adj",def:"Thin and long",ex:"The model has a slender figure."},
+  {id:"vw79",word:"Suffer",pos:"verb",def:"To be in pain mentally or physically",ex:"Following her passing, we were comforted in that she would no longer suffer."},
+  {id:"vw80",word:"Trauma",pos:"noun",def:"A scarring experience that can have a long-term effect on your mental state; physical injury",ex:"Head traumas are very serious and require immediate medical attention."},
+  {id:"vw81",word:"Executive",pos:"noun/adj",def:"A person of importance within an organization (noun); dealing with the management of an organization (adj)",ex:"The chief executive of Wonder Inc. contacted us last week."},
+  {id:"vw82",word:"Import",pos:"noun/verb",def:"A product sent from one country into another to be sold (noun); to bring something into a place it hasn't been before (verb)",ex:"Ships were arriving with a large supply of imports."},
+  {id:"vw83",word:"Affiliate",pos:"verb/noun",def:"Having and maintaining a connection (verb); an entity that is connected with or run by another (noun)",ex:"May no longer affiliates herself with that church."},
+  {id:"vw84",word:"Ambition",pos:"noun",def:"An intense desire to get something done",ex:"Her young heart was full of ambition."},
+  {id:"vw85",word:"Manufacture",pos:"verb/noun",def:"To mass produce materials or finished goods (verb); the making of goods using a machine (noun)",ex:"Nelli Industries plans to manufacture a large amount of dog toys this year."},
+  {id:"vw86",word:"Prosper",pos:"verb",def:"To grow or experience great success",ex:"They began to prosper under new leadership."},
+  {id:"vw87",word:"Surplus",pos:"noun/adj",def:"An amount of something that is more than what is needed (noun); more than necessary (adj)",ex:"The company experienced a surplus of goods after sales declined unexpectedly."},
+  {id:"vw88",word:"Venture",pos:"noun/verb",def:"A new activity having to do with business risks (noun); to stray from the normal way (verb)",ex:"Tanner Co. is planning a new business venture."},
+  {id:"vw89",word:"Exchange",pos:"noun/verb",def:"The gift of goods or words between people (noun); to give something to someone and receive something back (verb)",ex:"Our Christmas party always involves a gift exchange."},
+  {id:"vw90",word:"Valuable",pos:"adj",def:"Important; worth a lot",ex:"Don't lose track of those valuable jewels."},
+  {id:"vw91",word:"Afford",pos:"verb",def:"To have enough money; to allow or supply",ex:"Laura couldn't afford a new car."},
+  {id:"vw92",word:"Commute",pos:"verb/noun",def:"To travel (verb); a specific route or distance (noun)",ex:"It is a long commute to work every morning."},
+  {id:"vw93",word:"Deduct",pos:"verb",def:"To subtract; to remove a part of something",ex:"That penalty deducted two points from their score."},
+  {id:"vw94",word:"Negotiate",pos:"verb",def:"To talk to someone in attempt to persuade or come to an agreement",ex:"Negotiate a new deal for us please."},
+  {id:"vw95",word:"Shortage",pos:"noun",def:"When there is not enough of something",ex:"The United States is currently experiencing a refrigerator shortage."},
+  {id:"vw96",word:"Enterprise",pos:"noun",def:"A large company or activity",ex:"Stark Enterprise is rising in the marketing industry."},
+  {id:"vw97",word:"Inherit",pos:"verb",def:"To get something from someone",ex:"Ella inherited her father's old truck after he passed."},
+  {id:"vw98",word:"Transaction",pos:"noun",def:"A business procedure in which items or money are exchanged",ex:"He prepared a statement for their transaction."},
+  {id:"vw99",word:"Appoint",pos:"verb",def:"To choose or arrange for something to happen",ex:"We appointed her as leader of the group."},
+  {id:"vw100",word:"Fare",pos:"noun",def:"Something offered or paid",ex:"The taxi fare was much cheaper than I expected."},
+  {id:"vw101",word:"Possess",pos:"verb",def:"To have or to own",ex:"Allison possesses the skills to create a beautiful work of art."},
+  {id:"vw102",word:"Supervise",pos:"verb",def:"To be the head of something; in charge of overseeing activities",ex:"Mom told me we need a babysitter to supervise us for the night."},
+  {id:"vw103",word:"Abundant",pos:"adj",def:"A large amount of something",ex:"New students are in abundant supply."},
+  {id:"vw104",word:"Erupt",pos:"verb",def:"To suddenly explode or break out",ex:"The crowd erupted into laughter."},
+  {id:"vw105",word:"Instinct",pos:"noun",def:"A natural likelihood to behave a certain way",ex:"Luckily, she has good instincts."},
+  {id:"vw106",word:"Shallow",pos:"adj",def:"Occurring a small distance from the top",ex:"Don't worry the water is shallow here."},
+  {id:"vw107",word:"Fluid",pos:"noun/adj",def:"A liquid substance (noun); flexible; easily changed (adj)",ex:"My car is leaking fluid."},
+  {id:"vw108",word:"Marine",pos:"adj/noun",def:"Having to do with the ocean or water (adj); a soldier who sails boats (noun)",ex:"I used to have dreams of becoming a marine biologist."},
+  {id:"vw109",word:"Universe",pos:"noun",def:"Our world; an area of space",ex:"These are the best cookies in the universe."},
+  {id:"vw110",word:"Coast",pos:"noun/verb",def:"The place that the ocean meets the land (noun); to move without effort (verb)",ex:"Let's visit the Pacific coast."},
+  {id:"vw111",word:"Catastrophe",pos:"noun",def:"A disaster; an unfortunate event",ex:"That party was a complete catastrophe."},
+  {id:"vw112",word:"Decay",pos:"verb/noun",def:"To be destroyed over time, naturally or on purpose (verb); an item in a state of destruction (noun)",ex:"After death, the body begins to decay."},
+  {id:"vw113",word:"Extinct",pos:"adj",def:"Something that no longer exists",ex:"If we aren't careful, many endangered animals will become extinct."},
+  {id:"vw114",word:"Harbour",pos:"noun/verb",def:"A place where the water is calm enough for ships to be stored (noun); to hold onto negativity for a long period of time (verb)",ex:"There are at least twenty ships parked at the harbour."},
+  {id:"vw115",word:"Batch",pos:"noun",def:"A group or set of specific items",ex:"I just made a fresh batch of cookies!"},
+  {id:"vw116",word:"Privilege",pos:"noun/verb",def:"An advantage you are lucky to have (noun); giving someone or something better treatment (verb)",ex:"That phone is a privilege, not a right."},
+  {id:"vw117",word:"Sensation",pos:"noun",def:"The feeling something or someone provides",ex:"Grace began to feel a tingling sensation in her legs after sitting for too long."},
+  {id:"vw118",word:"Situation",pos:"noun",def:"A group of specific conditions that occur at once",ex:"This is a sticky situation."},
+  {id:"vw119",word:"Tactic",pos:"noun",def:"A specific way of achieving something",ex:"What's the best note-taking tactic?"},
+  {id:"vw120",word:"Texture",pos:"noun",def:"The way something feels",ex:"This brownie has a funny texture."},
+  {id:"vw121",word:"Aftermath",pos:"noun",def:"Period after an event occurs",ex:"The aftermath of the hurricane is devastating."},
+  {id:"vw122",word:"Quality",pos:"noun/adj",def:"The standard of how good or bad something is (noun); especially good (adj)",ex:"Please use high quality materials on this project."},
+  {id:"vw123",word:"Reputation",pos:"noun",def:"A person's appearance from others' point of view based on actions",ex:"She has a reputation for being easily convincible."},
+  {id:"vw124",word:"Stake",pos:"noun/verb",def:"A wooden rod or post (noun); to place value in or on something as a risk (verb)",ex:"I would stake my reputation on it."},
+  {id:"vw125",word:"Collision",pos:"noun",def:"An accident involving a crash of two items",ex:"She survived a head-on collision."},
+  {id:"vw126",word:"Basis",pos:"noun",def:"Facts that something is backed up with or built upon",ex:"We are on a first-name basis."},
+  {id:"vw127",word:"Fixture",pos:"noun",def:"A permanent piece of equipment or furniture",ex:"The bench dedicated to John Doe after his passing is a fixture of the area."},
+  {id:"vw128",word:"Hazard",pos:"noun/verb",def:"Something deemed to be unsafe or harmful (noun); to give something a go (verb)",ex:"Gasoline next to an open flame is a fire hazard."},
+  {id:"vw129",word:"Summit",pos:"noun",def:"Peak; an important meeting",ex:"The European summit is set to occur in May this year."},
+  {id:"vw130",word:"Temper",pos:"noun/verb",def:"Easily angered individual (noun); to lessen the severity (verb)",ex:"Polly is very hot tempered."},
+  {id:"vw131",word:"Access",pos:"noun/verb",def:"The permission to do a specific action (noun); to find or acquire (verb)",ex:"The top-secret lab has limited access."},
+  {id:"vw132",word:"Outline",pos:"noun/verb",def:"A plan with the main points, excluding many details (noun); to sketch around an edge (verb)",ex:"The professor required us to write an outline of the paper before we began."},
+  {id:"vw133",word:"Paste",pos:"verb/noun",def:"To place something on with glue (verb); a mixture that can be spread and used to attach something (noun)",ex:"I pasted the magazine cutouts onto my art project."},
+  {id:"vw134",word:"Slump",pos:"verb/noun",def:"To fall or lean due to a lack of strength (verb); a sudden decrease (noun)",ex:"He slumped against the wall after she rejected him."},
+  {id:"vw135",word:"Discipline",pos:"noun/verb",def:"A way to correct behaviors and train new ones (noun); to punish bad behaviors (verb)",ex:"My mom had to buy a book about discipline for kids who are strong-willed."},
+  {id:"vw136",word:"Scrap",pos:"noun/verb",def:"A small piece of something (noun); to get rid of (verb)",ex:"Can I have a scrap of paper to write down your email?"},
+  {id:"vw137",word:"Stroll",pos:"verb/noun",def:"To walk slowly (verb); a slow walk (noun)",ex:"Grandma and I strolled in the park this evening."},
+  {id:"vw138",word:"Appeal",pos:"noun/verb",def:"An urgent attempt to acquire something (noun); to make a formal statement as a request (verb)",ex:"May I make an appeal to the court?"},
+  {id:"vw139",word:"Concern",pos:"noun",def:"A worried feeling",ex:"Rene felt her brother's odd behavior was cause for concern."},
+  {id:"vw140",word:"Groan",pos:"verb/noun",def:"To make a sound signaling distress, disgust, or discomfort (verb); such a sound (noun)",ex:"She groaned with disgust."},
+  {id:"vw141",word:"Mention",pos:"verb/noun",def:"To bring up or write something without details (verb); a direct reference (noun)",ex:"I forgot to mention my fear of spiders."},
+  {id:"vw142",word:"Scrape",pos:"verb/noun",def:"To get rid of using a sharp edge (verb); a small wound caused by something sharp or rough (noun)",ex:"Scrape your plate off before you put it in the dishwasher."},
+  {id:"vw143",word:"Delight",pos:"noun/verb",def:"A general feeling of pleasure or enjoyment (noun); to create a feeling of satisfaction (verb)",ex:"What a delight she is!"},
+  {id:"vw144",word:"Gaze",pos:"verb/noun",def:"To look at something from afar for a long period of time (verb); a long, unchanging look (noun)",ex:"Sara gazed across the room."},
+  {id:"vw145",word:"Pressure",pos:"noun/verb",def:"An attempt to influence someone else using persuasion or threats (noun); to try and convince someone (verb)",ex:"The athletes felt an immense amount of pressure from their fans."},
+  {id:"vw146",word:"Rival",pos:"noun/verb",def:"An opposing person or group in competition (noun); to level up to (verb)",ex:"Our hometown has a game against their rivals this weekend."},
+  {id:"vw147",word:"Surface",pos:"noun/verb",def:"The top level only; not deep (noun); to bring about; make easier to notice (verb)",ex:"Their relationship is nothing but surface level."},
+  {id:"vw148",word:"Escort",pos:"verb",def:"To accompany someone to a specific place; guide",ex:"Let me escort you to the door."},
+  {id:"vw149",word:"Growl",pos:"verb",def:"A long deep snarl sound",ex:"Zeus growled at me when I tried to pet him."},
+  {id:"vw150",word:"Launch",pos:"verb/noun",def:"To cause the start of something large or important (verb); the release of a new product or event (noun)",ex:"The rocket launched at noon."},
+  {id:"vw151",word:"Position",pos:"noun/verb",def:"How someone is placed either physically or figuratively (noun); to place in a specific fashion (verb)",ex:"This decision has put her in a difficult position."},
+  {id:"vw152",word:"Review",pos:"noun/verb",def:"When a situation or idea is closely examined (noun); to reexamine; look at again for clarity or improvement (verb)",ex:"Professor Dunn gave us a super long math review."},
+  {id:"vw153",word:"Support",pos:"verb/noun",def:"To provide evidence or assistance; to agree (verb); assistance or encouragement (noun)",ex:"That beam supports the structure of the house."},
+  {id:"vw154",word:"Wreck",pos:"verb/noun",def:"To ruin something (verb); an event in which something sustains a large amount of damage (noun)",ex:"Why did you wreck my office?"},
+  {id:"vw155",word:"Delay",pos:"noun/verb",def:"Something that causes someone to wait (noun); to cause something to take longer (verb)",ex:"The Chiefs game is experiencing a rain delay."},
+  {id:"vw156",word:"Filter",pos:"noun/verb",def:"Something used to only allow certain materials through (noun); to remove unwanted materials (verb)",ex:"You need a coffee filter, so the grounds don't get into the mug."},
+  {id:"vw157",word:"Limp",pos:"adj/verb/noun",def:"Flimsy or weak (adj); to walk unsteadily due to an injury (verb); a difficulty walking (noun)",ex:"Starting a job interview with a limp handshake is not a good idea."},
+  {id:"vw158",word:"Plague",pos:"noun/verb",def:"An incurable, easily spreadable disease (noun); to inflict pain or trouble (verb)",ex:"The Bubonic Plague was a terrible tragedy in Europe."},
+  {id:"vw159",word:"Yield",pos:"verb/noun",def:"To produce (verb); the amount produced (noun)",ex:"This recipe yields 4 servings."},
+  {id:"vw160",word:"Burden",pos:"noun/verb",def:"Something especially hard (noun); to be given something difficult (verb)",ex:"Don't ever feel like a burden."},
+  {id:"vw161",word:"Switch",pos:"verb/noun",def:"To change from one thing to another (verb); a change (noun)",ex:"She switched places with Nicole at the last second."},
+  {id:"vw162",word:"Bundle",pos:"noun/verb",def:"A group of items that are connected or belong together (noun); to push together quickly (verb)",ex:"What a pretty bundle of flowers."},
+  {id:"vw163",word:"Fragment",pos:"noun/verb",def:"A piece of something (noun); to break into smaller parts (verb)",ex:"Honey, that fragment of a blanket needs to be thrown away."},
+  {id:"vw164",word:"Permit",pos:"verb/noun",def:"To let happen; allow (verb); a statement granting access or giving the right to do something (noun)",ex:"You are no longer permitted on this property."},
+  {id:"vw165",word:"Sacrifice",pos:"noun/verb",def:"A decision to give up something to gain something else (noun); to give up something of importance (verb)",ex:"Mom made the tough sacrifice of missing her favorite show to be here."},
+  {id:"vw166",word:"Shock",pos:"noun/verb",def:"A state of being surprised or stunned (noun); to be surprised or shocked by something (verb)",ex:"It was a huge shock to everyone that she chose to attend Missouri State."},
+  {id:"vw167",word:"Smash",pos:"verb/noun",def:"To violently break or hit something (verb); the sound made when something breaks (noun)",ex:"Please don't smash this vase it was my grandmother's."},
+  {id:"vw168",word:"Decrease",pos:"verb/noun",def:"To become less (verb); the amount by which something reduces (noun)",ex:"Let's decrease our carbon footprint by at least 3% this year."},
+  {id:"vw169",word:"Influence",pos:"noun/verb",def:"The power to cause change to someone or something else (noun); to indirectly affect how someone or something acts (verb)",ex:"Don't let peer pressure influence you into making a bad decision."},
+  {id:"vw170",word:"Humour",pos:"noun/verb",def:"Something funny; a quality that makes people laugh (noun); to pretend to like doing something to please someone else (verb)",ex:"That movie wasn't really my kind of humour."},
+  {id:"vw171",word:"Preview",pos:"noun/verb",def:"A viewing of something before it is public (noun); to see before anyone else (verb)",ex:"The exclusive movie preview was successful."},
+  {id:"vw172",word:"Service",pos:"noun/verb",def:"The help or assistance offered (noun); to provide assistance or help (verb)",ex:"The bottle service was excellent."},
+  {id:"vw173",word:"Struggle",pos:"verb/noun",def:"To experience difficulty doing something (verb); an experience in which you face difficulty (noun)",ex:"Miles and his family are struggling to find a good daycare."},
+  {id:"vw174",word:"Treasure",pos:"noun/verb",def:"A collection of valuable items (noun); to hold something in high regard (verb)",ex:"The pirates of Neverland finally located the buried treasure."},
+  {id:"vw175",word:"Torch",pos:"noun/verb",def:"A flashlight or small light source (noun); to purposely set on fire (verb)",ex:"He held out a torch in the cave so that they could see."},
+  {id:"vw176",word:"Blaze",pos:"noun/verb",def:"A large fire (noun); to burn intensely (verb)",ex:"The blaze in the field was out of control."},
+  {id:"vw177",word:"Brew",pos:"verb/noun",def:"To make a drink (verb); a drink made by brewing (noun)",ex:"Can you brew a fresh pot of coffee?"},
+  {id:"vw178",word:"Command",pos:"noun/verb",def:"An order to be followed (noun); to gain control of something (verb)",ex:"He is second in command."},
+  {id:"vw179",word:"Glance",pos:"verb/noun",def:"To look over quickly (verb); a quick look over (noun)",ex:"I took a glance at the menu."},
+  {id:"vw180",word:"Relay",pos:"verb",def:"To pass along a message",ex:"He relayed the news to me."},
+  {id:"vw181",word:"Request",pos:"noun/verb",def:"A formal demand (noun); to ask formally (verb)",ex:"I will put in a request for your transfer."},
+  {id:"vw182",word:"Salute",pos:"verb/noun",def:"To give respect to someone (verb); an act of respect (noun)",ex:"I saluted the Colonel."},
+  {id:"vw183",word:"Span",pos:"noun/verb",def:"A length of time in between (noun); to spread out across a period of time (verb)",ex:"Over the span of many years, Logan's Spanish has improved."},
+  {id:"vw184",word:"Tangle",pos:"verb/noun",def:"To get twisted together (verb); a twisted mess (noun)",ex:"Her hair was tangled from the wind."},
+  {id:"vw185",word:"Voyage",pos:"noun/verb",def:"A journey taken by ship or spacecraft (noun); to take a journey (verb)",ex:"Long ago, the Mayflower took its maiden voyage."},
+  {id:"vw186",word:"Glare",pos:"verb/noun",def:"To look at someone angrily (verb); an angry look or bright light (noun)",ex:"I don't know why she's glaring at me."},
+  {id:"vw187",word:"Increase",pos:"verb/noun",def:"To raise up (verb); a rise in something (noun)",ex:"Gas prices have continued to increase this year."},
+  {id:"vw188",word:"Remark",pos:"noun/verb",def:"An opinion or statement (noun); to give an opinion or statement (verb)",ex:"What a rude remark!"},
+  {id:"vw189",word:"Thrill",pos:"noun/verb",def:"A sudden feeling of happiness (noun); to make someone feel happy (verb)",ex:"That rollercoaster was such a thrill!"},
+  {id:"vw190",word:"Balance",pos:"noun/verb",def:"A state in which your weight is equal on all sides (noun); to distribute your weight evenly (verb)",ex:"Ballerinas must have good balance."},
+  {id:"vw191",word:"Beam",pos:"noun/verb",def:"A bright light line; a long piece of wood (noun); to light up with happiness (verb)",ex:"The flashlight emits a long beam of light."},
+  {id:"vw192",word:"Figure",pos:"noun/verb",def:"A number dealing with a specific amount (noun); to form an opinion (verb)",ex:"The figures this month are looking pretty good."},
+  {id:"vw193",word:"Wonder",pos:"verb/noun/adj",def:"To think over in order to make a guess (verb); a feeling of awe (noun); extremely effective (adj)",ex:"I wonder what she's going to do this evening."},
+  {id:"vw194",word:"Duplicate",pos:"verb/noun/adj",def:"To make an exact copy (verb); an exact copy; replica (noun); made to be an exact copy (adj)",ex:"It's hard to duplicate the feeling you get on Christmas morning."},
+  {id:"vw195",word:"Forecast",pos:"noun/verb",def:"A prediction of the future (noun); to predict future events (verb)",ex:"Check the weather forecast before you go."},
+  {id:"vw196",word:"Glimpse",pos:"noun/verb",def:"A quick look not allowing you to see a clear picture (noun); to see someone or something for a brief moment (verb)",ex:"I only caught a glimpse of the robber before he escaped."},
+  {id:"vw197",word:"Recruit",pos:"verb/noun",def:"To get new people involved (verb); a person that has joined (noun)",ex:"We need to recruit some more volunteers."},
+  {id:"vw198",word:"Update",pos:"verb/noun",def:"To provide the most recent information (verb); the most recent piece of information (noun)",ex:"Jamie will be updating us on the road conditions this morning."},
+  {id:"vw199",word:"Experience",pos:"noun/verb",def:"Obtained knowledge gained from practice (noun); to go through something (verb)",ex:"I've never experienced a winter day in New York City."},
+  {id:"vw200",word:"Catalogue",pos:"noun/verb",def:"A list composed of similar items (noun); to make a list of a specific group of items (verb)",ex:"Please find me a good furniture catalogue."}
+];
+
+// ═══════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════
+
+let state = {
+  section: 'phrasal',   // phrasal | vocab | daily
+  view: 'flashcard',    // flashcard | browse
+  cardIndex: 0,
+  flipped: false,
+  filterUnknown: false,
+  deck: [],             // current ordered deck
+};
+
+// localStorage helpers
+function loadProgress() {
+  try { return JSON.parse(localStorage.getItem('vocab_progress') || '{}'); } catch(e) { return {}; }
+}
+function saveProgress(p) {
+  localStorage.setItem('vocab_progress', JSON.stringify(p));
+}
+function loadStreak() {
+  try { return JSON.parse(localStorage.getItem('vocab_streak') || '{"days":0,"last":""}'); } catch(e) { return {days:0,last:""}; }
+}
+function saveStreak(s) { localStorage.setItem('vocab_streak', JSON.stringify(s)); }
+
+let progress = loadProgress();
+
+function isKnown(id) { return !!progress[id]; }
+function setKnown(id, val) {
+  if (val) progress[id] = true; else delete progress[id];
+  saveProgress(progress);
+  updateStreakToday();
+}
+
+function updateStreakToday() {
+  const today = new Date().toISOString().slice(0,10);
+  let s = loadStreak();
+  if (s.last !== today) {
+    const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0,10);
+    s.days = (s.last === yesterday) ? s.days + 1 : 1;
+    s.last = today;
+    saveStreak(s);
+  }
+}
+
+// ═══════════════════════════════════════════════
+// DAILY SET — seeded by date, 10 from each list
+// ═══════════════════════════════════════════════
+
+function getDailySet() {
+  const today = new Date().toISOString().slice(0,10);
+  const seed = today.replace(/-/g,'').split('').reduce((a,c) => a*31+c.charCodeAt(0),0);
+  function seededPick(arr, n, offset) {
+    const picked = [];
+    for (let i = 0; i < n; i++) {
+      picked.push(arr[Math.abs(seed * (i+1+offset)) % arr.length]);
+    }
+    // deduplicate
+    const seen = new Set();
+    return picked.filter(x => { if(seen.has(x.id)) return false; seen.add(x.id); return true; });
+  }
+  const pvPick = seededPick(phrasalVerbs, 10, 0);
+  const vwPick = seededPick(vocabWords, 10, 100);
+  return [...pvPick, ...vwPick];
+}
+
+function getItemLabel(item) {
+  return item.phrase || item.word;
+}
+function getItemPos(item) {
+  return item.phrase ? 'Phrasal Verb' : (item.pos || 'Word');
+}
+
+// ═══════════════════════════════════════════════
+// DECK MANAGEMENT
+// ═══════════════════════════════════════════════
+
+function buildDeck() {
+  let data;
+  if (state.section === 'phrasal') data = phrasalVerbs;
+  else if (state.section === 'vocab') data = vocabWords;
+  else data = getDailySet();
+
+  if (state.filterUnknown) {
+    const filtered = data.filter(x => !isKnown(x.id));
+    data = filtered.length > 0 ? filtered : data; // fallback to all if all known
+  }
+  state.deck = [...data];
+  state.cardIndex = 0;
+  state.flipped = false;
+}
+
+function getCurrentCard() {
+  return state.deck[state.cardIndex] || null;
+}
+
+// ═══════════════════════════════════════════════
+// FLASHCARD UI
+// ═══════════════════════════════════════════════
+
+function updateCard() {
+  const card = getCurrentCard();
+  if (!card) return;
+  state.flipped = false;
+  document.getElementById('flashcard').classList.remove('flipped');
+
+  document.getElementById('card-word').textContent = getItemLabel(card);
+  document.getElementById('card-pos').textContent = getItemPos(card);
+  document.getElementById('card-def').textContent = card.def;
+  document.getElementById('card-ex').textContent = '"' + card.ex + '"';
+  document.getElementById('card-num').textContent = (state.cardIndex+1) + ' / ' + state.deck.length;
+
+  const knownDot = document.getElementById('known-dot');
+  knownDot.style.display = isKnown(card.id) ? 'block' : 'none';
+
+  const pct = state.deck.length > 1 ? (state.cardIndex / (state.deck.length-1)) * 100 : 100;
+  document.getElementById('prog-bar').style.width = pct + '%';
+}
+
+function flipCard() {
+  state.flipped = !state.flipped;
+  document.getElementById('flashcard').classList.toggle('flipped', state.flipped);
+}
+
+function nextCard() {
+  if (state.cardIndex < state.deck.length - 1) state.cardIndex++;
+  else state.cardIndex = 0;
+  updateCard();
+}
+
+function prevCard() {
+  if (state.cardIndex > 0) state.cardIndex--;
+  else state.cardIndex = state.deck.length - 1;
+  updateCard();
+}
+
+function markCard(known) {
+  const card = getCurrentCard();
+  if (!card) return;
+  setKnown(card.id, known);
+  document.getElementById('known-dot').style.display = known ? 'block' : 'none';
+  nextCard();
+}
+
+function shuffleCards() {
+  for (let i = state.deck.length-1; i > 0; i--) {
+    const j = Math.floor(Math.random()*(i+1));
+    [state.deck[i], state.deck[j]] = [state.deck[j], state.deck[i]];
+  }
+  state.cardIndex = 0;
+  updateCard();
+}
+
+function showUnknownOnly() {
+  state.filterUnknown = !state.filterUnknown;
+  const btn = document.getElementById('filter-btn');
+  btn.textContent = state.filterUnknown ? '📋 Show All' : '🔍 Unknown Only';
+  btn.style.background = state.filterUnknown ? 'var(--primary-light)' : '';
+  btn.style.color = state.filterUnknown ? 'var(--primary)' : '';
+  buildDeck();
+  updateCard();
+}
+
+function resetSection() {
+  if (!confirm('Reset progress for this section?')) return;
+  state.deck.forEach(card => { delete progress[card.id]; });
+  saveProgress(progress);
+  buildDeck();
+  updateCard();
+}
+
+// ═══════════════════════════════════════════════
+// BROWSE UI
+// ═══════════════════════════════════════════════
+
+function renderWordList(data) {
+  const list = document.getElementById('word-list');
+  const q = document.getElementById('search-input').value.toLowerCase();
+  const filtered = q ? data.filter(item =>
+    getItemLabel(item).toLowerCase().includes(q) ||
+    item.def.toLowerCase().includes(q)
+  ) : data;
+
+  list.innerHTML = filtered.map(item => {
+    const known = isKnown(item.id);
+    return `<div class="wi${known?' learned':''}" id="wi-${item.id}">
+      <div class="wi-header" onclick="toggleItem('${item.id}')">
+        <div>
+          <div class="wi-title">${getItemLabel(item)}</div>
+          <div class="wi-pos">${getItemPos(item)}</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <div class="wi-check" onclick="event.stopPropagation();toggleKnown('${item.id}')">${known?'✓':''}</div>
+        </div>
+      </div>
+      <div class="wi-body">
+        <div class="wi-def">${item.def}</div>
+        <div class="wi-ex">"${item.ex}"</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleItem(id) {
+  const el = document.getElementById('wi-'+id);
+  if (el) el.classList.toggle('expanded');
+}
+
+function toggleKnown(id) {
+  setKnown(id, !isKnown(id));
+  const el = document.getElementById('wi-'+id);
+  if (!el) return;
+  const known = isKnown(id);
+  el.classList.toggle('learned', known);
+  el.querySelector('.wi-check').textContent = known ? '✓' : '';
+}
+
+function filterWords() {
+  let data;
+  if (state.section === 'phrasal') data = phrasalVerbs;
+  else if (state.section === 'vocab') data = vocabWords;
+  else data = getDailySet();
+  renderWordList(data);
+}
+
+// ═══════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════
+
+function setSection(sec) {
+  state.section = sec;
+  state.filterUnknown = false;
+  document.getElementById('filter-btn').textContent = '🔍 Unknown Only';
+  document.getElementById('filter-btn').style.background = '';
+  document.getElementById('filter-btn').style.color = '';
+  document.querySelectorAll('.stab').forEach((b,i) => {
+    b.classList.toggle('active', ['phrasal','vocab','daily'][i] === sec);
+  });
+  buildDeck();
+  if (state.view === 'flashcard') updateCard();
+  else filterWords();
+  // update daily badge
+  document.getElementById('daily-badge').textContent = getDailySet().length;
+}
+
+function setView(v) {
+  state.view = v;
+  document.querySelectorAll('.view-toggle button').forEach((b,i) => {
+    b.classList.toggle('active', ['flashcard','browse'][i] === v);
+  });
+  document.getElementById('flashcard-view').classList.toggle('hidden', v !== 'flashcard');
+  document.getElementById('browse-view').classList.toggle('hidden', v !== 'browse');
+  if (v === 'browse') filterWords();
+  else updateCard();
+}
+
+function showPage(page) {
+  document.getElementById('page-study').classList.toggle('hidden', page !== 'study');
+  document.getElementById('page-progress').classList.toggle('hidden', page !== 'progress');
+  document.querySelectorAll('.nav-item').forEach((b,i) => {
+    b.classList.toggle('active', ['study','progress'][i] === page);
+  });
+  if (page === 'progress') updateProgressPage();
+}
+
+// ═══════════════════════════════════════════════
+// PROGRESS PAGE
+// ═══════════════════════════════════════════════
+
+function updateProgressPage() {
+  const pvKnown = phrasalVerbs.filter(x => isKnown(x.id)).length;
+  const vwKnown = vocabWords.filter(x => isKnown(x.id)).length;
+  const total = pvKnown + vwKnown;
+
+  document.getElementById('stat-pv').textContent = pvKnown + ' / 200';
+  document.getElementById('stat-voc').textContent = vwKnown + ' / 200';
+  document.getElementById('stat-tot').textContent = total + ' / 400';
+  document.getElementById('fill-pv').style.width = (pvKnown/2) + '%';
+  document.getElementById('fill-voc').style.width = (vwKnown/2) + '%';
+  document.getElementById('fill-tot').style.width = (total/4) + '%';
+
+  const s = loadStreak();
+  document.getElementById('streak-val').textContent = s.days + (s.days === 1 ? ' day' : ' days');
+  document.getElementById('last-study').textContent = s.last ? 'Last studied: ' + s.last : 'Start studying to build your streak!';
+}
+
+function resetAll() {
+  progress = {};
+  saveProgress(progress);
+  saveStreak({days:0, last:""});
+  updateProgressPage();
+  buildDeck();
+  updateCard();
+}
+
+// ═══════════════════════════════════════════════
+// SWIPE GESTURES
+// ═══════════════════════════════════════════════
+
+let touchStartX = 0, touchStartY = 0;
+const fc = document.getElementById('flashcard');
+fc.addEventListener('touchstart', e => {
+  touchStartX = e.touches[0].clientX;
+  touchStartY = e.touches[0].clientY;
+}, {passive:true});
+fc.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  const dy = e.changedTouches[0].clientY - touchStartY;
+  if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 40) {
+    if (dx < 0) { markCard(false); }  // swipe left = again
+    else { markCard(true); }          // swipe right = known
+  }
+}, {passive:true});
+
+// ═══════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════
+
+buildDeck();
+updateCard();
+document.getElementById('daily-badge').textContent = getDailySet().length;
+</script>
+</body>
+</html>
