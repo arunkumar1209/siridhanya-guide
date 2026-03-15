@@ -1,0 +1,1792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Siridhanya — Dr. Khadar Vali's Millet Guide</title>
+<style>
+  :root {
+    --foxtail:   #d97706;
+    --kodo:      #7c3aed;
+    --little:    #16a34a;
+    --barnyard:  #0369a1;
+    --browntop:  #be123c;
+    --bg:        #fafaf9;
+    --sidebar:   #1c1917;
+    --text:      #1c1917;
+    --muted:     #78716c;
+    --border:    #e7e5e4;
+    --card:      #ffffff;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* ── SIDEBAR ── */
+  #sidebar {
+    width: 240px;
+    min-width: 240px;
+    background: var(--sidebar);
+    color: #e7e5e4;
+    display: flex;
+    flex-direction: column;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+  }
+
+  #sidebar .brand {
+    padding: 24px 20px 16px;
+    border-bottom: 1px solid #292524;
+  }
+  #sidebar .brand h1 {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: .3px;
+    color: #fafaf9;
+  }
+  #sidebar .brand p {
+    font-size: 11px;
+    color: #a8a29e;
+    margin-top: 4px;
+  }
+
+  #sidebar nav { flex: 1; padding: 16px 0; }
+
+  #sidebar nav .section-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #78716c;
+    padding: 8px 20px 4px;
+  }
+
+  #sidebar nav button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 10px 20px;
+    background: none;
+    border: none;
+    color: #d6d3d1;
+    font-size: 13.5px;
+    cursor: pointer;
+    text-align: left;
+    transition: background .15s, color .15s;
+    border-left: 3px solid transparent;
+  }
+  #sidebar nav button:hover { background: #292524; color: #fafaf9; }
+  #sidebar nav button.active {
+    background: #292524;
+    color: #fafaf9;
+    border-left-color: var(--accent);
+  }
+  #sidebar nav button .dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    background: var(--accent);
+  }
+
+  #sidebar .quote {
+    padding: 16px 20px;
+    border-top: 1px solid #292524;
+    font-size: 11px;
+    color: #78716c;
+    line-height: 1.5;
+    font-style: italic;
+  }
+
+  /* ── MAIN ── */
+  #main { flex: 1; overflow-y: auto; }
+
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* ── HERO BANNER ── */
+  .hero {
+    padding: 48px 48px 36px;
+    background: linear-gradient(135deg, var(--accent-light) 0%, white 60%);
+    border-bottom: 1px solid var(--border);
+  }
+  .hero .millet-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .8px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+  .hero h2 {
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -.5px;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  .hero .scientific {
+    font-size: 13px;
+    color: var(--muted);
+    font-style: italic;
+    margin-bottom: 20px;
+  }
+  .hero .summary {
+    font-size: 15px;
+    line-height: 1.7;
+    color: #44403c;
+    max-width: 700px;
+    margin-bottom: 24px;
+  }
+  .hero-meta {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .hero-meta .meta-chip {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .hero-meta .meta-chip .label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .8px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .hero-meta .meta-chip .value {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  /* ── SECTIONS ── */
+  .content { padding: 40px 48px; display: flex; flex-direction: column; gap: 48px; }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .section-header h3 {
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .section-header .badge {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent);
+    background: var(--accent-light);
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+
+  /* Names table */
+  .names-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 12px;
+  }
+  .name-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+  .name-card .lang { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .8px; color: var(--muted); margin-bottom: 4px; }
+  .name-card .name { font-size: 15px; font-weight: 600; color: var(--text); }
+
+  /* Benefits */
+  .benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 12px;
+  }
+  .benefit-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    border-left: 3px solid var(--accent);
+  }
+  .benefit-card .benefit-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+  .benefit-card .benefit-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+  /* Organ cleanse highlight */
+  .organ-banner {
+    background: var(--accent-light);
+    border: 1px solid var(--accent);
+    border-radius: 12px;
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+  .organ-banner .icon { font-size: 28px; }
+  .organ-banner .organ-text h4 { font-size: 15px; font-weight: 700; color: var(--accent); margin-bottom: 4px; }
+  .organ-banner .organ-text p { font-size: 13px; color: #44403c; line-height: 1.5; }
+
+  /* Health conditions */
+  .conditions-table {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .conditions-table table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .conditions-table thead th {
+    background: var(--accent-light);
+    color: var(--accent);
+    font-weight: 600;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .7px;
+    padding: 12px 16px;
+    text-align: left;
+  }
+  .conditions-table tbody tr { border-top: 1px solid var(--border); }
+  .conditions-table tbody tr:hover { background: #fafaf9; }
+  .conditions-table td { padding: 11px 16px; vertical-align: top; line-height: 1.5; }
+  .conditions-table td:first-child { font-weight: 600; }
+  .days-pill {
+    display: inline-flex;
+    align-items: center;
+    background: var(--accent);
+    color: white;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 20px;
+  }
+  .herb-list { color: var(--muted); font-size: 12px; }
+
+  /* Recipes */
+  .recipes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+  }
+  .recipe-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px;
+    transition: box-shadow .15s, transform .15s;
+  }
+  .recipe-card { cursor: pointer; }
+  .recipe-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,.07); transform: translateY(-2px); }
+  .recipe-card .recipe-view { font-size: 11px; color: var(--accent); font-weight: 600; margin-top: 10px; }
+
+  /* ── KASHAYAS GUIDE ── */
+  .kashaya-section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    margin-bottom: 0;
+  }
+  .kashaya-header {
+    background: var(--accent-light);
+    padding: 18px 24px;
+    border-bottom: 1px solid var(--border);
+  }
+  .kashaya-header h4 { font-size: 15px; font-weight: 700; color: var(--accent); margin-bottom: 6px; }
+  .kashaya-header p { font-size: 12px; color: #44403c; line-height: 1.6; max-width: 700px; }
+  .herb-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 0;
+  }
+  .herb-card {
+    padding: 16px 20px;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .herb-card:hover { background: var(--accent-light); }
+  .herb-card .herb-emoji { font-size: 20px; margin-bottom: 6px; }
+  .herb-card .herb-name { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+  .herb-card .herb-local { font-size: 11px; color: var(--accent); font-weight: 600; margin-bottom: 4px; }
+  .herb-card .herb-use { font-size: 11px; color: var(--muted); line-height: 1.4; }
+
+  /* ── MODAL ── */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.55);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal-box {
+    background: #fff;
+    border-radius: 16px;
+    width: 100%;
+    max-width: 640px;
+    max-height: 85vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0,0,0,.25);
+  }
+  .modal-top {
+    position: sticky;
+    top: 0;
+    background: #fff;
+    padding: 24px 28px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .modal-top .modal-cat { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--accent); margin-bottom: 4px; }
+  .modal-top .modal-title { font-size: 20px; font-weight: 700; color: var(--text); line-height: 1.3; }
+  .modal-close {
+    background: none; border: none; cursor: pointer; font-size: 22px; color: var(--muted);
+    padding: 0; line-height: 1; flex-shrink: 0; margin-top: 2px;
+  }
+  .modal-close:hover { color: var(--text); }
+  .modal-body { padding: 24px 28px; display: flex; flex-direction: column; gap: 20px; }
+  .modal-section h5 { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+  .ingredients-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+  .ingredients-list li {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border);
+    gap: 16px;
+  }
+  .ingredients-list li:last-child { border-bottom: none; }
+  .ing-name { color: var(--text); }
+  .ing-qty { color: var(--muted); font-size: 12px; white-space: nowrap; }
+  .procedure-text { font-size: 13px; color: #44403c; line-height: 1.8; white-space: pre-wrap; }
+  .modal-note { background: #fef9c3; border: 1px solid #fde047; border-radius: 8px; padding: 12px 16px; font-size: 12px; color: #713f12; line-height: 1.6; }
+  .recipe-card .recipe-cat {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .8px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+  .recipe-card .recipe-name { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+  .recipe-card .recipe-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+  /* Overview page */
+  .overview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+  }
+  .millet-overview-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px;
+    cursor: pointer;
+    transition: box-shadow .15s, transform .15s;
+    border-top: 4px solid var(--mc);
+  }
+  .millet-overview-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,.09); transform: translateY(-3px); }
+  .millet-overview-card h3 { font-size: 17px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+  .millet-overview-card .ov-sci { font-size: 12px; font-style: italic; color: var(--muted); margin-bottom: 12px; }
+  .millet-overview-card .ov-cleanse {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #f5f5f4;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 12px;
+    font-weight: 500;
+    margin-bottom: 12px;
+    color: #44403c;
+  }
+  .millet-overview-card .ov-desc { font-size: 13px; color: #57534e; line-height: 1.6; }
+
+  /* Stats row */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+  .stat-box {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+  }
+  .stat-box .stat-num { font-size: 28px; font-weight: 700; color: var(--accent); }
+  .stat-box .stat-label { font-size: 11px; color: var(--muted); margin-top: 4px; font-weight: 500; }
+
+  /* Ambali section */
+  .ambali-box {
+    background: linear-gradient(135deg, #fef3c7, #fff);
+    border: 1px solid #fbbf24;
+    border-radius: 14px;
+    padding: 28px;
+  }
+  .ambali-box h4 { font-size: 18px; font-weight: 700; color: #92400e; margin-bottom: 8px; }
+  .ambali-box p { font-size: 14px; color: #78350f; line-height: 1.7; }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    body { flex-direction: column; }
+    #sidebar { width: 100%; height: auto; position: static; flex-direction: row; overflow-x: auto; }
+    #sidebar nav { display: flex; padding: 0; }
+    #sidebar nav button { white-space: nowrap; }
+    #sidebar .brand, #sidebar .quote { display: none; }
+    .hero, .content { padding: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside id="sidebar">
+  <div class="brand">
+    <h1>Siridhanya Guide</h1>
+    <p>Dr. Khadar Vali's Millet System</p>
+  </div>
+  <nav>
+    <div class="section-label">Overview</div>
+    <button onclick="showTab('overview')" id="btn-overview" class="active" style="--accent:#d97706">
+      <span class="dot" style="background:#d97706"></span> All Millets
+    </button>
+    <div class="section-label" style="margin-top:8px">Positive Millets</div>
+    <button onclick="showTab('foxtail')" id="btn-foxtail" style="--accent:#d97706">
+      <span class="dot" style="background:#d97706"></span> Foxtail Millet
+    </button>
+    <button onclick="showTab('kodo')" id="btn-kodo" style="--accent:#7c3aed">
+      <span class="dot" style="background:#7c3aed"></span> Kodo Millet
+    </button>
+    <button onclick="showTab('little')" id="btn-little" style="--accent:#16a34a">
+      <span class="dot" style="background:#16a34a"></span> Little Millet
+    </button>
+    <button onclick="showTab('barnyard')" id="btn-barnyard" style="--accent:#0369a1">
+      <span class="dot" style="background:#0369a1"></span> Barnyard Millet
+    </button>
+    <button onclick="showTab('browntop')" id="btn-browntop" style="--accent:#be123c">
+      <span class="dot" style="background:#be123c"></span> Browntop Millet
+    </button>
+  </nav>
+  <div class="quote">"When food is right, medicine is of no need."<br>— Dr. Khadar Vali</div>
+</aside>
+
+<!-- MAIN -->
+<main id="main">
+
+<!-- ═══════════════ OVERVIEW ═══════════════ -->
+<div id="tab-overview" class="tab-content active" style="--accent:#d97706;--accent-light:#fef3c7">
+
+  <div class="hero" style="background: linear-gradient(135deg,#fef3c7 0%,white 70%)">
+    <div class="millet-tag">● Siridhanya System</div>
+    <h2>The Five Positive Millets</h2>
+    <p class="scientific">Dr. Khadar Vali's Classification of Healing Grains</p>
+    <p class="summary">
+      Dr. Khadar Vali identified five "Siridhanya" (positive millets) — grains with a Carbohydrate-to-Fiber ratio below 10.
+      This single property ensures slow glucose release, deep organ cleansing, and restoration of health from its root causes.
+      Each millet specialises in cleansing a different organ system, making rotation across all five essential for complete health.
+    </p>
+  </div>
+
+  <div class="content">
+    <div class="stats-row">
+      <div class="stat-box"><div class="stat-num">5</div><div class="stat-label">Positive Millets</div></div>
+      <div class="stat-box"><div class="stat-num">&lt;10</div><div class="stat-label">Carb:Fiber Ratio</div></div>
+      <div class="stat-box"><div class="stat-num">100+</div><div class="stat-label">Conditions Treated</div></div>
+      <div class="stat-box"><div class="stat-num">110+</div><div class="stat-label">Recipes in Paka Siri</div></div>
+    </div>
+
+    <div>
+      <div class="section-header"><h3>At a Glance — All Five Millets</h3></div>
+      <div class="overview-grid">
+        <div class="millet-overview-card" style="--mc:#d97706" onclick="showTab('foxtail')">
+          <h3>Foxtail Millet</h3>
+          <div class="ov-sci">Setaria italica • Navane / Korra / Tenai</div>
+          <div class="ov-cleanse">🧠 Cleanses Nervous &amp; Respiratory System</div>
+          <p class="ov-desc">The most balanced of the five Siridhanyas. Rich in protein (12%) and fiber (8%). Base food for lung cancer, Parkinson's, asthma, and anemia. Especially beneficial for lung tissue cleansing.</p>
+        </div>
+        <div class="millet-overview-card" style="--mc:#7c3aed" onclick="showTab('kodo')">
+          <h3>Kodo Millet</h3>
+          <div class="ov-sci">Paspalum scrobiculatum • Arka / Arikelu / Varagu</div>
+          <div class="ov-cleanse">🩸 Cleanses Bone Marrow</div>
+          <p class="ov-desc">Specialises in blood production. Heals blood cancer, anemia, low platelet count, and blood-related diseases. Also highly effective for diabetes, kidney problems, and joint swelling.</p>
+        </div>
+        <div class="millet-overview-card" style="--mc:#16a34a" onclick="showTab('little')">
+          <h3>Little Millet</h3>
+          <div class="ov-sci">Panicum sumatrense • Saame / Samulu / Samai</div>
+          <div class="ov-cleanse">🌿 Cleanses Reproductive Organs</div>
+          <p class="ov-desc">The primary grain for all reproductive health issues — PCOD, fibroids, infertility, irregular periods, low sperm count. Also excellent for thyroid, hormonal imbalances, and lymphatic system.</p>
+        </div>
+        <div class="millet-overview-card" style="--mc:#0369a1" onclick="showTab('barnyard')">
+          <h3>Barnyard Millet</h3>
+          <div class="ov-sci">Echinochloa frumentacea • Oodhalu / Udhalu / Sanwa</div>
+          <div class="ov-cleanse">🫀 Cleanses Liver &amp; Soft Organs</div>
+          <p class="ov-desc">Primary cleanser for liver, kidneys, urinary bladder and gallbladder. Treats jaundice, hepatitis A/B/C, liver cirrhosis. Iron-rich — used in North India and Nepal during fasting and post-natal recovery.</p>
+        </div>
+        <div class="millet-overview-card" style="--mc:#be123c" onclick="showTab('browntop')">
+          <h3>Browntop Millet</h3>
+          <div class="ov-sci">Brachiaria ramosa • Korale / Andu korralu / Makra</div>
+          <div class="ov-cleanse">✨ Detoxifies Entire Body (Head to Toe)</div>
+          <p class="ov-desc">The universal detoxifier. Lowest Carb:Fiber ratio of all five (5.54). The only grain that can provide relief from ALL types of cancers. Cures all alimentary canal issues — constipation, gastric ulcers, piles, fistula.</p>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="section-header"><h3>Carb:Fiber Ratio Comparison</h3></div>
+      <div class="conditions-table">
+        <table>
+          <thead><tr><th>Grain</th><th>Category</th><th>Carb:Fiber Ratio</th><th>Note</th></tr></thead>
+          <tbody>
+            <tr><td>Browntop Millet</td><td>✅ Positive (Siridhanya)</td><td><span class="days-pill" style="background:#be123c">5.54</span></td><td>Lowest ratio — strongest detoxifier</td></tr>
+            <tr><td>Kodo Millet</td><td>✅ Positive (Siridhanya)</td><td><span class="days-pill" style="background:#7c3aed">~6</span></td><td>Bone marrow cleanser</td></tr>
+            <tr><td>Little Millet</td><td>✅ Positive (Siridhanya)</td><td><span class="days-pill" style="background:#16a34a">~6</span></td><td>Reproductive cleanser</td></tr>
+            <tr><td>Foxtail Millet</td><td>✅ Positive (Siridhanya)</td><td><span class="days-pill" style="background:#d97706">~7</span></td><td>Most balanced grain</td></tr>
+            <tr><td>Barnyard Millet</td><td>✅ Positive (Siridhanya)</td><td><span class="days-pill" style="background:#0369a1">~7</span></td><td>Liver cleanser</td></tr>
+            <tr><td>Finger Millet (Ragi)</td><td>⚪ Neutral</td><td>~12</td><td>Okay for healthy people</td></tr>
+            <tr><td>Pearl Millet (Bajra)</td><td>⚪ Neutral</td><td>~14</td><td>Okay for healthy people</td></tr>
+            <tr><td>Wheat</td><td>❌ Negative</td><td>63.5</td><td>Avoid completely</td></tr>
+            <tr><td>Paddy Rice</td><td>❌ Negative</td><td>395</td><td>Causes glucose spike</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="ambali-box">
+      <h4>🍵 Ambali — The Elixir</h4>
+      <p>Fermented millet porridge (Ambali / Khameer) is the most potent form of consuming Siridhanya. Soak any positive millet for 6–8 hours, cook as a thin gruel, cover with a clean cotton/khadi cloth, and ferment for 7–8 hours. This fermentation produces probiotics, corrects gut microbiome imbalance, and is the key to natural Vitamin B12 synthesis. For serious chronic conditions, consuming Ambali for all 3 meals for 6–9 weeks accelerates recovery.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ FOXTAIL ═══════════════ -->
+<div id="tab-foxtail" class="tab-content" style="--accent:#d97706;--accent-light:#fef3c7">
+  <div class="hero">
+    <div class="millet-tag">● Positive Millet</div>
+    <h2>Foxtail Millet</h2>
+    <p class="scientific">Setaria italica — "The Most Balanced Siridhanya"</p>
+    <p class="summary">Sweet, slightly bitter in taste. Considered the most balanced of the five Siridhanyas with all nutrients in right proportion. Especially effective at cleansing the nervous system and respiratory system. Contains 12% protein and 8% fiber. Base food for lung cancer, Parkinson's disease, asthma and anemia.</p>
+    <div class="hero-meta">
+      <div class="meta-chip"><span class="label">Taste</span><span class="value">Sweet, Bitter</span></div>
+      <div class="meta-chip"><span class="label">Carb:Fiber Ratio</span><span class="value">&lt;10 (Single Digit)</span></div>
+      <div class="meta-chip"><span class="label">Protein</span><span class="value">12%</span></div>
+      <div class="meta-chip"><span class="label">Fiber</span><span class="value">8%</span></div>
+      <div class="meta-chip"><span class="label">Soaking Time</span><span class="value">6+ hours</span></div>
+    </div>
+  </div>
+
+  <div class="content">
+    <div>
+      <div class="section-header"><h3>Names in Different Languages</h3></div>
+      <div class="names-grid">
+        <div class="name-card"><div class="lang">English</div><div class="name">Foxtail Millet</div></div>
+        <div class="name-card"><div class="lang">Hindi</div><div class="name">Kakum / Kangni</div></div>
+        <div class="name-card"><div class="lang">Kannada</div><div class="name">Navane</div></div>
+        <div class="name-card"><div class="lang">Telugu</div><div class="name">Korra</div></div>
+        <div class="name-card"><div class="lang">Tamil</div><div class="name">Tenai</div></div>
+        <div class="name-card"><div class="lang">Marathi</div><div class="name">Rala</div></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="organ-banner">
+        <div class="icon">🧠</div>
+        <div class="organ-text">
+          <h4>Primary Organ System: Nervous System &amp; Respiratory System</h4>
+          <p>Foxtail millet has the unique ability to cleanse the nervous system and lung tissues. It is the base food recommended for lung cancer, Parkinson's disease, asthma, and epileptic convulsions.</p>
+        </div>
+      </div>
+      <div class="section-header"><h3>Health Benefits</h3></div>
+      <div class="benefits-grid">
+        <div class="benefit-card"><div class="benefit-title">Anemia</div><div class="benefit-desc">Rich in proteins and iron — a good natural medicine for anemia, especially in women and children.</div></div>
+        <div class="benefit-card"><div class="benefit-title">Lung Tissue Cleansing</div><div class="benefit-desc">Lung tissues get especially cleaned up. Base food for lung cancer. Also helps in asthma management.</div></div>
+        <div class="benefit-card"><div class="benefit-title">Seizures &amp; Nerve Weakness</div><div class="benefit-desc">Drives away seizures in children with high fever. Strengthens weak nerves and acts as medicine for convulsions.</div></div>
+        <div class="benefit-card"><div class="benefit-title">Constipation</div><div class="benefit-desc">High fiber content relieves constipation, including in pregnant women. Elders traditionally recommended foxtail millet gruel for fever recovery.</div></div>
+        <div class="benefit-card"><div class="benefit-title">Diabetes Management</div><div class="benefit-desc">Reduces cholesterol. Good for diabetic patients due to slow glucose release and antioxidant activity.</div></div>
+        <div class="benefit-card"><div class="benefit-title">Heart &amp; Obesity</div><div class="benefit-desc">Good for heart ailments, obesity, arthritis, bleeding and burns in women. Rich in calcium, iron, manganese, magnesium, phosphorus.</div></div>
+        <div class="benefit-card"><div class="benefit-title">Stomach &amp; Urinary</div><div class="benefit-desc">Acts like medicine for stomachache, burning sensation while urinating, diarrhea, and lack of hunger.</div></div>
+        <div class="benefit-card"><div class="benefit-title">Skin &amp; Cancer</div><div class="benefit-desc">Useful for certain skin diseases, mouth cancer, abdominal cancer, Parkinson's disease, and asthma (with Kodo).</div></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="section-header"><h3>Kashayas (Decoctions) Guide</h3><div class="badge">Morning Ritual</div></div>
+      <div class="kashaya-section">
+        <div class="kashaya-header">
+          <h4>How to Prepare Kashaya</h4>
+          <p>Take 10–15 fresh leaves (or 1 tsp seeds/bark/powder) of the herb. Boil in 2 cups of water until reduced to 1 cup. Strain and drink warm on an empty stomach each morning. <strong>Rotate ONE herb per week</strong> — never use the same herb for more than 7 consecutive days. The rotation itself activates different healing pathways.</p>
+        </div>
+        <div class="herb-cards-grid">
+          <div class="herb-card"><div class="herb-emoji">🌿</div><div class="herb-name">Tinospora cordifolia</div><div class="herb-local">Giloy / Guduchi / Tippa teega</div><div class="herb-use">Diabetes, blood sugar control, immunity booster. Used for all 5 millets' diabetes protocol.</div></div>
+          <div class="herb-card"><div class="herb-emoji">🍃</div><div class="herb-name">Ruta graveolens</div><div class="herb-local">Common Rue / Sadaap / Aruda</div><div class="herb-use">Sciatica, cervical, lumbar, chikungunya, nerve disorders, asthma. A key nerve-healing herb.</div></div>
+          <div class="herb-card"><div class="herb-emoji">🌸</div><div class="herb-name">Nyctanthes arbor-tristis</div><div class="herb-local">Night Jasmine / Parijata / Parijatam</div><div class="herb-use">BASE for all cancer protocols (morning decoction). Also arthritis, chikungunya, nerve diseases.</div></div>
+          <div class="herb-card"><div class="herb-emoji">🌳</div><div class="herb-name">Peepal (Sacred Fig)</div><div class="herb-local">Ashwatha / Raavi / Arasa maram</div><div class="herb-use">BASE for all cancer protocols (morning). Paralysis, obesity, Alzheimer's, Parkinson's.</div></div>
+          <div class="herb-card"><div class="herb-emoji">🍈</div><div class="herb-name">Guava leaves</div><div class="herb-local">Peru / Jamba / Seebe</div><div class="herb-use">Cancer base (morning), joint swelling, arthritis, chikungunya, nerve weakness.</div></div>
+          <div class="herb-card"><div class="herb-emoji">🌱</div><div class="herb-name">Bermuda grass</div><div class="herb-local">Doob / Arugampul / Garika</div><div class="herb-use">Asthma, obesity, dengue fever, chikungunya. Cooling and anti-inflammatory.</div></div>
+          <div class="herb-card"><div class="herb-emoji">🍋</div><div class="herb-name">Ruta + Curry leaves</div><div class="herb-local">Rue + Kadipatta / Karivepaku</div><div class="herb-use">Nerve weakness, accident recovery, ligament tears, bone fractures, motor neuron disease.</div></div>
+          <div class="herb-card"><div class="herb-emoji">🌿</div><div class="herb-name">Centella asiatica</div><div class="herb-local">Brahmi / Mandukaparni / Saraswati</div><div class="herb-use">Skin diseases, psoriasis, eczema, vitiligo, brain health. Powerful skin-healing herb.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="section-header"><h3>Health Conditions &amp; Protocol</h3><div class="badge">From Protocol Book</div></div>
+      <div class="conditions-table">
+        <table>
+          <thead><tr><th>Condition(s)</th><th>Days/Week</th><th>Key Kashayas (Decoctions)</th></tr></thead>
+          <tbody>
+            <tr><td>Asthma, TB, Pneumonia, Sinusitis</td><td><span class="days-pill">2 days</span></td><td class="herb-list">Organic turmeric, Ginger, Ruta graveolens, Neem, Curry leaves, Bermuda grass, Tinospora cordifolia</td></tr>
+            <tr><td>Parkinson's, Alzheimer's, Fits, Paralysis</td><td><span class="days-pill">3 days</span></td><td class="herb-list">Guava leaves, Nyctanthes arbor-tristis, Peepal, Cinnamon, Turmeric, Abutilon indicum</td></tr>
+            <tr><td>Eye Problems, Glaucoma</td><td><span class="days-pill">3 days</span></td><td class="herb-list">Dill weed leaves, Drumstick leaves, Mint, Curry leaves, Betel leaves, Ruta graveolens</td></tr>
+            <tr><td>Obesity / Weight Loss</td><td><span class="days-pill">1 day</span></td><td class="herb-list">Peepal, Betel leaves, Cumin seeds, Bermuda grass, Wild date palm leaves, Turmeric</td></tr>
+            <tr><td>Cervical (C4/C5), Lumbar (L4/L5), Sciatica</td><td><span class="days-pill">3 days</span></td><td class="herb-list">Curry leaves, Nyctanthes arbor-tristis, Guava, Abutilon indicum, Pongamia, Tamarind leaves</td></tr>
+            <tr><td>Constipation, Piles, Fistula, Fissures</td><td><span class="days-pill">3 days</span></td><td class="herb-list">Pongamia, Senna, Roselle, Fenugreek leaves, Coriander, Banana stem</td></tr>
+            <tr><td>Skin Problems, Psoriasis, Eczema, Vitiligo</td><td><span class="days-pill">3 days</span></td><td class="herb-list">Aloe vera, Centella asiatica, Mint, Coriander, Dill weed, Abutilon indicum</td></tr>
+            <tr><td>Joint Swellings, Arthritis, Rheumatoid Arthritis</td><td><span class="days-pill">3 days</span></td><td class="herb-list">Guava, Nyctanthes arbor-tristis, Aegle marmelos, Bermuda grass, Tridax procumbens, Pongamia</td></tr>
+            <tr><td>Chikungunya</td><td><span class="days-pill">3 days</span></td><td class="herb-list">Bermuda grass, Ruta graveolens, Chamomile, Guava leaves, Nyctanthes arbor-tristis</td></tr>
+            <tr><td>Lupus / SLE</td><td><span class="days-pill">3 days</span></td><td class="herb-list">Wild date palm, Aegle marmelos, Pongamia, Abutilon indicum</td></tr>
+            <tr><td>Accident / Ligament Tear / Bone Fracture</td><td><span class="days-pill">3 days</span></td><td class="herb-list">Common rue (Ruta), Coat buttons (Tridax), Moringa, Curry leaves</td></tr>
+            <tr><td>Motor Neuron Disease</td><td><span class="days-pill">3 days</span></td><td class="herb-list">Turmeric, Aegle marmelos, Ruta graveolens, Bermuda grass, Nyctanthes, Betel leaves</td></tr>
+            <tr><td>Lung Cancer</td><td><span class="days-pill">2 days</span></td><td class="herb-list">Nyctanthes arbor-tristis, Peepal, Guava, Japanese mugwort + Afternoon: Ginger, Turmeric</td></tr>
+            <tr><td>Mouth Cancer, Esophageal Cancer</td><td><span class="days-pill">2 days</span></td><td class="herb-list">Nyctanthes, Peepal, Guava + Afternoon: Mint, Ginger, Silver palm date leaves</td></tr>
+            <tr><td>Diabetes</td><td><span class="days-pill">2 days</span></td><td class="herb-list">Tinospora cordifolia, Jamun leaves, Ivy gourd, Mint, Drumstick, Fenugreek, Coriander</td></tr>
+            <tr><td>During Pregnancy</td><td><span class="days-pill">2 days</span></td><td class="herb-list">Chrysanthemum, Abutilon indicum, Betel leaves, Roselle, Lemon grass, Mint</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div>
+      <div class="section-header"><h3>Recipes from Paka Siri Cookbook</h3><div class="badge">Foxtail Millet</div></div>
+      <div class="recipes-grid">
+        <div class="recipe-card"><div class="recipe-cat">Breakfast</div><div class="recipe-name">Foxtail Millet Instant Dosa with Curd</div><div class="recipe-desc">Quick crispy dosa using foxtail millet flour with curd batter. No fermentation needed.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Breakfast</div><div class="recipe-name">Foxtail Millet Paniyaram</div><div class="recipe-desc">Soft, fluffy paniyaram balls made from foxtail millet batter, cooked in a paniyaram pan.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Breakfast</div><div class="recipe-name">Foxtail Millet Punugulu</div><div class="recipe-desc">Crispy fried dumplings using foxtail millet batter — popular Andhra snack.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Breakfast</div><div class="recipe-name">Foxtail Millet Pulka</div><div class="recipe-desc">Soft, puffed flatbread made from foxtail millet flour.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Breakfast</div><div class="recipe-name">Foxtail Millet Spicy Roti</div><div class="recipe-desc">Thick spiced flatbread without black gram flour — wholesome breakfast option.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Breakfast</div><div class="recipe-name">Foxtail Millet Potato Chapati (Paratha)</div><div class="recipe-desc">Stuffed paratha with spiced potato filling using foxtail millet dough.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Breakfast</div><div class="recipe-name">Foxtail Millet Puri</div><div class="recipe-desc">Deep-fried puffy bread from foxtail millet dough.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Rice / Main</div><div class="recipe-name">Foxtail Millet Spinach Rice</div><div class="recipe-desc">Foxtail millet rice cooked with spinach, homemade masala powder, and dry coconut.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Rice / Main</div><div class="recipe-name">Foxtail Millet Tamarind Puliyogare</div><div class="recipe-desc">Traditional tamarind rice with foxtail millet — tangy and aromatic.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Rice / Main</div><div class="recipe-name">Foxtail Millet Citron Fruit Rice</div><div class="recipe-desc">Fragrant citron-flavoured millet rice — bright and refreshing.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Rice / Main</div><div class="recipe-name">Foxtail Millet Vangi Bath</div><div class="recipe-desc">Karnataka-style brinjal rice using foxtail millet with special spice blend.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Snack</div><div class="recipe-name">Foxtail Millet Tapilent (Shallow Fry)</div><div class="recipe-desc">Shallow-fried crispy millet snack discs.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Snack</div><div class="recipe-name">Foxtail Millet Flour Mirchi Bajji</div><div class="recipe-desc">Green chilli fritters dipped in foxtail millet flour batter — crispy coating.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Snack</div><div class="recipe-name">Foxtail Millet–Yellow Moong Dal Roti</div><div class="recipe-desc">Protein-rich flatbread combining foxtail millet and yellow moong dal.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Savoury</div><div class="recipe-name">Foxtail Millet Sev / Tomato Sev / Mint Sev</div><div class="recipe-desc">Three varieties of crispy millet sev — plain, tomato-flavoured, and mint-flavoured.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Savoury</div><div class="recipe-name">Foxtail Millet Fryums</div><div class="recipe-desc">Sun-dried millet fryums for deep-frying — crunchy accompaniment to meals.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Sweet</div><div class="recipe-name">Foxtail Millet Laddu</div><div class="recipe-desc">Nutritious laddus made from roasted foxtail millet flour with palm jaggery.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Sweet</div><div class="recipe-name">Foxtail Millet Boondi Laddu</div><div class="recipe-desc">Boondi-style laddus from foxtail millet — festive sweet.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Sweet</div><div class="recipe-name">Foxtail Millet Bandar Laddu</div><div class="recipe-desc">Famous Bandar-style laddu made with foxtail millet instead of besan.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Sweet</div><div class="recipe-name">Foxtail Millet Burfi</div><div class="recipe-desc">Fudge-like sweet made from foxtail millet flour, palm jaggery, and ghee.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Sweet</div><div class="recipe-name">Foxtail Millet Poornalu</div><div class="recipe-desc">Sweet fried dumplings stuffed with coconut-jaggery filling.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ KODO ═══════════════ -->
+<div id="tab-kodo" class="tab-content" style="--accent:#7c3aed;--accent-light:#ede9fe">
+  <div class="hero">
+    <div class="millet-tag">● Positive Millet</div>
+    <h2>Kodo Millet</h2>
+    <p class="scientific">Paspalum scrobiculatum — "The Blood Cleanser"</p>
+    <p class="summary">Sweet, bitter and acrid in taste. Kodo millet specialises in cleansing the bone marrow — the body's blood production centre. Any health issue related to blood components (anemia, blood cancer, low platelets) can be addressed by this millet. Highly nutritious for children and effective for diabetes, kidney problems and joint diseases.</p>
+    <div class="hero-meta">
+      <div class="meta-chip"><span class="label">Taste</span><span class="value">Sweet, Bitter, Acrid</span></div>
+      <div class="meta-chip"><span class="label">Carb:Fiber Ratio</span><span class="value">&lt;10 (Single Digit)</span></div>
+      <div class="meta-chip"><span class="label">Soaking</span><span class="value">6+ hours</span></div>
+      <div class="meta-chip"><span class="label">Water ratio</span><span class="value">1:3 (millet:water)</span></div>
+    </div>
+  </div>
+
+  <div class="content">
+    <div>
+      <div class="section-header"><h3>Names in Different Languages</h3></div>
+      <div class="names-grid">
+        <div class="name-card"><div class="lang">English</div><div class="name">Kodo Millet</div></div>
+        <div class="name-card"><div class="lang">Hindi</div><div class="name">Kodon</div></div>
+        <div class="name-card"><div class="lang">Kannada</div><div class="name">Arka</div></div>
+        <div class="name-card"><div class="lang">Telugu</div><div class="name">Arikelu</div></div>
+        <div class="name-card"><div class="lang">Tamil</div><div class="name">Varagu</div></div>
+        <div class="name-card"><div class="lang">Marathi</div><div class="name">Kodro</div></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="organ-banner" style="background:#f5f3ff;border-color:#7c3aed">
+        <div class="icon">🩸</div>
+        <div class="organ-text">
+          <h4>Primary Organ System: Bone Marrow (Blood Production Centre)</h4>
+          <p>Kodo millet cleanses the bone marrow. Therefore any health issue related to blood components — anemia, blood cancer, low platelet count — can be cured by consuming this grain. It also has amazing ability to purify blood and improve resistance.</p>
+        </div>
+      </div>
+      <div class="section-header"><h3>Health Benefits</h3></div>
+      <div class="benefits-grid">
+        <div class="benefit-card"><div class="benefit-title">Blood Purification</div><div class="benefit-desc">Purifies blood, improves resistance power, overcomes anemia and helps in sound sleep. Efficient functioning of bone marrow.</div></div>
+        <div class="benefit-card"><div class="benefit-title">Blood &amp; Intestinal Cancer</div><div class="benefit-desc">Effective for blood cancer and cancers of intestine, thyroid, throat, pancreas and liver.</div></div>
+        <div class="benefit-card"><div class="benefit-title">Diabetes</div><div class="benefit-desc">Keeps blood sugar and cholesterol levels in check. Especially for diabetic patients who develop gangrene after leg injuries.</div></div>
+        <div class="benefit-card"><div class="benefit-title">Kidney &amp; Prostate</div><div class="benefit-desc">Gets rid of asthma and kidney problems, problems related to prostate.</div></div>
+        <div class="benefit-card"><div class="benefit-title">Weight Management</div><div class="benefit-desc">High fiber content aids weight reduction. Good energy for sprint athletes when combined with pulses.</div></div>
+        <div class="benefit-card"><div class="benefit-title">Eye Nerve Weakness</div><div class="benefit-desc">Good food for women who suffer from irregular periods and those with weak eye nerves.</div></div>
+        <div class="benefit-card"><div class="benefit-title">Joint Swelling</div><div class="benefit-desc">Good for swelling of joints. The flour of Kodo millet can be applied externally on swellings for relief.</div></div>
+        <div class="benefit-card"><div class="benefit-title">Post-Viral Recovery</div><div class="benefit-desc">Helpful for recovery from dengue, typhoid, and viral fevers. Reduces pain from long-term diseases.</div></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="section-header"><h3>Kashayas (Decoctions) Guide</h3><div class="badge">Morning Ritual</div></div>
+      <div class="kashaya-section">
+        <div class="kashaya-header">
+          <h4>How to Prepare Kashaya</h4>
+          <p>Take 10–15 fresh leaves (or 1 tsp seeds/bark/powder) of the herb. Boil in 2 cups of water until reduced to 1 cup. Strain and drink warm on an empty stomach each morning. <strong>Rotate ONE herb per week</strong> — never use the same herb for more than 7 consecutive days.</p>
+        </div>
+        <div class="herb-cards-grid">
+          <div class="herb-card"><div class="herb-emoji">🌸</div><div class="herb-name">Nyctanthes arbor-tristis</div><div class="herb-local">Night Jasmine / Parijata / Parijatam</div><div class="herb-use">Blood cancer, anemia, low platelets, dengue, typhoid recovery. The primary blood-healing herb.</div></div>
+          <div class="herb-card"><div class="herb-emoji">🍂</div><div class="herb-name">Phyllanthus niruri</div><div class="herb-local">Bhumi amla / Keela nelli / Nela usiri</div><div class="herb-use">Hepatitis B, liver disease, kidney cleaning, jaundice. Most powerful liver-protective herb.</div></div>
+          <div class="herb-card"><div class="herb-emoji">🌿</div><div class="herb-name">Boerhavia diffusa</div><div class="herb-local">Punarnava / Muppala damu</div><div class="herb-use">Kidney disease, dialysis, albumin in urine, gout, uric acid. Powerful diuretic and kidney herb.</div></div>
+          <div class="herb-card"><div class="herb-emoji">🍃</div><div class="herb-name">Bryophyllum pinnatum</div><div class="herb-local">Patharchatta / Sirukattu shedi</div><div class="herb-use">Kidney stones, gout, uric acid, urine infection. Dissolves stones over time.</div></div>
+          <div class="herb-card"><div class="herb-emoji">🌿</div><div class="herb-name">Ruta graveolens</div><div class="herb-local">Common Rue / Sadaap / Aruda</div><div class="herb-use">Fatty liver, spleen issues, pancreatitis. Liver detox and regeneration support.</div></div>
+          <div class="herb-card"><div class="herb-emoji">🍀</div><div class="herb-name">Aegle marmelos</div><div class="herb-local">Bael / Bilva / Maredu</div><div class="herb-use">Digestive disorders, fatty liver, HIV, pancreatitis. Sacred and medicinal fruit tree.</div></div>
+          <div class="herb-card"><div class="herb-emoji">🥬</div><div class="herb-name">Papaya leaves</div><div class="herb-local">Boppayi aaku / Papita patta</div><div class="herb-use">Anemia, low platelet count (dengue/typhoid), blood cancer recovery. Rapid platelet booster.</div></div>
+          <div class="herb-card"><div class="herb-emoji">🪴</div><div class="herb-name">Banana stem juice</div><div class="herb-local">Arati dandu / Kela ke tane</div><div class="herb-use">Kidney stones, diuretic, kidney and liver cleansing, albumin in urine.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="section-header"><h3>Health Conditions &amp; Protocol</h3><div class="badge">From Protocol Book</div></div>
+      <div class="conditions-table">
+        <table>
+          <thead><tr><th>Condition(s)</th><th>Days/Week</th><th>Key Kashayas (Decoctions)</th></tr></thead>
+          <tbody>
+            <tr><td>Dialysis, Albumin Urea, Gout, Uric Acid</td><td><span class="days-pill" style="background:#7c3aed">3 days</span></td><td class="herb-list">Nyctanthes arbor-tristis, Coriander, Bryophyllum pinnatum, Banana stem, Boerhavia diffusa, Abutilon indicum</td></tr>
+            <tr><td>HIV</td><td><span class="days-pill" style="background:#7c3aed">3 days</span></td><td class="herb-list">Wild date palm, Bermuda grass, Tinospora cordifolia, Pongamia, Aegle marmelos, Phyllanthus niruri</td></tr>
+            <tr><td>Dental Problems, Gum Problems, Bleeding Gums</td><td><span class="days-pill" style="background:#7c3aed">3 days</span></td><td class="herb-list">Wild date palm, Tamarind leaves, Pongamia, Turmeric, Peepal + separate: Guava, Cloves, Chamomile, Pongamia</td></tr>
+            <tr><td>Anemia</td><td><span class="days-pill" style="background:#7c3aed">3 days</span></td><td class="herb-list">Nyctanthes arbor-tristis, Papaya leaves, Curry leaves, Fenugreek leaves + Carrot-Beetroot juice</td></tr>
+            <tr><td>ESR, Urticaria</td><td><span class="days-pill" style="background:#7c3aed">3 days</span></td><td class="herb-list">Nyctanthes arbor-tristis, Papaya leaves, Curry leaves, Abutilon indicum, Banana stem, Sambar onion, Fenugreek</td></tr>
+            <tr><td>Fatty Liver, Spleen, Pancreatitis</td><td><span class="days-pill" style="background:#7c3aed">3 days</span></td><td class="herb-list">Ruta graveolens, Mint, Aegle marmelos, Betel leaves, Abutilon indicum</td></tr>
+            <tr><td>Blood Cancer (Lymphoma, Thalassemia)</td><td><span class="days-pill" style="background:#7c3aed">3 days</span></td><td class="herb-list">Nyctanthes, Peepal, Guava, Papaya leaves + Afternoon: Curry leaves, Betel leaves</td></tr>
+            <tr><td>Skin Cancer, Thyroid/Pancreas Cancer</td><td><span class="days-pill" style="background:#7c3aed">2 days</span></td><td class="herb-list">Nyctanthes, Peepal, Guava + Afternoon: Spring onions, Aloe vera, Centella asiatica</td></tr>
+            <tr><td>Gangrene</td><td><span class="days-pill" style="background:#7c3aed">3 days</span></td><td class="herb-list">Chrysanthemum, Tridax procumbens, Marigold, Coriander, Nyctanthes arbor leaves</td></tr>
+            <tr><td>Diabetes</td><td><span class="days-pill" style="background:#7c3aed">2 days</span></td><td class="herb-list">Tinospora cordifolia, Jamun leaves, Ivy gourd, Mint, Drumstick, Fenugreek, Coriander</td></tr>
+            <tr><td>Liver/Kidney/Pancreas Cleaning, Hepatitis</td><td><span class="days-pill" style="background:#7c3aed">1 day</span></td><td class="herb-list">Ruta graveolens, Fenugreek seeds/leaves, Bryophyllum pinnatum, Boerhavia diffusa, Phyllanthus niruri</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div>
+      <div class="section-header"><h3>Recipes from Paka Siri Cookbook</h3><div class="badge">Kodo Millet</div></div>
+      <div class="recipes-grid">
+        <div class="recipe-card"><div class="recipe-cat">Breakfast</div><div class="recipe-name">Kodo Millet Kanchi Idli</div><div class="recipe-desc">Fermented Kodo millet idli — soft and naturally sour.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Breakfast</div><div class="recipe-name">Kodo Millet Rava Idli</div><div class="recipe-desc">Quick rava-style idli from Kodo millet rava with curd for instant fermentation.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Breakfast</div><div class="recipe-name">Kodo Millet Rava &amp; Yellow Pumpkin Idli</div><div class="recipe-desc">Nutritious idli with yellow pumpkin for added flavour and beta-carotene.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Breakfast</div><div class="recipe-name">Kodo Millet Rava Upma</div><div class="recipe-desc">Classic South Indian upma using Kodo millet rava — wholesome breakfast.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Breakfast</div><div class="recipe-name">Kodo Millet Dibbarotte</div><div class="recipe-desc">Thick set-dosa style Kodo millet cake — Andhra specialty.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Breakfast</div><div class="recipe-name">Kodo Millet Pesarattu (Moong Cheela)</div><div class="recipe-desc">Green moong and Kodo millet crepe — protein-packed, crispy.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Breakfast</div><div class="recipe-name">Kodo Millet Vada</div><div class="recipe-desc">Crispy fried vada from Kodo millet and lentils — great with chutney.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Rice / Main</div><div class="recipe-name">Kodo Millet Tomato Rice</div><div class="recipe-desc">Spiced tomato rice with whole spices — aromatic one-pot meal.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Rice / Main</div><div class="recipe-name">Kodo Millet Coconut Rice</div><div class="recipe-desc">Kodo millet cooked with fresh coconut, green chillies, and lemon in a clay pot.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Rice / Main</div><div class="recipe-name">Kodo Millet Kenaf Rice</div><div class="recipe-desc">With homemade Kenaf (Gongura/Roselle) masala powder — Andhra favourite.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Rice / Main</div><div class="recipe-name">Kodo Millet Bise Bele Bath</div><div class="recipe-desc">Karnataka's famous sambar rice — made with Kodo millet instead of rice.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Rice / Main</div><div class="recipe-name">Kodo Millet Poha Bise Bele Bath</div><div class="recipe-desc">Variant of Bise Bele Bath using Kodo millet beaten rice flakes.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Rice / Main</div><div class="recipe-name">Kodo Millet Carrot Rice</div><div class="recipe-desc">Colourful carrot rice using Kodo millet — nutritious and vibrant.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Rice / Main</div><div class="recipe-name">Kodo Millet Capsicum Rice</div><div class="recipe-desc">Bell pepper rice with Kodo millet — aromatic and flavourful.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Rice / Main</div><div class="recipe-name">Kodo Millet Curry Leaf Rice</div><div class="recipe-desc">Curry leaf, coconut and coriander paste mixed with Kodo millet rice.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Rice / Main</div><div class="recipe-name">Kodo Millet Tomato Butter Balls</div><div class="recipe-desc">Dr. Khadar Vali's favourite recipe — millet flour balls with tomato-coriander flavouring.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Snack</div><div class="recipe-name">Kodo Millet Flour Pakora</div><div class="recipe-desc">Crispy vegetable fritters using Kodo millet flour batter.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Snack</div><div class="recipe-name">Kodo Millet Beaten Rice Mixture</div><div class="recipe-desc">Crispy Kodo millet poha mixture — dry snack for tea-time.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Sweet</div><div class="recipe-name">Kodo Millet Halwa</div><div class="recipe-desc">Rich, dense halwa from Kodo millet flour with palm jaggery and ghee.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Sweet</div><div class="recipe-name">Kodo Millet Coconut Vada</div><div class="recipe-desc">Sweet fried vada with coconut and Kodo millet — dessert-style snack.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Savoury</div><div class="recipe-name">Kodo Millet Murukku</div><div class="recipe-desc">Crispy spiral murukku made from Kodo millet flour — crunchy savoury snack.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ LITTLE MILLET ═══════════════ -->
+<div id="tab-little" class="tab-content" style="--accent:#16a34a;--accent-light:#dcfce7">
+  <div class="hero">
+    <div class="millet-tag">● Positive Millet</div>
+    <h2>Little Millet</h2>
+    <p class="scientific">Panicum sumatrense — "The Reproductive Healer"</p>
+    <p class="summary">Sweet in taste. Little millet has the unique ability to cleanse the reproductive organs. All health issues related to the reproductive system in both men and women — PCOD, fibroids, infertility, oligospermia — can be resolved by consumption of this grain. The primary millet recommended for thyroid, PCOD, hormonal imbalances, and cancer of the brain, throat, blood, thyroid and pancreas.</p>
+    <div class="hero-meta">
+      <div class="meta-chip"><span class="label">Taste</span><span class="value">Sweet</span></div>
+      <div class="meta-chip"><span class="label">Carb:Fiber Ratio</span><span class="value">&lt;10 (Single Digit)</span></div>
+      <div class="meta-chip"><span class="label">Water Ratio</span><span class="value">1 : 2 to 2.5</span></div>
+      <div class="meta-chip"><span class="label">Soaking</span><span class="value">6+ hours</span></div>
+    </div>
+  </div>
+
+  <div class="content">
+    <div>
+      <div class="section-header"><h3>Names in Different Languages</h3></div>
+      <div class="names-grid">
+        <div class="name-card"><div class="lang">English</div><div class="name">Little Millet</div></div>
+        <div class="name-card"><div class="lang">Hindi</div><div class="name">Kutki</div></div>
+        <div class="name-card"><div class="lang">Kannada</div><div class="name">Saame</div></div>
+        <div class="name-card"><div class="lang">Telugu</div><div class="name">Samulu</div></div>
+        <div class="name-card"><div class="lang">Tamil</div><div class="name">Samai</div></div>
+        <div class="name-card"><div class="lang">Marathi</div><div class="name">Vari</div></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="organ-banner" style="background:#f0fdf4;border-color:#16a34a">
+        <div class="icon">🌿</div>
+        <div class="organ-text">
+          <h4>Primary Organ System: Reproductive Organs (Male &amp; Female)</h4>
+          <p>Little millet uniquely cleanses the reproductive system. It resolves PCOD, fibroids, infertility, oligospermia (low sperm count), and all diseases of the reproductive system. It also cleans the lymph nodal system and aids in cancer of the brain, throat, blood, thyroid and pancreas.</p>
+        </div>
+      </div>
+      <div class="section-header"><h3>Health Benefits</h3></div>
+      <div class="benefits-grid">
+        <div class="benefit-card"><div class="benefit-title">PCOD &amp; Fibroids</div><div class="benefit-desc">Helps in overcoming problems of ovaries, PCOD, fibroadenoma, and endometriosis. Primary grain for all ovarian issues.</div></div>
+        <div class="benefit-card"><div class="benefit-title">Fertility (Men &amp; Women)</div><div class="benefit-desc">Improves sperm count in men. Resolves irregular periods, infertility and reproductive system diseases in women.</div></div>
+        <div class="benefit-card"><div class="benefit-title">Thyroid &amp; Hormones</div><div class="benefit-desc">The dominant grain (3 days/week) for thyroid, PCOD, hormonal imbalance, and endometriosis protocols.</div></div>
+        <div class="benefit-card"><div class="benefit-title">Gastric Problems</div><div class="benefit-desc">Acts as medicine for burning sensation in chest after eating, sour belching, gastric tightening, acidity and GERD.</div></div>
+        <div class="benefit-card"><div class="benefit-title">Lymph System &amp; Cancer</div><div class="benefit-desc">Cleans up the lymph nodal system. Aids control of brain, throat, blood, thyroid and pancreas cancer.</div></div>
+        <div class="benefit-card"><div class="benefit-title">Migraine</div><div class="benefit-desc">Provides relief to migraine sufferers. The primary millet for nerve problem protocols.</div></div>
+        <div class="benefit-card"><div class="benefit-title">STD &amp; Digestive Issues</div><div class="benefit-desc">Good for sexually transmitted diseases, diarrhea and indigestion.</div></div>
+        <div class="benefit-card"><div class="benefit-title">Heart, Obesity &amp; Joints</div><div class="benefit-desc">Nutritious food for those suffering from heart problems, obesity and joint pains.</div></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="section-header"><h3>Kashayas (Decoctions) Guide</h3><div class="badge">Morning Ritual</div></div>
+      <div class="kashaya-section">
+        <div class="kashaya-header">
+          <h4>How to Prepare Kashaya</h4>
+          <p>Take 10–15 fresh leaves (or 1 tsp seeds/bark/powder) of the herb. Boil in 2 cups of water until reduced to 1 cup. Strain and drink warm on an empty stomach each morning. <strong>Rotate ONE herb per week</strong> — never use the same herb for more than 7 consecutive days.</p>
+        </div>
+        <div class="herb-cards-grid">
+          <div class="herb-card"><div class="herb-emoji">🥦</div><div class="herb-name">Drumstick leaves (Moringa)</div><div class="herb-local">Munagakura / Sahjan patta / Murungai</div><div class="herb-use">THYROID, PCOD, hormonal imbalance. Richest plant source of iron, calcium, and vitamins. Primary herb for women's health.</div></div>
+          <div class="herb-card"><div class="herb-emoji">🌿</div><div class="herb-name">Pongamia pinnata</div><div class="herb-local">Kanuga / Karanj / Pungam</div><div class="herb-use">Thyroid, PCOD, endometriosis, skin diseases, reproductive health. Strong hormonal balancer.</div></div>
+          <div class="herb-card"><div class="herb-emoji">🌺</div><div class="herb-name">Roselle / Kenaf</div><div class="herb-local">Gongura / Pitta bhanga / Pulichakeerai</div><div class="herb-use">Thyroid, women's health, constipation, piles. Also a souring agent and cooking ingredient.</div></div>
+          <div class="herb-card"><div class="herb-emoji">🍃</div><div class="herb-name">Tamarind leaves</div><div class="herb-local">Chinta aaku / Imli patta</div><div class="herb-use">Reproductive health, dental problems, thyroid, endocrine system cleansing.</div></div>
+          <div class="herb-card"><div class="herb-emoji">🌿</div><div class="herb-name">Boerhavia diffusa</div><div class="herb-local">Punarnava / Muppala damu</div><div class="herb-use">Urine infection, prostate problems, kidney cleaning, uric acid. Powerful urinary tract herb.</div></div>
+          <div class="herb-card"><div class="herb-emoji">🌱</div><div class="herb-name">Tinospora cordifolia</div><div class="herb-local">Giloy / Guduchi / Tippa teega</div><div class="herb-use">Diabetes, hormonal imbalance, immunity. Works across thyroid, PCOD, and diabetes protocols.</div></div>
+          <div class="herb-card"><div class="herb-emoji">🍀</div><div class="herb-name">Betel leaves</div><div class="herb-local">Pan / Vethalai / Tamalapaku</div><div class="herb-use">Digestive health, thyroid support, anti-inflammatory, mental clarity and anxiety relief.</div></div>
+          <div class="herb-card"><div class="herb-emoji">🌼</div><div class="herb-name">Chrysanthemum + Lemon grass</div><div class="herb-local">Chrysanthemum / Lemon grass</div><div class="herb-use">Post-pregnancy recovery, mental health, insomnia, anxiety, nervous system calming.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="section-header"><h3>Health Conditions &amp; Protocol</h3><div class="badge">From Protocol Book</div></div>
+      <div class="conditions-table">
+        <table>
+          <thead><tr><th>Condition(s)</th><th>Days/Week</th><th>Key Kashayas (Decoctions)</th></tr></thead>
+          <tbody>
+            <tr><td>Thyroid, PCOD, Hormonal Imbalance, Endometriosis, Fibroid/Fibroadenoma</td><td><span class="days-pill" style="background:#16a34a">3 days</span></td><td class="herb-list">Drumstick leaves, Tamarind leaves, Betel leaves, Pongamia, Roselle, Abutilon, Tinospora cordifolia</td></tr>
+            <tr><td>Dialysis, Albumin Urea, Gout, Uric Acid</td><td><span class="days-pill" style="background:#16a34a">3 days</span></td><td class="herb-list">Nyctanthes, Coriander, Bryophyllum pinnatum, Banana stem, Boerhavia diffusa</td></tr>
+            <tr><td>Obesity / Weight Loss</td><td><span class="days-pill" style="background:#16a34a">3 days</span></td><td class="herb-list">Peepal, Betel leaves, Cumin seeds, Bermuda grass, Wild date palm, Turmeric</td></tr>
+            <tr><td>Weight Gain (Underweight)</td><td><span class="days-pill" style="background:#16a34a">3 days</span></td><td class="herb-list">Mustard seeds, Fenugreek seeds, Cumin seeds, Banana stem, Abutilon indicum</td></tr>
+            <tr><td>Urine Infection, Prostate</td><td><span class="days-pill" style="background:#16a34a">3 days</span></td><td class="herb-list">Bryophyllum pinnatum, Coriander, Mint, Boerhavia diffusa, Drumstick leaves, Ruta, Dillweed, Banana stem</td></tr>
+            <tr><td>Dental Problems, Gum Problems</td><td><span class="days-pill" style="background:#16a34a">3 days</span></td><td class="herb-list">Wild date palm, Tamarind leaves, Pongamia, Turmeric, Peepal</td></tr>
+            <tr><td>Anemia</td><td><span class="days-pill" style="background:#16a34a">3 days</span></td><td class="herb-list">Nyctanthes, Papaya leaves, Curry leaves, Fenugreek</td></tr>
+            <tr><td>Kidney/Prostate Cancer, Ovarian/Uterus Cancer</td><td><span class="days-pill" style="background:#16a34a">3 days</span></td><td class="herb-list">Nyctanthes, Peepal, Guava + Afternoon: Boerhavia diffusa, Coriander, Banana stem / Papaya, Betel leaves</td></tr>
+            <tr><td>After Pregnancy</td><td><span class="days-pill" style="background:#16a34a">3 days</span></td><td class="herb-list">Chrysanthemum leaves, Lemon grass, Mint, Roselle + 7 Saptapatra leaves cycle</td></tr>
+            <tr><td>Diabetes</td><td><span class="days-pill" style="background:#16a34a">2 days</span></td><td class="herb-list">Tinospora cordifolia, Jamun leaves, Ivy gourd, Mint, Drumstick, Fenugreek, Coriander</td></tr>
+            <tr><td>Varicose Veins, Varicocele, Hydrocele</td><td><span class="days-pill" style="background:#16a34a">3 days</span></td><td class="herb-list">Aegle marmelos, Ivy gourd leaves, Nyctanthes, Papaya leaves, Curry leaves</td></tr>
+            <tr><td>Mental Illness, Insomnia, Anxiety</td><td><span class="days-pill" style="background:#16a34a">1 day</span></td><td class="herb-list">Curry leaves, Organic banana stem, Turmeric, Cinnamon, Ruta graveolens</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div>
+      <div class="section-header"><h3>Recipes from Paka Siri Cookbook</h3><div class="badge">Little Millet</div></div>
+      <div class="recipes-grid">
+        <div class="recipe-card"><div class="recipe-cat">Breakfast</div><div class="recipe-name">Little Millet Freedom Idli</div><div class="recipe-desc">Whole grain little millet idli — no grinding required, minimal prep time.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Breakfast</div><div class="recipe-name">Little Millet Idli with Steamed Rava</div><div class="recipe-desc">Idli using home-prepared little millet rava for a textured, hearty breakfast.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Breakfast</div><div class="recipe-name">Little Millet Upma</div><div class="recipe-desc">Classic upma using little millet rava with vegetables and tempering.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Breakfast</div><div class="recipe-name">Little Millet Tamarind Pulp Upma</div><div class="recipe-desc">Tangy tamarind-flavoured upma — unique variation with sourness balanced by the millet's sweetness.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Breakfast</div><div class="recipe-name">Little Millet Undrallu</div><div class="recipe-desc">Steamed millet rava balls with Bengal gram and coconut — offered to Lord Ganesha traditionally.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Rice / Main</div><div class="recipe-name">Little Millet Mint (Pudina) Rice</div><div class="recipe-desc">Aromatic mint rice with coconut-sesame paste — fragrant and cooling.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Rice / Main</div><div class="recipe-name">Little Millet Coriander Leaf Masala Rice</div><div class="recipe-desc">Green coriander leaf rice with whole spices — one pot aromatic meal.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Rice / Main</div><div class="recipe-name">Little Millet Mango Puliyogare</div><div class="recipe-desc">Raw mango-flavoured tamarind rice — tangy summer special.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Sweet</div><div class="recipe-name">Little Millet Kheer</div><div class="recipe-desc">Creamy millet milk pudding with palm jaggery and cardamom.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Sweet</div><div class="recipe-name">Little Millet Pineapple Sheera</div><div class="recipe-desc">Halwa with pineapple — sweet, fruity, and soft in texture.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Sweet</div><div class="recipe-name">Little Millet Rava Laddu</div><div class="recipe-desc">Quick laddus from little millet rava, palm jaggery, and desiccated coconut.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Sweet</div><div class="recipe-name">Little Millet Coconut Louz Poornalu</div><div class="recipe-desc">Fried stuffed dumplings with coconut-jaggery filling — festive sweet.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Snack</div><div class="recipe-name">Little Millet Patties (Billa Kudumulu)</div><div class="recipe-desc">Soft steamed little millet patties — easy snack or side dish.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Savoury</div><div class="recipe-name">Little Millet Murukku</div><div class="recipe-desc">Crispy little millet murukku — crunchy savoury snack.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Savoury</div><div class="recipe-name">Little Millet Tomato Fryums</div><div class="recipe-desc">Sun-dried tomato-flavoured little millet fryums.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Savoury</div><div class="recipe-name">Little Millet Leafy Green Fryums</div><div class="recipe-desc">Fryums made with leafy greens and little millet for added nutrition.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ BARNYARD ═══════════════ -->
+<div id="tab-barnyard" class="tab-content" style="--accent:#0369a1;--accent-light:#e0f2fe">
+  <div class="hero">
+    <div class="millet-tag">● Positive Millet</div>
+    <h2>Barnyard Millet</h2>
+    <p class="scientific">Echinochloa frumentacea — "The Liver Cleanser"</p>
+    <p class="summary">Sweet in taste. Barnyard millet has incredible capacity to cleanse the liver — so all liver-related diseases can be cured by this millet. It also cleanses all soft organs: kidneys, urinary bladder, and gallbladder. Rich in iron, it is traditionally used during religious fasting in North India and given to pregnant and post-natal women in Uttarakhand and Nepal for iron replenishment and breast milk production.</p>
+    <div class="hero-meta">
+      <div class="meta-chip"><span class="label">Taste</span><span class="value">Sweet</span></div>
+      <div class="meta-chip"><span class="label">Carb:Fiber Ratio</span><span class="value">&lt;10 (Single Digit)</span></div>
+      <div class="meta-chip"><span class="label">Water Ratio</span><span class="value">1 : 2 to 2.5</span></div>
+      <div class="meta-chip"><span class="label">Soaking</span><span class="value">6+ hours</span></div>
+    </div>
+  </div>
+
+  <div class="content">
+    <div>
+      <div class="section-header"><h3>Names in Different Languages</h3></div>
+      <div class="names-grid">
+        <div class="name-card"><div class="lang">English</div><div class="name">Barnyard Millet</div></div>
+        <div class="name-card"><div class="lang">Hindi</div><div class="name">Sanwa</div></div>
+        <div class="name-card"><div class="lang">Kannada</div><div class="name">Oodhalu</div></div>
+        <div class="name-card"><div class="lang">Telugu</div><div class="name">Udhalu</div></div>
+        <div class="name-card"><div class="lang">Tamil</div><div class="name">Kuthiraivally</div></div>
+        <div class="name-card"><div class="lang">Marathi</div><div class="name">—</div></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="organ-banner" style="background:#e0f2fe;border-color:#0369a1">
+        <div class="icon">🫀</div>
+        <div class="organ-text">
+          <h4>Primary Organ System: Liver &amp; All Soft Organs</h4>
+          <p>Barnyard millet cleanses the liver. All diseases related to the liver — Jaundice, Hepatitis A, B, C, Liver Cirrhosis, liver infections — can be cured by consuming this millet. It also cleanses kidneys, urinary bladder and gallbladder.</p>
+        </div>
+      </div>
+      <div class="section-header"><h3>Health Benefits</h3></div>
+      <div class="benefits-grid">
+        <div class="benefit-card"><div class="benefit-title">Liver Diseases</div><div class="benefit-desc">Primary millet for Jaundice, Hepatitis A, B, C, liver cirrhosis, and all liver infections. Strengthens and cleanses the liver.</div></div>
+        <div class="benefit-card"><div class="benefit-title">Kidney &amp; Gallbladder</div><div class="benefit-desc">Cleans kidneys, urinary bladder, and gallbladder. Good for endocrinal glands.</div></div>
+        <div class="benefit-card"><div class="benefit-title">Diabetes &amp; Constipation</div><div class="benefit-desc">High fiber content helps with diabetes and constipation. Protects against small intestine ulcers and large intestine cancer.</div></div>
+        <div class="benefit-card"><div class="benefit-title">Ovaries &amp; Uterus Cancer</div><div class="benefit-desc">After recovering from jaundice, also helpful in reducing ovarian and uterine cancer.</div></div>
+        <div class="benefit-card"><div class="benefit-title">Iron &amp; Breast Milk</div><div class="benefit-desc">Rich in iron — reduces anemia in post-natal women and increases breast milk supply. Used traditionally in fasting diets.</div></div>
+        <div class="benefit-card"><div class="benefit-title">Body Temperature &amp; Immunity</div><div class="benefit-desc">Maintains body temperature. Improves resistance capacity. Good for those working in sedentary positions.</div></div>
+        <div class="benefit-card"><div class="benefit-title">Liver &amp; Spleen Cancer</div><div class="benefit-desc">Protects from cancer of the large intestine, liver and spleen.</div></div>
+        <div class="benefit-card"><div class="benefit-title">Easy Digestion</div><div class="benefit-desc">The food is easily digestible and gives strength — hence used during religious fasting across North India.</div></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="section-header"><h3>Kashayas (Decoctions) Guide</h3><div class="badge">Morning Ritual</div></div>
+      <div class="kashaya-section">
+        <div class="kashaya-header">
+          <h4>How to Prepare Kashaya</h4>
+          <p>Take 10–15 fresh leaves (or 1 tsp seeds/bark/powder) of the herb. Boil in 2 cups of water until reduced to 1 cup. Strain and drink warm on an empty stomach each morning. <strong>Rotate ONE herb per week</strong> — never use the same herb for more than 7 consecutive days.</p>
+        </div>
+        <div class="herb-cards-grid">
+          <div class="herb-card"><div class="herb-emoji">🍂</div><div class="herb-name">Phyllanthus niruri</div><div class="herb-local">Bhumi amla / Keela nelli / Nela usiri</div><div class="herb-use">Hepatitis A &amp; B, liver cirrhosis, jaundice, kidney cleaning. The most powerful liver herb in this system.</div></div>
+          <div class="herb-card"><div class="herb-emoji">🌿</div><div class="herb-name">Ruta graveolens</div><div class="herb-local">Common Rue / Sadaap / Aruda</div><div class="herb-use">Liver detox, fatty liver, kidney cleansing. Primary herb for all liver and soft organ conditions.</div></div>
+          <div class="herb-card"><div class="herb-emoji">🌿</div><div class="herb-name">Boerhavia diffusa</div><div class="herb-local">Punarnava / Muppala damu</div><div class="herb-use">Kidney stones, liver conditions, diuretic action. Rejuvenates the liver and kidney.</div></div>
+          <div class="herb-card"><div class="herb-emoji">🍃</div><div class="herb-name">Bryophyllum pinnatum</div><div class="herb-local">Patharchatta / Sirukattu shedi</div><div class="herb-use">Kidney and gallbladder stones, pancreas stones. Dissolves mineral deposits over weeks.</div></div>
+          <div class="herb-card"><div class="herb-emoji">🌿</div><div class="herb-name">Holy Basil (Tulsi)</div><div class="herb-local">Tulasi / Thulasi / Ocimum</div><div class="herb-use">Heart disease, high BP, cholesterol, triglycerides. Also anti-viral and immunity-boosting.</div></div>
+          <div class="herb-card"><div class="herb-emoji">🍀</div><div class="herb-name">Aegle marmelos</div><div class="herb-local">Bael / Bilva / Maredu</div><div class="herb-use">Heart conditions, cholesterol, digestive disorders, autism, cerebral palsy protocols.</div></div>
+          <div class="herb-card"><div class="herb-emoji">🌱</div><div class="herb-name">Senna (Avaram)</div><div class="herb-local">Avaram / Tarwar / Sanay</div><div class="herb-use">Constipation, piles, fistula, IBS, colitis. Strong but safe laxative herb for intestinal health.</div></div>
+          <div class="herb-card"><div class="herb-emoji">🌿</div><div class="herb-name">Pongamia pinnata</div><div class="herb-local">Kanuga / Karanj / Pungam</div><div class="herb-use">Gallbladder, kidney stones, IBS, colitis, intestinal conditions. Also anti-inflammatory.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="section-header"><h3>Health Conditions &amp; Protocol</h3><div class="badge">From Protocol Book</div></div>
+      <div class="conditions-table">
+        <table>
+          <thead><tr><th>Condition(s)</th><th>Days/Week</th><th>Key Kashayas (Decoctions)</th></tr></thead>
+          <tbody>
+            <tr><td>Liver Cleaning, Kidney Cleaning, Pancreas, Hepatitis A &amp; B</td><td><span class="days-pill" style="background:#0369a1">3 days</span></td><td class="herb-list">Ruta graveolens, Fenugreek seeds/leaves, Bryophyllum pinnatum, Boerhavia diffusa, Phyllanthus niruri, Abutilon</td></tr>
+            <tr><td>Fatty Liver, Spleen, Pancreatitis</td><td><span class="days-pill" style="background:#0369a1">3 days</span></td><td class="herb-list">Ruta graveolens, Mint, Aegle marmelos, Betel leaves, Abutilon indicum</td></tr>
+            <tr><td>Kidney Stones, Gallbladder Stones, Pancreas Stones</td><td><span class="days-pill" style="background:#0369a1">2 days</span></td><td class="herb-list">Coriander leaves, Boerhavia diffusa, Bryophyllum pinnatum, Banana stem, Pongamia, Abutilon</td></tr>
+            <tr><td>B.P., Heart Related, Cholesterol, Triglycerides, Angina</td><td><span class="days-pill" style="background:#0369a1">2 days</span></td><td class="herb-list">Holy basil, Aegle marmelos, Coriander, Sarpagandha, Opuntia, Abutilon, Tinospora + cucumber/bottle gourd juice</td></tr>
+            <tr><td>Autism, Cerebral Palsy, Polio, ADHD, Differently-Abled</td><td><span class="days-pill" style="background:#0369a1">2 days</span></td><td class="herb-list">Aegle marmelos, Bermuda grass, Pongamia, Banana stem, Guava leaves</td></tr>
+            <tr><td>Gastric Problems, Acidity, GERD, Acid Reflux</td><td><span class="days-pill" style="background:#0369a1">2 days</span></td><td class="herb-list">Betel leaves, Fenugreek leaves, Pongamia, Cumin, Senna, Abutilon indicum</td></tr>
+            <tr><td>IBS, Colitis, Crohn's Disease</td><td><span class="days-pill" style="background:#0369a1">1 day</span></td><td class="herb-list">Pongamia, Senna, Castor leaves, Fenugreek, Banana stem</td></tr>
+            <tr><td>Breast &amp; Lymph Nodes Cancer, Liver &amp; Spleen Cancer, Intestine Cancer</td><td><span class="days-pill" style="background:#0369a1">2 days</span></td><td class="herb-list">Nyctanthes, Peepal, Guava + Afternoon: Pongamia, Neem, Roselle / Ruta, Fenugreek / Pongamia, Senna</td></tr>
+            <tr><td>During Pregnancy</td><td><span class="days-pill" style="background:#0369a1">2 days</span></td><td class="herb-list">Chrysanthemum, Abutilon indicum, Betel leaves, Roselle, Lemon grass, Mint</td></tr>
+            <tr><td>Rheumatoid Arthritis, Joint Swellings</td><td><span class="days-pill" style="background:#0369a1">1 day</span></td><td class="herb-list">Silver date palm, Pongamia, Nyctanthes, Coriander, Bermuda grass, Guava, Roselle</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div>
+      <div class="section-header"><h3>Recipes from Paka Siri Cookbook</h3><div class="badge">Barnyard Millet</div></div>
+      <div class="recipes-grid">
+        <div class="recipe-card"><div class="recipe-cat">Breakfast</div><div class="recipe-name">Barnyard Millet Beaten Rice (Poha) Upma</div><div class="recipe-desc">Upma using barnyard millet poha — quick, light, and nutritious morning dish.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Breakfast</div><div class="recipe-name">Barnyard Millet Dosa</div><div class="recipe-desc">Thin crispy dosa from barnyard millet batter — good for liver conditions.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Breakfast</div><div class="recipe-name">Barnyard Millet Rava Dosa (Using Grain)</div><div class="recipe-desc">Lacy rava-style dosa — quick and instant.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Breakfast</div><div class="recipe-name">Barnyard Millet Pullattu (Sour Dosa)</div><div class="recipe-desc">Naturally fermented sour dosa from barnyard millet — probiotic-rich.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Breakfast</div><div class="recipe-name">Barnyard Millet Curd Uttapam</div><div class="recipe-desc">Thick set uttapam with vegetable toppings using barnyard millet batter.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Breakfast</div><div class="recipe-name">Barnyard Millet Kudumulu</div><div class="recipe-desc">Steamed barnyard millet balls — traditional Andhra/Karnataka festival dish.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Breakfast</div><div class="recipe-name">Barnyard Millet Flakes Dhokla</div><div class="recipe-desc">Steamed Gujarati-style dhokla using barnyard millet flakes and rava — soft and spongy.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Rice / Main</div><div class="recipe-name">Barnyard Millet Vegetable Rice</div><div class="recipe-desc">One-pot vegetable rice with Punarnava leaves, carrots, beans, cabbage and tomato.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Rice / Main</div><div class="recipe-name">Barnyard Millet Cumin (Jeera) Rice</div><div class="recipe-desc">Simple, aromatic cumin rice — perfect accompaniment for dals and curries.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Rice / Main</div><div class="recipe-name">Barnyard Millet Kidney Beans (Rajma) Rice</div><div class="recipe-desc">Protein-rich rajma with barnyard millet — hearty North Indian-style meal.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Rice / Main</div><div class="recipe-name">Barnyard Millet Flour Ambali</div><div class="recipe-desc">Fermented gruel from barnyard millet flour — recommended for those sensitive to whole grain fiber.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Sweet</div><div class="recipe-name">Barnyard Millet Appalu / Boorelu</div><div class="recipe-desc">Deep-fried sweet dumplings with dal-jaggery stuffing — traditional festival sweet.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Sweet</div><div class="recipe-name">Barnyard Millet Sesame Dumplings (Karanji)</div><div class="recipe-desc">Fried crescent dumplings stuffed with sesame-jaggery filling.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Snack</div><div class="recipe-name">Barnyard Millet Patties (Tapila Billalu)</div><div class="recipe-desc">Shallow-fried millet patties — crispy outside, soft inside.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Snack</div><div class="recipe-name">Barnyard Millet Coconut Pakora (Muttilu)</div><div class="recipe-desc">Crispy coconut-studded pakoras — unique coastal style snack.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Snack</div><div class="recipe-name">Barnyard Millet Vadappas</div><div class="recipe-desc">Crispy dried vadappas — fried savoury discs from barnyard millet.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Savoury</div><div class="recipe-name">Barnyard Millet Kara Boondi</div><div class="recipe-desc">Spicy crispy boondi from barnyard millet flour — excellent tea-time snack.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Savoury</div><div class="recipe-name">Barnyard Millet Chekodi</div><div class="recipe-desc">Crispy ring-shaped savoury snack — Andhra style.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Savoury</div><div class="recipe-name">Barnyard Millet Yellow Moong Dal Chekodi</div><div class="recipe-desc">Protein-enriched variation of Chekodi with yellow moong dal.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Savoury</div><div class="recipe-name">Barnyard Millet Savoury / Spicy Shells</div><div class="recipe-desc">Shell-shaped crispy savoury snack from barnyard millet flour.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ BROWNTOP ═══════════════ -->
+<div id="tab-browntop" class="tab-content" style="--accent:#be123c;--accent-light:#ffe4e6">
+  <div class="hero">
+    <div class="millet-tag">● Positive Millet</div>
+    <h2>Browntop Millet</h2>
+    <p class="scientific">Brachiaria ramosa — "The Universal Detoxifier"</p>
+    <p class="summary">One of the most traditional crops. Browntop millet can detoxify each and every part of the human body from head to toe. It has the lowest Carb:Fiber ratio of all five Siridhanyas (5.54), making it the most effective. The consumption of this grain cures all ailments related to the alimentary canal — constipation, gastric ulcers, piles, fissures. Most remarkably, it is the ONE AND ONLY grain that can provide relief from ALL types of cancers.</p>
+    <div class="hero-meta">
+      <div class="meta-chip"><span class="label">Carb:Fiber Ratio</span><span class="value">5.54 (Lowest)</span></div>
+      <div class="meta-chip"><span class="label">Carbohydrate</span><span class="value">69.37g / 100g</span></div>
+      <div class="meta-chip"><span class="label">Fiber</span><span class="value">12.5g / 100g</span></div>
+      <div class="meta-chip"><span class="label">Soaking</span><span class="value">6–8 hours mandatory</span></div>
+      <div class="meta-chip"><span class="label">Water Ratio</span><span class="value">1 : 2 to 2.5</span></div>
+    </div>
+  </div>
+
+  <div class="content">
+    <div>
+      <div class="section-header"><h3>Names in Different Languages</h3></div>
+      <div class="names-grid">
+        <div class="name-card"><div class="lang">English</div><div class="name">Browntop Millet</div></div>
+        <div class="name-card"><div class="lang">Hindi</div><div class="name">Makra / Muradh</div></div>
+        <div class="name-card"><div class="lang">Kannada</div><div class="name">Korale</div></div>
+        <div class="name-card"><div class="lang">Telugu</div><div class="name">Andu korralu</div></div>
+        <div class="name-card"><div class="lang">Tamil</div><div class="name">Palapul / Kula samai</div></div>
+        <div class="name-card"><div class="lang">Marathi</div><div class="name">—</div></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="organ-banner" style="background:#fff1f2;border-color:#be123c">
+        <div class="icon">✨</div>
+        <div class="organ-text">
+          <h4>Primary Organ System: Entire Body — Head to Toe Detoxification</h4>
+          <p>Browntop millet detoxifies the entire human body. With the lowest Carb:Fiber ratio (5.54) of all grains, it is uniquely positioned as the only grain that can provide relief from ALL types of cancers. It cures all ailments of the alimentary canal — constipation, gastric ulcers, piles, fistula, fissures.</p>
+        </div>
+      </div>
+      <div class="section-header"><h3>Health Benefits</h3></div>
+      <div class="benefits-grid">
+        <div class="benefit-card"><div class="benefit-title">Universal Cancer Relief</div><div class="benefit-desc">The ONE AND ONLY grain providing relief from all types of cancers. Contains the most potent lignans among the five Siridhanyas.</div></div>
+        <div class="benefit-card"><div class="benefit-title">Alimentary Canal Conditions</div><div class="benefit-desc">Cures constipation, gastric ulcers, piles, fistula, fissures — all diseases of the digestive tract.</div></div>
+        <div class="benefit-card"><div class="benefit-title">Ovaries &amp; Stomach</div><div class="benefit-desc">Useful for problems of ovaries, stomach issues, arthritis, and obesity.</div></div>
+        <div class="benefit-card"><div class="benefit-title">Blood Pressure &amp; Thyroid</div><div class="benefit-desc">Helps with BP regulation and thyroid conditions.</div></div>
+        <div class="benefit-card"><div class="benefit-title">Eye Problems</div><div class="benefit-desc">Useful for eye problems and vision-related conditions.</div></div>
+        <div class="benefit-card"><div class="benefit-title">Bone &amp; Skin Cancer</div><div class="benefit-desc">Specifically recommended for brain, blood, breast, bone, stomach, intestine, and skin cancer protocols.</div></div>
+        <div class="benefit-card"><div class="benefit-title">Nerve &amp; Brain Diseases</div><div class="benefit-desc">Primary millet (3 days) for Parkinson's, Alzheimer's, Fits, and Paralysis protocols.</div></div>
+        <div class="benefit-card"><div class="benefit-title">Lowest Glycemic Impact</div><div class="benefit-desc">With Carb:Fiber ratio of only 5.54, it has the lowest possible glycemic impact of any known grain — strongest blood sugar regulation.</div></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="section-header"><h3>Kashayas (Decoctions) Guide</h3><div class="badge">Morning Ritual</div></div>
+      <div class="kashaya-section">
+        <div class="kashaya-header">
+          <h4>How to Prepare Kashaya</h4>
+          <p>Take 10–15 fresh leaves (or 1 tsp seeds/bark/powder) of the herb. Boil in 2 cups of water until reduced to 1 cup. Strain and drink warm on an empty stomach each morning. <strong>Rotate ONE herb per week</strong> — never use the same herb for more than 7 consecutive days.</p>
+        </div>
+        <div class="herb-cards-grid">
+          <div class="herb-card"><div class="herb-emoji">🌸</div><div class="herb-name">Nyctanthes arbor-tristis</div><div class="herb-local">Night Jasmine / Parijata / Parijatam</div><div class="herb-use">BASE herb for ALL cancer protocols (morning). Also Parkinson's, Alzheimer's, arthritis. Non-negotiable for cancer.</div></div>
+          <div class="herb-card"><div class="herb-emoji">🌳</div><div class="herb-name">Peepal (Sacred Fig)</div><div class="herb-local">Ashwatha / Raavi / Arasa maram</div><div class="herb-use">BASE herb for ALL cancer protocols (morning). Paralysis, Alzheimer's, skin cancer, brain cancer.</div></div>
+          <div class="herb-card"><div class="herb-emoji">🍈</div><div class="herb-name">Guava leaves</div><div class="herb-local">Peru / Jamba / Seebe</div><div class="herb-use">Cancer base, Parkinson's, Alzheimer's, chikungunya, joint pain. The third pillar of cancer decoctions.</div></div>
+          <div class="herb-card"><div class="herb-emoji">🌵</div><div class="herb-name">Aloe vera</div><div class="herb-local">Ghritkumari / Kumari / Kalabanda</div><div class="herb-use">Skin cancer, psoriasis, eczema, vitiligo, alopecia, bald head. Most important herb for skin conditions.</div></div>
+          <div class="herb-card"><div class="herb-emoji">🌿</div><div class="herb-name">Centella asiatica</div><div class="herb-local">Brahmi / Mandukaparni / Saraswati aaku</div><div class="herb-use">Skin diseases, psoriasis, motor neuron disease, skin cancer, scleroderma. Brain and nerve tonic.</div></div>
+          <div class="herb-card"><div class="herb-emoji">🍀</div><div class="herb-name">Aegle marmelos</div><div class="herb-local">Bael / Bilva / Maredu</div><div class="herb-use">Motor neuron disease, Parkinson's, paralysis, nerve conditions. Sacred healing tree.</div></div>
+          <div class="herb-card"><div class="herb-emoji">🌱</div><div class="herb-name">Pongamia + Senna</div><div class="herb-local">Kanuga + Avaram / Karanj + Sanay</div><div class="herb-use">Constipation, piles, fistula, fissures, IBS, colitis. Core bowel-cleansing combination.</div></div>
+          <div class="herb-card"><div class="herb-emoji">🍃</div><div class="herb-name">Ruta graveolens</div><div class="herb-local">Common Rue / Sadaap / Aruda</div><div class="herb-use">Chikungunya, nerve disorders, motor neuron disease, bone cancer. Anti-spasmodic nerve herb.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="section-header"><h3>Health Conditions &amp; Protocol</h3><div class="badge">From Protocol Book</div></div>
+      <div class="conditions-table">
+        <table>
+          <thead><tr><th>Condition(s)</th><th>Days/Week</th><th>Key Kashayas (Decoctions)</th></tr></thead>
+          <tbody>
+            <tr><td>Parkinson's, Alzheimer's, Fits, Paralysis</td><td><span class="days-pill" style="background:#be123c">3 days</span></td><td class="herb-list">Guava leaves, Nyctanthes arbor-tristis, Peepal, Ruta, Cinnamon, Turmeric, Abutilon indicum</td></tr>
+            <tr><td>Asthma, TB, Pneumonia, Sinusitis</td><td><span class="days-pill" style="background:#be123c">2 days</span></td><td class="herb-list">Organic turmeric, Ginger, Ruta graveolens, Neem, Curry leaves, Bermuda grass, Tinospora</td></tr>
+            <tr><td>Skin Problems, Psoriasis, Eczema, Vitiligo, Bald Head, Alopecia</td><td><span class="days-pill" style="background:#be123c">3 days</span></td><td class="herb-list">Aloe vera, Centella asiatica, Mint, Coriander, Dill weed, Abutilon indicum</td></tr>
+            <tr><td>Chikungunya</td><td><span class="days-pill" style="background:#be123c">3 days</span></td><td class="herb-list">Bermuda grass, Ruta graveolens, Chamomile, Guava, Nyctanthes arbor-tristis</td></tr>
+            <tr><td>Constipation, Piles, Fistula, Fissures</td><td><span class="days-pill" style="background:#be123c">3 days</span></td><td class="herb-list">Pongamia, Senna, Roselle, Fenugreek, Coriander, Banana stem</td></tr>
+            <tr><td>IBS, Colitis, Crohn's Disease</td><td><span class="days-pill" style="background:#be123c">3 days</span></td><td class="herb-list">Pongamia, Senna, Castor leaves, Fenugreek, Banana stem</td></tr>
+            <tr><td>Eye Problems, Glaucoma</td><td><span class="days-pill" style="background:#be123c">3 days</span></td><td class="herb-list">Dill weed, Drumstick leaves, Mint, Curry leaves, Betel leaves, Ruta graveolens</td></tr>
+            <tr><td>Motor Neuron Disease, Muscular Dystrophy, Scleroderma</td><td><span class="days-pill" style="background:#be123c">2–3 days</span></td><td class="herb-list">Turmeric, Aegle marmelos, Ruta, Bermuda grass, Nyctanthes, Betel leaves / Centella asiatica, Guava</td></tr>
+            <tr><td>Bone Cancer, Brain Cancer</td><td><span class="days-pill" style="background:#be123c">2 days</span></td><td class="herb-list">Nyctanthes, Peepal, Guava + Afternoon: Fenugreek, Mint, Curry / Ruta, Turmeric, Cinnamon</td></tr>
+            <tr><td>Blood Cancer (Lymphoma, Thalassemia)</td><td><span class="days-pill" style="background:#be123c">1 day</span></td><td class="herb-list">Nyctanthes, Peepal, Guava, Papaya + Afternoon: Curry leaves, Betel leaves</td></tr>
+            <tr><td>Skin Cancer, Kidney/Prostate Cancer, Stomach Cancer</td><td><span class="days-pill" style="background:#be123c">2 days</span></td><td class="herb-list">Nyctanthes, Peepal, Guava + various afternoon decoctions per cancer type</td></tr>
+            <tr><td>Thyroid, Obesity, Arthritis, BP</td><td><span class="days-pill" style="background:#be123c">1 day</span></td><td class="herb-list">Various as per specific condition protocol</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div>
+      <div class="section-header"><h3>Recipes from Paka Siri Cookbook</h3><div class="badge">Browntop Millet</div></div>
+      <div class="recipes-grid">
+        <div class="recipe-card"><div class="recipe-cat">Breakfast</div><div class="recipe-name">Browntop Millet Flour Instant Dosa</div><div class="recipe-desc">Quick crispy dosa using browntop millet flour — no fermentation needed.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Breakfast</div><div class="recipe-name">Browntop Millet Pumpkin Chapathi</div><div class="recipe-desc">Soft chapathi with grated pumpkin kneaded into browntop millet dough — naturally sweet.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Breakfast</div><div class="recipe-name">Browntop Millet Instant Chapathi</div><div class="recipe-desc">Quick flatbread from browntop millet flour — no resting time needed.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Breakfast</div><div class="recipe-name">Browntop Millet Khara Pongal</div><div class="recipe-desc">Savoury pongal with browntop millet and moong dal — comforting and wholesome.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Rice / Main</div><div class="recipe-name">Browntop Millet Kenaf Puliyogare</div><div class="recipe-desc">Tangy kenaf (Gongura/Roselle) puliyogare using browntop millet — Andhra flavour.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Rice / Main</div><div class="recipe-name">Browntop Millet Lemon Rice</div><div class="recipe-desc">Bright lemon rice with browntop millet — simple and refreshing.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Sweet</div><div class="recipe-name">Browntop Millet Sweet Shells (Gavvalu)</div><div class="recipe-desc">Sweet shell-shaped fried dumplings made from browntop millet dough.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Snack</div><div class="recipe-name">Browntop Millet Tapilent (Deep Fry)</div><div class="recipe-desc">Crispy deep-fried browntop millet snack discs.</div></div>
+        <div class="recipe-card"><div class="recipe-cat">Savoury</div><div class="recipe-name">Browntop Millet Chekkalu (Rice Cracker)</div><div class="recipe-desc">Andhra-style crispy rice crackers made from browntop millet flour.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="recipeModal" onclick="closeModalOnOverlay(event)">
+  <div class="modal-box">
+    <div class="modal-top">
+      <div>
+        <div class="modal-cat" id="modalCat"></div>
+        <div class="modal-title" id="modalTitle"></div>
+      </div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<script>
+/* ── TAB NAVIGATION ── */
+function showTab(name) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('#sidebar nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  document.getElementById('btn-' + name).classList.add('active');
+  document.getElementById('main').scrollTop = 0;
+}
+
+/* ── RECIPE DATA ── */
+const RECIPES = {
+  "Chow Chow Bath — Khara Bath (Foxtail)": {
+    cat: "Breakfast · Dr. Khadar Vali's Recipe",
+    ingredients: [
+      ["Foxtail Millet Rava (soaked, sundried, milled)", "1 cup"],
+      ["Water (for cooking)", "1½ cups"],
+      ["Water (to moisten rava)", "½ cup"],
+      ["Curry Leaves", "1 sprig"],
+      ["Tempering (mustard, urad dal, chana dal)", "1 tsp"],
+      ["Onion (large, diced)", "1"],
+      ["Carrot (diced)", "1"],
+      ["Tomatoes (diced)", "2"],
+      ["Green Chillies (slit lengthwise)", "5"],
+      ["Green Peas", "¼ cup"],
+      ["Ghani-pressed oil", "as needed"],
+      ["Salt", "to taste"]
+    ],
+    procedure: `Dry roast foxtail millet rava in an iron kadai on low flame until it gives a nutty aroma. After cooling, sprinkle water and soak for at least 1 hour (store-bought rava: 2 hours), keeping covered. As it dries, sprinkle more water and mix.
+
+STEAMING: Place a grid in a steamer, bring 3 cups water to boil. Place rava vessel on the stand (not touching water) and steam for 6–7 minutes. Rest 2 minutes. Remove and mash any lumps.
+
+Meanwhile dice onion, tomatoes, carrot. Heat a heavy steel pan, add oil. Once hot, add tempering and fry until mustard splutters. Add curry leaves, onion, tomatoes, carrot, peas one after another and sauté. Add green chillies and sauté 1 minute. Add water and salt, bring to boil. Reduce flame to minimum, add steamed rava gradually, stirring continuously to prevent lumps. Keep covered, stir in between, cook on low flame until done.`,
+    note: "Serve as part of Chow Chow Bath alongside Sweet Bath (both on the same plate)."
+  },
+
+  "Chow Chow Bath — Sweet Bath (Foxtail)": {
+    cat: "Breakfast · Dr. Khadar Vali's Recipe",
+    ingredients: [
+      ["Foxtail Millet Rava (soaked, sundried, milled)", "1 cup"],
+      ["Water", "2 cups"],
+      ["Palm Jaggery Syrup (adjust to taste)", "1 cup"],
+      ["Desi Cow Ghee or Niger Seed Oil", "2½ tbsp"],
+      ["Pumpkin Seeds", "1 tbsp"],
+      ["Watermelon Seeds", "1 tbsp"]
+    ],
+    procedure: `Dry roast foxtail millet rava in an iron kadai on low flame until nutty aroma. After cooling, sprinkle water and soak for at least 1 hour (store-bought: 2 hours). Keep covered, sprinkle more water as needed.
+
+STEAMING: Place rava vessel on a stand in a steamer, steam for 6–7 minutes. Rest 2 minutes, remove and mash any lumps.
+
+Heat a heavy steel pan, add ghee/oil. Once hot, add pumpkin seeds and sauté until half done. Add watermelon seeds, fry until done, keep aside. Pour water into pan, bring to boil. Gradually add steamed rava, stirring continuously to prevent lumps. Keep covered, stir at intervals, cook on low flame until done. Add palm jaggery syrup and cook 5 more minutes. Garnish with fried seeds.`,
+    note: "Add palm jaggery syrup ONLY after the foxtail millet is completely cooked."
+  },
+
+  "Foxtail Millet Instant Dosa with Curd": {
+    cat: "Breakfast",
+    ingredients: [
+      ["Foxtail Millet Flour (grain soaked, sundried, milled)", "1 cup"],
+      ["Curd", "2 tbsp"],
+      ["Sea Salt", "to taste"],
+      ["Water", "as needed"],
+      ["Ghani-pressed oil", "as needed for frying"]
+    ],
+    procedure: `Rinse and soak foxtail millet for 8 hours. Drain completely and sundry for 2–3 days, then mill into flour.
+
+To the flour add curd, salt, water and mix well so there are no lumps. Adding curd makes dosas softer. Soak the batter for 30 minutes.
+
+Grease an iron tawa with oil for the first time and once hot, pour the batter using a glass with rim. Drizzle oil on dosa and fry on both sides. Tasty instant dosas are ready.`,
+    note: "Dr. Khadar Vali says eating siridhanya instant dosas is equivalent to eating siridhanya rice. For maximum benefit, eat fermented dosas at least once a week."
+  },
+
+  "Foxtail Millet Paniyaram": {
+    cat: "Breakfast",
+    ingredients: [
+      ["Fermented Foxtail Millet Dosa Batter (with salt)", "1 cup"],
+      ["Mustard Seeds", "¼ tsp"],
+      ["Cumin Seeds", "¼ tsp"],
+      ["Onion (finely chopped)", "1 tbsp"],
+      ["Turmeric Powder", "a pinch"],
+      ["Green Chillies (finely chopped)", "½ tsp"],
+      ["Curry Leaves (finely chopped)", "½ tsp"],
+      ["Coriander Leaves (finely chopped)", "½ tsp"],
+      ["Soaked Bengal Gram Dal", "1 tbsp"],
+      ["Ghani-pressed oil", "as needed"]
+    ],
+    procedure: `Heat a kadai with oil. Add mustard seeds and cumin seeds. Once they splutter, add curry leaves and sauté for a minute. Add onions and chillies, fry until onions turn pink. Add soaked bengal gram, coriander leaves and turmeric. Once cooled, add this mixture to the dosa batter.
+
+Heat the paniyaram pan and grease it. Pour batter up to ¾ in each mould. Drizzle very little oil and cover with lid. Once the base is golden, flip and cook with a little oil until completely cooked from inside.`,
+    note: "Crushed roasted groundnuts, finely chopped coconut, grated carrot may also be added to the batter for variation."
+  },
+
+  "Foxtail Millet Pulka": {
+    cat: "Breakfast",
+    ingredients: [
+      ["Foxtail Millet Flour (soaked, sundried, milled)", "1 cup"],
+      ["Skinned Black Gram Flour", "1 tbsp"],
+      ["Water", "½ cup"],
+      ["Salt", "to taste"]
+    ],
+    procedure: `Boil water with salt in a steel vessel. Mix both millet flour and skinned black gram flour with hot water and keep aside for one hour.
+
+Knead the dough well, divide into equal portions and make small balls. Take each ball and using a puri press, press to desired size. Fry on an iron tawa without oil. Hot pulkas are ready.`,
+    note: "Ratio: To 1 kg millet flour, use 250g skinned black gram flour for making chapati/roti/pulka. Using hot water is important for a pliable dough."
+  },
+
+  "Foxtail Millet Spicy Roti": {
+    cat: "Breakfast",
+    ingredients: [
+      ["Foxtail Millet Flour (soaked, sundried, milled)", "3 cups"],
+      ["Onion (large, finely chopped)", "1"],
+      ["Carrot (grated)", "1"],
+      ["Coriander Leaves", "2 fistfuls"],
+      ["Curry Leaves", "1 sprig"],
+      ["Sesame Seeds", "1 tsp"],
+      ["Leafy Vegetable (finely chopped, tightly packed)", "1 cup"],
+      ["Green Chillies", "10 (or to taste)"],
+      ["Salt", "as needed"],
+      ["Ghani-pressed oil", "as needed"],
+      ["Water", "as needed"]
+    ],
+    procedure: `Make a paste of green chillies and salt. In a mixing bowl add flour, grated carrot, chopped onion, sesame seeds, finely chopped leafy vegetables, coriander leaves, curry leaves and green chilli paste. Mix well.
+
+Add water little by little and knead well to form a dough. Rest for 15 minutes. Divide into equal portions, make small balls. Press each ball into chapatis of desired size. Heat an iron tawa, grease it and fry the rotis.`,
+    note: "Use only ONE variety of leafy vegetable at a time. For children's soft rotis: add 50g groundnut powder per 200g flour (avoid for adults)."
+  },
+
+  "Foxtail Millet Potato Chapati (Paratha)": {
+    cat: "Breakfast",
+    ingredients: [
+      ["Foxtail Millet Flour (soaked, sundried, milled)", "2 cups"],
+      ["Potatoes (boiled, peeled, mashed)", "3 medium"],
+      ["Fenugreek Leaves (finely chopped)", "1 cup"],
+      ["Red Chilli Powder", "1 tbsp"],
+      ["Coriander Seeds (powdered)", "1 tbsp"],
+      ["Cumin Seeds (powdered)", "1 tbsp"],
+      ["Onion (large, chopped)", "1"],
+      ["Turmeric Powder", "a pinch"],
+      ["Salt", "to taste"],
+      ["Oil", "1 tbsp"]
+    ],
+    procedure: `Boil potatoes, peel and mash. Make fine powder of coriander and cumin seeds. Heat oil in a pan and add chopped onions. After onions soften, add finely chopped fenugreek leaves and coriander-cumin powder. Add turmeric, salt, red chilli powder, mashed potato and mix well.
+
+After mixture cools, add foxtail flour and make a dough. Rest for 30 minutes. Divide into equal portions, make small balls. Press each ball into a chapati and fry on an iron tawa with oil. Goes well with onion raita.`
+  },
+
+  "Kodo Millet Kanchi Idli": {
+    cat: "Breakfast",
+    ingredients: [
+      ["Skinned Black Gram (soaked 2 hrs)", "1 cup"],
+      ["Kodo Millet (soaked 6 hrs)", "2 cups"],
+      ["Curd", "1 cup"],
+      ["Ghani-pressed oil", "1 tbsp"],
+      ["Desi Cow Ghee", "1 tbsp"],
+      ["Green Chillies (or to taste)", "5"],
+      ["Curry Leaves", "1 sprig"],
+      ["Pepper", "½ tsp"],
+      ["Cumin Seeds", "½ tsp"],
+      ["Asafoetida (Hing)", "a pinch"],
+      ["Salt", "to taste"]
+    ],
+    procedure: `Soak kodo millet and skinned black gram separately. Prepare thick batter using a wet grinder. Ferment for 6 hours.
+
+Heat ghee and oil in a pan. Add slit chillies, pepper, curry leaves, cumin seeds and asafoetida. Sauté for a minute. Add to the idli batter.
+
+Add hung (thick) curd and salt to batter and mix well. Take tumblers/moulds, grease inside with ghee, fill half with batter. Pour water in idli cooker, place tumblers/moulds and steam for 20 minutes on low flame or until done.`,
+    note: "The ratio of black gram to millet here is 1:2. Dr. Khadar Vali recommends 1:3 or 1:4 in general. Make occasionally."
+  },
+
+  "Kodo Millet Rava Idli": {
+    cat: "Breakfast",
+    ingredients: [
+      ["Kodo Millet Rava", "2 cups"],
+      ["Vegetables (finely chopped)", "2 cups"],
+      ["Roasted Groundnuts (crushed)", "1 tbsp"],
+      ["Bengal Gram Dal (soaked)", "1 tbsp"],
+      ["Churned Sour Desi Cow Curd", "3 cups"],
+      ["Desi Cow Ghee", "2 tbsp"],
+      ["Coriander Leaves (finely chopped)", "a little"],
+      ["Cumin Seeds", "½ tsp"],
+      ["Green Chillies (finely chopped)", "as needed"],
+      ["Salt", "to taste"],
+      ["Fermented Siri Rice Idli Batter", "1 big ladle"]
+    ],
+    procedure: `Heat a heavy stainless steel pan, add 1 tbsp ghee. Add kodo rava and roast until nutty aroma. Cool, then gradually add beaten sour curd until batter consistency similar to idli batter. Rest for 4 hours.
+
+Steam-cook vegetables and soaked bengal gram until soft. Dry roast groundnuts and crush lightly.
+
+Heat a kadai for tempering. Add remaining ghee. Once hot, add cumin seeds, green chillies, bengal gram, cooked vegetables. Sauté until water evaporates. Once cooled, add to rava-curd mixture with idli batter, salt, crushed peanuts and coriander. Mix well, rest 10–15 minutes.
+
+Boil water in idli steamer. Rinse and grease idli plates. Pour batter into moulds, steam 10–15 minutes. Check with a wet toothpick — done when batter doesn't stick. Turn off, wait 10 more minutes before scooping. Serve with sambar and coconut chutney.`,
+    note: "This batter does not keep well — it is single-use unlike regular idli batter. Make only what you will eat immediately."
+  },
+
+  "Kodo Millet Rava Upma": {
+    cat: "Breakfast",
+    ingredients: [
+      ["Kodo Millet Rava (soaked, sundried, milled)", "1 cup"],
+      ["Green Chillies", "3"],
+      ["Onions (slit lengthwise)", "2"],
+      ["Salt", "to taste"],
+      ["Water (heated separately)", "3 cups"],
+      ["Tempering (mustard, urad dal)", "1 tsp"],
+      ["Curry Leaves", "1 sprig"],
+      ["Ghani-pressed oil", "as needed"]
+    ],
+    procedure: `Roast 1 cup kodo millet in an iron kadai until nutty aroma. Wash and soak in 1.5 cups water for minimum 30 minutes (store-bought rava: 2 hours).
+
+Place thick steel pan on stove, add oil. Once hot, add tempering, chillies, curry leaves and onions one by one — sauté well. Add the remaining 1.5 cups water plus the water the kodo millet was soaking in. Bring to a boil. Add salt, then add rava and mix well. Cook on low flame with lid covered until done.`
+  },
+
+  "Kodo Millet Dibbarotte": {
+    cat: "Breakfast",
+    ingredients: [
+      ["Skinned Black Gram", "1 cup"],
+      ["Kodo Millet", "4 cups"],
+      ["Fenugreek Seeds", "½ tsp"],
+      ["Cumin Seeds (coarsely pounded)", "2 tsp"],
+      ["Pepper (coarsely pounded)", "2 tsp"],
+      ["Asafoetida (Hing)", "a pinch"],
+      ["Curry Leaves (finely chopped)", "10 leaves"],
+      ["Salt", "to taste"],
+      ["Ghani-pressed oil", "2 tbsp"]
+    ],
+    procedure: `Rinse kodo millet, soak for 6+ hours. Soak fenugreek seeds with skinned black gram for 4 hours before grinding. Grind black gram with fenugreek until fine and frothy (drop a spoonful in water — if it floats, it's ready). Empty into vessel. Coarsely grind kodo millet to fine rava texture using minimal water. Mix both batters with salt. Ferment covered for not more than 5 hours (do NOT ferment overnight — batter should not turn sour).
+
+Before making Dibbarotte, add pounded pepper, cumin, asafoetida, and chopped curry leaves to batter. Rest 30 minutes.
+
+Heat a thick heavy iron kadai, then add oil (add oil only after heating — or it will stick). Once oil is hot, pour 4–5 ladles of batter, spread lightly, cover and cook on LOWEST possible flame. Once cooked well, flip and cook the other side. Rest for 5 minutes after turning off flame. Serve hot with ginger chutney and thick palm jaggery syrup.`,
+    note: "Dibbarotte must be at least 1.5 inches thick. Use a 2–3 inch deep heavy iron or stainless steel kadai. In the centre of the kadai, thrust a small bowl into the batter to ensure even cooking."
+  },
+
+  "Kodo Millet Pesarattu (Moong Cheela)": {
+    cat: "Breakfast",
+    ingredients: [
+      ["Whole Green Gram (sprouted)", "1 cup"],
+      ["Kodo Millet (soaked 6 hrs)", "2 cups"],
+      ["Ginger", "50g"],
+      ["Green Chillies", "10"],
+      ["Cumin Seeds", "2 tbsp"],
+      ["Garlic Pods (optional)", "4–5"],
+      ["Onions (finely chopped)", "2"],
+      ["Salt", "to taste"],
+      ["Ghani-pressed oil", "¼ cup"]
+    ],
+    procedure: `Rinse and soak kodo millet for 6+ hours. Soak whole green gram for 8 hours, then drain and allow to sprout. Grind kodo millet and green gram sprouts separately and mix the batters. Coarsely grind 25g peeled ginger with 6 green chillies, ½ tbsp cumin seeds, garlic cloves and salt in a mixer grinder. Add to the batter and mix well.
+
+Finely chop onions, ginger, green chillies. Mix these together with cumin seeds.
+
+Heat an iron tawa, grease with oil, spread the batter. Liberally sprinkle chopped onion mixture over it. Drizzle oil over edges and cook until edges leave the tawa. Flip and cook the other side if needed. Tastes best with ginger chutney.`,
+    note: "Do NOT ferment Pesarattu batter. Foxtail (12.3% protein) and browntop (11.5%) have higher protein; use little, barnyard, or kodo (6–7% protein) for best Pesarattu binding."
+  },
+
+  "Kodo Millet Vada": {
+    cat: "Breakfast",
+    ingredients: [
+      ["Skinned Black Gram", "1 cup"],
+      ["Kodo Millet (soaked 6 hrs)", "2 cups"],
+      ["Fenugreek Seeds", "1 tsp"],
+      ["Green Chillies", "7–8"],
+      ["Pepper (coarsely pounded)", "½ tsp"],
+      ["Cumin Seeds", "½ tsp"],
+      ["Curry Leaves", "2 sprigs"],
+      ["Coconut pieces (finely chopped)", "1 tbsp"],
+      ["Kodo Millet Flour", "2 tbsp"],
+      ["Asafoetida (Hing)", "a pinch"],
+      ["Soaked Skinned Split Black Gram", "2 tbsp"],
+      ["Grated Ginger", "½ inch piece"],
+      ["Salt", "to taste"],
+      ["Oil for deep frying", "as needed"]
+    ],
+    procedure: `Soak kodo millet for 6+ hours. Soak black gram with fenugreek for ~3 hours. Grind black gram in wet grinder with kodo soaking water, adding water gradually. Test 1: batter stands firmly without spreading. Test 2: drop in water — floats immediately without dissolving.
+
+Drain kodo millet completely, grind to smooth but tight batter in mixer (minimal water). Mix kodo and black gram batters. Add curry leaves, green chillies, coconut pieces, grated ginger, asafoetida, cumin, pounded pepper, soaked split black gram and salt. Mix well. If batter is runny, add kodo millet flour.
+
+Heat oil in iron kadai. Shape batter into large laddu on a wet piece of banana leaf, flatten slightly, make a small hole in centre with finger. Carefully slide onto hand and gently drop into hot oil. Fry until golden brown, flip for uniform colour. Fry 4–5 vadas per batch. Serve with ginger chutney, coconut chutney and sambar.`
+  },
+
+  "Little Millet Freedom Idli": {
+    cat: "Breakfast",
+    ingredients: [
+      ["Whole Skinned Black Gram", "1 cup"],
+      ["Little Millet Rava", "3 cups"],
+      ["Little Millet Rice/Poha (for softness)", "a handful"],
+      ["Fenugreek Seeds", "½ tsp"],
+      ["Salt", "to taste"],
+      ["Desi Cow Ghee (to grease plates)", "as needed"]
+    ],
+    procedure: `Rinse little millet and grind coarsely in a mixer to make rava. Soak this rava for at least 6 hours (do NOT discard soaking water — nutrients leach into it; use it for grinding).
+
+Rinse and soak skinned black gram and fenugreek seeds for 4 hours. Grind black gram and fenugreek in wet grinder until half done. Add cooked little millet rice (or poha soaked 10 mins) and continue grinding until smooth batter. Mix black gram batter with little millet rava and ferment overnight or 6 hours.
+
+For regular idli: take fermented batter, add salt, add a little water if needed. Grease idli plates with ghee. Pour batter. Steam in a steamer for 8–10 minutes on medium flame. Serve hot with peanut chutney and sambar.`,
+    note: "CARROT IDLI variant: Add ½ cup steamed carrot paste to 1 cup batter. SPINACH IDLI variant: Add ½ cup steamed spinach paste. Rest 1 hour after adding paste before steaming."
+  },
+
+  "Little Millet Upma": {
+    cat: "Breakfast",
+    ingredients: [
+      ["Little Millet (roasted, soaked 6 hrs)", "1 cup"],
+      ["Carrot and Beans/Green Peas (finely diced)", "2 tbsp"],
+      ["Onion (medium, finely chopped)", "1"],
+      ["Water", "2½ cups"],
+      ["Grated Ginger", "1 tsp"],
+      ["Green Chillies", "3"],
+      ["Coriander Leaves (finely chopped)", "2 tbsp"],
+      ["Groundnuts (soaked)", "1 tbsp"],
+      ["Salt", "to taste"],
+      ["Ghani-pressed oil", "1½ tbsp"],
+      ["Mustard Seeds", "¼ tsp"],
+      ["Skinned Black Gram", "1 tsp"],
+      ["Curry Leaves", "1 sprig"],
+      ["Turmeric Powder", "a pinch"]
+    ],
+    procedure: `Roast little millet in iron kadai until nice aroma. Soak in ¼ cup water for minimum 6 hours.
+
+STEAMING: Sprinkle ¼ cup water over 1 cup millet, mix well. Cover for 1 hour. As it dries, sprinkle more water and mix again — repeat. After 6 hours: millet should be moist enough to form a lump but disintegrate with a nudge. Add 1 tsp oil and steam for 8–10 minutes, mixing with fork at intervals. One cup rises to ~2 cups. Cool and separate lumps.
+
+Heat steel pan, add oil. Add tempering until mustard splutters. Add onion, ginger, green chillies, curry leaves, vegetables and groundnuts one by one — fry well. Pour 1½ cups water, bring to boil. Add steamed millet, turmeric, salt. Mix well. Cook on low flame until done, adding water if needed. Garnish with coriander. Serve with raita or sambar.`,
+    note: "Alternative: Cook siri rice separately, add to tempering, close lid and simmer 5 minutes. MLA Pesarattu variant: spread upma liberally on whole moong cheela."
+  },
+
+  "Little Millet Tamarind Pulp Upma": {
+    cat: "Breakfast",
+    ingredients: [
+      ["Little Millet Rava (soaked, sundried, milled)", "1 cup"],
+      ["Green Chillies", "8 (or to taste)"],
+      ["Fresh Grated Coconut", "1 tbsp"],
+      ["Tamarind", "1½ tbsp"],
+      ["Palm Jaggery Syrup", "1 tsp"],
+      ["Water", "2½ cups"],
+      ["Ghani-pressed oil", "4 tbsp"],
+      ["Groundnuts", "2 tbsp"],
+      ["Onions", "1–2"],
+      ["Salt", "to taste"],
+      ["Turmeric Powder", "¼ tsp"],
+      ["Curry Leaves", "a sprig"],
+      ["Tempering (mustard, urad dal)", "1 tsp"]
+    ],
+    procedure: `Soak tamarind and extract pulp. Make a paste of green chillies, grated coconut, salt and turmeric. Add tamarind pulp, green chilli paste and palm jaggery syrup to 2½ cups water.
+
+Fry little millet rava with a little oil. Heat oil in a thick-bottomed pan, add tempering, groundnuts, curry leaves and chopped onions. Sauté well, then add the tamarind solution and bring to a boil. Lower the flame and gradually add rava while stirring continuously to prevent lumps. Cook on low flame for 15 minutes or until done.`
+  },
+
+  "Little Millet Undrallu": {
+    cat: "Breakfast",
+    ingredients: [
+      ["Little Millet Rava (home-made)", "1 cup"],
+      ["Bengal Gram Dal (soaked and cooked)", "2 tbsp"],
+      ["Fresh Grated Coconut", "2 tbsp"],
+      ["Cumin Seeds", "1 tsp"],
+      ["Desi Cow Ghee", "2 tbsp"],
+      ["Salt", "to taste"],
+      ["Water", "1½ to 2 cups"]
+    ],
+    procedure: `RAVA PREPARATION: Soak 2 cups little millet for 6 hours and dry in shade on cotton cloth. Take ½ cup at a time, use mixer pulse/whipper button to make rava. Sieve to remove fine flour (use that in dosa batter). Sieve through rava mesh — what falls through is your rava. Regrind what remains. Rava must be uniform. Make fresh on day of use.
+
+COOKING: Boil 1½ cups water in thick stainless steel vessel. Add 1 tsp ghee, cumin seeds and salt. Gradually pour rava while stirring constantly to prevent lumps. Keep another 1 cup boiled water as standby. Cook on lowest flame, stirring regularly, adding water as needed.
+
+In a wide basin spread cooked rava, cooked bengal gram, grated coconut, and remaining ghee. Mix well. With wet hands mould into medium-sized laddus. Arrange in steaming bowl and steam in idli steamer for 5 minutes. Serve hot with chutney and sambar.`,
+    note: "Traditionally offered to Lord Ganesha during Ganesh Chaturthi in Telugu households. Moong dal can replace bengal gram."
+  },
+
+  "Barnyard Millet Poha Upma": {
+    cat: "Breakfast",
+    ingredients: [
+      ["Barnyard Millet Poha (Beaten Rice)", "3 cups"],
+      ["Ghani-pressed oil", "6 tbsp"],
+      ["Green Chillies", "10"],
+      ["Salt", "to taste"],
+      ["Turmeric Powder", "¼ tsp"],
+      ["Onions (large, chopped)", "2"],
+      ["Tempering (mustard, urad, chana dal)", "1 tsp"],
+      ["Curry Leaves", "1 sprig"],
+      ["Coriander Leaves (optional, garnish)", "a fistful"],
+      ["Dry Red Chillies", "2"],
+      ["Lemon Juice", "to taste"]
+    ],
+    procedure: `Make a paste of green chillies and salt. Rinse barnyard millet poha using a colander (no soaking needed — barnyard poha is pre-soaked during preparation).
+
+Place heavy bottomed pan on stove, add oil. Once hot, add tempering, dry red chillies and curry leaves. Fry well. Add finely chopped onions, sauté for a minute. Add chilli paste, fry until raw smell goes. Add turmeric powder. Add rinsed poha and lemon juice, mix well on a low flame. Turn off and serve hot.`,
+    note: "Millet flakes/poha are prepared after soaking the millets, so no additional soaking needed when using them in recipes."
+  },
+
+  "Barnyard Millet Dosa": {
+    cat: "Breakfast",
+    ingredients: [
+      ["Whole Skinned Black Gram", "1 cup"],
+      ["Barnyard Millet (soaked 6 hrs)", "4 cups"],
+      ["Barnyard Millet Rice/Beaten Rice (optional)", "½ cup"],
+      ["Fenugreek Seeds", "½ tsp"],
+      ["Salt", "to taste"],
+      ["Oil", "as needed for frying"]
+    ],
+    procedure: `Rinse and soak whole skinned black gram and fenugreek seeds for 4 hours. In a separate bowl rinse and soak barnyard millet for at least 6 hours. Soak barnyard beaten rice for ~10 minutes before grinding.
+
+Transfer all ingredients to a wet grinder and grind until smooth batter (use millet soaking water for grinding). Ferment 6 hours or overnight until it rises well. Add salt just before making dosas.
+
+Grease an iron tawa with oil for first use. Once hot, spread a ladle of batter in circular motion. Drizzle oil over dosa, cook on medium heat. Tastes great with peanut chutney, sambar or potato masala.`,
+    note: "Dr. Khadar Vali recommends eating fermented dosas at least once a week as they create both prebiotic and probiotic conditions in the gut. If using cooked barnyard rice, add it towards the end of grinding."
+  },
+
+  "Barnyard Millet Pullattu (Sour Dosa)": {
+    cat: "Breakfast",
+    ingredients: [
+      ["Barnyard Millet Flour", "2 cups"],
+      ["Desi Cow Buttermilk", "6 cups"],
+      ["Salt", "to taste"],
+      ["Ginger", "2 inch piece"],
+      ["Green Chillies", "6–10 (to taste)"],
+      ["Coriander Leaves", "1 small bunch"],
+      ["Sesame Seeds", "3 tbsp"],
+      ["Oil", "as needed for frying"]
+    ],
+    procedure: `Soak barnyard flour in buttermilk for 6–7 hours. Just before making, blend ginger, chillies, coriander and salt into a fine paste in a mixer. Add this paste and sesame seeds to the batter and mix well. Add water if needed — the batter should be THINNER than regular dosa batter.
+
+Place an iron tawa on stove and heat. Drizzle oil and grease with a potato or onion slice (do this before EVERY attu). Pour batter using a glass with rim/ladle. Drizzle oil around the attu. After 2–3 minutes flip and fry the other side too. Transfer to plate after 1 minute.`,
+    note: "The natural souring of buttermilk combined with barnyard millet creates a probiotic-rich dosa. The sour taste is intentional and beneficial."
+  },
+
+  "Barnyard Millet Curd Uttapam": {
+    cat: "Breakfast",
+    ingredients: [
+      ["Barnyard Millet (soaked 6–8 hrs)", "4 cups"],
+      ["Barnyard Beaten Rice (Poha)", "1 cup"],
+      ["Skinned Black Gram", "½ cup"],
+      ["Curd", "1 cup"],
+      ["Onion (finely chopped)", "1"],
+      ["Green Chillies (finely chopped)", "3–4"],
+      ["Tomato (finely chopped)", "2–3"],
+      ["Salt", "to taste"],
+      ["Oil", "as needed"]
+    ],
+    procedure: `Soak barnyard millet for 6–8 hours and skinned black gram for 4 hours separately. Rinse barnyard poha just before grinding (in winters: soak millet in curd; in summers: add curd during grinding).
+
+Transfer soaked millet, black gram and beaten rice to wet grinder. Grind until smooth, add salt. Heat iron tawa, grease with oil, spread the dosa. Top with finely chopped onion, tomato and green chillies. Drizzle oil over dosa, cover with lid and cook on low flame. Once base is firm, flip and cook the other side. Serve with tomato or coconut chutney.`
+  },
+
+  "Barnyard Millet Kudumulu": {
+    cat: "Breakfast",
+    ingredients: [
+      ["Barnyard Millet (soaked 6 hrs, sun-dried)", "4 cups"],
+      ["Pigeon Peas — Tur Dal", "1 cup"],
+      ["Onion (large, finely chopped)", "1"],
+      ["Green Chillies", "10"],
+      ["Cumin Seeds", "1 tbsp"],
+      ["Salt", "to taste"],
+      ["Desi Cow Ghee (to grease)", "as needed"]
+    ],
+    procedure: `Grind barnyard millet and tur dal so that 3 parts is rava and 1 part is fine flour (flour helps in binding the kudumulu tightly). Transfer to a steel vessel, sprinkle water and soak for 30 minutes. Keep covered, sprinkle more water as it dries.
+
+Place a grid in a steamer, bring 3 cups water to boil. Place steel vessel on stand (not touching water) and steam for 6–7 minutes. Rest 2 minutes. Remove and mash any lumps.
+
+Make a paste of green chillies and salt. Add finely chopped onion, cumin seeds and green chilli paste to rava with water as needed to make balls. Divide into small equal portions and shape into round or oval balls. Apply ghee to idli plates, place kudumulu and steam for 15 minutes. Serve with methi dal, rayalaseema red chutney or curd.`,
+    note: "Famous as Jowar Kudumulu in Rayalaseema — this recipe replaces jowar with barnyard millet. Any of the 5 Siridhanyas can be used."
+  },
+
+  "Barnyard Millet Flakes Dhokla": {
+    cat: "Breakfast",
+    ingredients: [
+      ["Barnyard Millet Flakes (Poha)", "1 cup"],
+      ["Barnyard Millet Rava", "½ cup"],
+      ["Sour Curd", "½ cup"],
+      ["Green Chillies", "6 (or to taste)"],
+      ["Ginger", "½ inch piece"],
+      ["Salt", "to taste"],
+      ["Water", "as required"],
+      ["Oil (to grease pan)", "½ tbsp"],
+      ["Oil (for tempering)", "2 tbsp"],
+      ["Mustard Seeds", "1 tbsp"],
+      ["Cumin Seeds", "½ tbsp"],
+      ["Curry Leaves", "1 sprig"]
+    ],
+    procedure: `Dry roast barnyard rava in iron kadai on low flame until nutty aroma. After cooling, sprinkle water and soak rava for at least 1 hour (store-bought: 2 hours). Keep covered.
+
+Wash barnyard poha in a colander and grind coarsely. In a mixing bowl combine ground poha, ½ cup barnyard rava, ½ cup sour curd, blended green chilli-ginger-salt paste and water to make idli batter consistency. Rest for 30 minutes.
+
+Boil water in idli steamer. Grease a rectangular stainless pan. Pour batter in, tap gently to settle evenly. Place on a grid in the steamer. Cover and cook on medium flame for 15 minutes. Test with toothpick — done when batter doesn't stick. Turn off, rest 10 minutes. Demould onto steel plate, cut into pieces. Heat oil for tempering, add seeds and curry leaves. Once spluttering, pour evenly over dhokla pieces. Serve with coconut chutney or sambar.`
+  },
+
+  "Browntop Millet Flour Instant Dosa": {
+    cat: "Breakfast",
+    ingredients: [
+      ["Browntop Millet Flour (soaked, sundried, milled)", "3 cups"],
+      ["Salt", "to taste"],
+      ["Water", "~4 cups"],
+      ["Cumin Seeds", "2 tsp"],
+      ["Oil", "as needed for frying"]
+    ],
+    procedure: `In a mixing bowl add flour, salt and water. Mix well ensuring no lumps — batter must be flowing and thin. Soak for 30 minutes (store-bought flour: at least 1 hour).
+
+Add cumin seeds just before making dosa. Grease an iron tawa with oil for the first time. Pour batter using a glass with rim. Drizzle oil on dosa and fry on both sides.
+
+Optional toppings: finely chopped carrot, coconut, coarsely pounded groundnuts.`,
+    note: "Dr. Khadar Vali says eating siridhanya instant dosas is equivalent to eating siridhanya rice."
+  },
+
+  "Browntop Millet Pumpkin Chapathi": {
+    cat: "Breakfast",
+    ingredients: [
+      ["Browntop Millet Flour (soaked, sundried, milled)", "3 cups"],
+      ["Yellow Pumpkin (grated and steamed to puree)", "1 cup"],
+      ["Ghani-pressed oil", "3 tbsp"],
+      ["Salt", "to taste"],
+      ["Oil", "as needed for frying"]
+    ],
+    procedure: `Grate pumpkin and steam for 2–3 minutes. Allow to cool completely and make into puree. In a mixing bowl add browntop millet flour, oil, salt and pumpkin puree. Knead into a smooth dough. Rest for 1 hour (store-bought flour: rest 5–6 hours).
+
+Divide into equal portions, make small balls. Roll each ball into chapati of desired size using a rolling board and pin. Heat an iron tawa, grease it and fry chapathis. Serve with curry of your choice.`,
+    note: "BANANA VARIANT: Replace pumpkin with mash of 1 medium ripe plantain. Add 2 cups siridhanya flour, salt and 2 tsp oil. Knead with hot water to a tight dough. Rest 1 hour and make chapathis."
+  },
+
+  "Browntop Millet Khara Pongal": {
+    cat: "Breakfast",
+    ingredients: [
+      ["Browntop Millet (soaked 8 hrs)", "1 cup"],
+      ["Green Gram (roasted until golden, soaked 2 hrs)", "¼ cup"],
+      ["Turmeric Powder", "¼ tsp"],
+      ["Ghee/Ghani oil", "2 tbsp"],
+      ["Pepper (coarsely ground)", "2 tsp"],
+      ["Cumin Seeds", "1 tsp"],
+      ["Asafoetida (Hing)", "¼ tsp"],
+      ["Coconut (finely chopped)", "2 tbsp"],
+      ["Grated Ginger", "a little"],
+      ["Curry Leaves", "10 leaves"],
+      ["Salt", "to taste"]
+    ],
+    procedure: `Dry roast browntop millet in iron kadai until nutty aroma. Soak in 2 cups water for 8 hours. Also roast green gram until golden and soak for 2 hours.
+
+Bring 5 cups water to boil in a large clay pot or thick stainless steel vessel. Add soaked green gram, browntop millet (with its soaking water), turmeric, a little ghee and hing. Cook until soft, adding more hot water as needed for desired consistency.
+
+Heat oil/ghee in a kadai. Fry coconut pieces until golden brown. Add coarsely ground pepper, cumin, ginger, hing and curry leaves. Sauté well. Add to almost-cooked pongal along with salt. Cover and cook until done. Add a little ghee before serving. Serve on banana leaf with ginger chutney or onion tamarind stew.`,
+    note: "Pongal served on banana leaf releases appetizing aromas — traditional recipes are best enjoyed this way."
+  }
+};
+
+/* ── MODAL FUNCTIONS ── */
+function openRecipe(name) {
+  const r = RECIPES[name];
+  if (!r) return;
+
+  document.getElementById('modalCat').textContent = r.cat;
+  document.getElementById('modalTitle').textContent = name;
+
+  let body = '';
+
+  if (r.ingredients && r.ingredients.length) {
+    body += '<div class="modal-section"><h5>Ingredients</h5><ul class="ingredients-list">';
+    r.ingredients.forEach(([n, q]) => {
+      body += `<li><span class="ing-name">${n}</span><span class="ing-qty">${q}</span></li>`;
+    });
+    body += '</ul></div>';
+  }
+
+  if (r.procedure) {
+    body += `<div class="modal-section"><h5>Procedure</h5><p class="procedure-text">${r.procedure}</p></div>`;
+  }
+
+  if (r.note) {
+    body += `<div class="modal-note"><strong>Note:</strong> ${r.note}</div>`;
+  }
+
+  document.getElementById('modalBody').innerHTML = body;
+  document.getElementById('recipeModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('recipeModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function closeModalOnOverlay(e) {
+  if (e.target === document.getElementById('recipeModal')) closeModal();
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+/* ── RECIPE CLICK DELEGATION ── */
+document.addEventListener('click', function(e) {
+  const card = e.target.closest('.recipe-card');
+  if (!card) return;
+  const name = card.querySelector('.recipe-name').textContent.trim();
+  if (RECIPES[name]) {
+    openRecipe(name);
+  } else {
+    // Show "coming soon" for recipes without full data
+    const cat = card.querySelector('.recipe-cat').textContent.trim();
+    const desc = card.querySelector('.recipe-desc').textContent.trim();
+    document.getElementById('modalCat').textContent = cat;
+    document.getElementById('modalTitle').textContent = name;
+    document.getElementById('modalBody').innerHTML = `
+      <div class="modal-section"><h5>Description</h5><p class="procedure-text">${desc}</p></div>
+      <div class="modal-note">Full ingredient list and step-by-step procedure for this recipe is from the <strong>Pāka Siri — Millet Cookbook</strong> by Dr. Khadar Vali (Rytu Nestham Publications). Refer to the printed cookbook for the complete recipe.</div>`;
+    document.getElementById('recipeModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+});
+</script>
+</body>
+</html>
