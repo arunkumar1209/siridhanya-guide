@@ -118,6 +118,18 @@
     padding: 48px 48px 36px;
     background: linear-gradient(135deg, var(--accent-light) 0%, white 60%);
     border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 32px;
+  }
+  .hero-text { flex: 1; min-width: 0; }
+  .hero-image {
+    flex-shrink: 0;
+    width: 260px;
+    height: 200px;
+    border-radius: 12px;
+    object-fit: cover;
   }
   .hero .millet-tag {
     display: inline-flex;
@@ -147,7 +159,7 @@
     font-size: 15px;
     line-height: 1.7;
     color: #44403c;
-    max-width: 700px;
+    max-width: 660px;
     margin-bottom: 24px;
   }
   .hero-meta {
@@ -291,6 +303,7 @@
     border-radius: 12px;
     padding: 18px;
     transition: box-shadow .15s, transform .15s;
+    border-top: 3px solid var(--accent);
   }
   .recipe-card { cursor: pointer; }
   .recipe-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,.07); transform: translateY(-2px); }
@@ -383,12 +396,16 @@
   .procedure-text { font-size: 13px; color: #44403c; line-height: 1.8; white-space: pre-wrap; }
   .modal-note { background: #fef9c3; border: 1px solid #fde047; border-radius: 8px; padding: 12px 16px; font-size: 12px; color: #713f12; line-height: 1.6; }
   .recipe-card .recipe-cat {
+    display: inline-block;
     font-size: 10px;
     font-weight: 600;
     letter-spacing: .8px;
     text-transform: uppercase;
     color: var(--accent);
-    margin-bottom: 6px;
+    background: var(--accent-light);
+    padding: 2px 8px;
+    border-radius: 20px;
+    margin-bottom: 8px;
   }
   .recipe-card .recipe-name { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
   .recipe-card .recipe-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
@@ -409,6 +426,7 @@
     border-top: 4px solid var(--mc);
   }
   .millet-overview-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,.09); transform: translateY(-3px); }
+  .millet-overview-card img { width: 80px; height: 80px; border-radius: 10px; object-fit: cover; margin-bottom: 12px; display: block; }
   .millet-overview-card h3 { font-size: 17px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
   .millet-overview-card .ov-sci { font-size: 12px; font-style: italic; color: var(--muted); margin-bottom: 12px; }
   .millet-overview-card .ov-cleanse {
@@ -452,21 +470,84 @@
   .ambali-box h4 { font-size: 18px; font-weight: 700; color: #92400e; margin-bottom: 8px; }
   .ambali-box p { font-size: 14px; color: #78350f; line-height: 1.7; }
 
+  /* ── WEEKLY ROTATION ── */
+  .weekly-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 12px;
+  }
+  .day-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 12px;
+    text-align: center;
+    border-top: 4px solid var(--dc);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+  .day-card .day-name { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .8px; color: var(--muted); }
+  .day-card .day-emoji { font-size: 28px; }
+  .day-card .day-millet { font-size: 12px; font-weight: 600; color: var(--text); }
+  .day-card .day-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--dc); margin: 2px auto 0; }
+
+  /* ── RATIO BAR CHART ── */
+  .ratio-chart { display: flex; flex-direction: column; gap: 10px; }
+  .ratio-row { display: flex; align-items: center; gap: 10px; }
+  .ratio-label { font-size: 12px; font-weight: 600; color: var(--text); width: 170px; flex-shrink: 0; }
+  .ratio-bar-wrap { flex: 1; background: #f3f4f6; border-radius: 4px; height: 20px; overflow: hidden; }
+  .ratio-bar { height: 100%; border-radius: 4px; transition: width .3s ease; }
+  .ratio-value { font-size: 12px; font-weight: 600; color: var(--muted); width: 40px; text-align: right; flex-shrink: 0; }
+
   /* Responsive */
   @media (max-width: 768px) {
     body { flex-direction: column; }
-    #sidebar { width: 100%; height: auto; position: static; flex-direction: row; overflow-x: auto; min-width: 0; }
-    #sidebar nav { display: flex; flex-direction: row; padding: 0; overflow-x: auto; flex: 1; }
-    #sidebar nav button { white-space: nowrap; flex-shrink: 0; padding: 12px 16px; border-left: none; border-bottom: 3px solid transparent; }
-    #sidebar nav button.active { border-left-color: transparent; border-bottom-color: var(--accent); }
-    #sidebar .section-label, #sidebar .brand, #sidebar .quote { display: none; }
-    .hero { padding: 20px 16px; }
+    #sidebar { display: none; }
+    #mobile-nav {
+      display: flex;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: #fff;
+      border-top: 1px solid var(--border);
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+    #mobile-nav button {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      padding: 8px 4px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 10px;
+      color: var(--muted);
+      font-weight: 500;
+      border-top: 2px solid transparent;
+      transition: color .15s, border-color .15s;
+    }
+    #mobile-nav button .nav-icon { font-size: 18px; line-height: 1; }
+    #mobile-nav button.active { color: var(--accent); border-top-color: var(--accent); }
+    #main { padding-bottom: 80px; }
+    .hero { padding: 20px 16px; flex-direction: column; gap: 16px; }
+    .hero-image { display: none; }
     .hero h2 { font-size: 22px; }
     .content { padding: 16px; gap: 32px; }
     .conditions-table { overflow-x: auto; }
     .conditions-table table { min-width: 500px; }
     .hero-meta { gap: 12px; }
     .organ-banner { flex-direction: column; align-items: flex-start; gap: 8px; }
+    .ratio-label { width: 110px; font-size: 11px; }
+  }
+  @media (min-width: 769px) {
+    #mobile-nav { display: none; }
   }
 </style>
 </head>
@@ -503,6 +584,28 @@
   <div class="quote">"When food is right, medicine is of no need."<br>— Dr. Khadar Vali</div>
 </aside>
 
+<!-- MOBILE BOTTOM NAV -->
+<nav id="mobile-nav">
+  <button onclick="showTab('overview')" id="mob-btn-overview" class="active" style="--accent:#d97706">
+    <span class="nav-icon">🌾</span>Overview
+  </button>
+  <button onclick="showTab('foxtail')" id="mob-btn-foxtail" style="--accent:#d97706">
+    <span class="nav-icon">🟠</span>Foxtail
+  </button>
+  <button onclick="showTab('kodo')" id="mob-btn-kodo" style="--accent:#7c3aed">
+    <span class="nav-icon">🟣</span>Kodo
+  </button>
+  <button onclick="showTab('little')" id="mob-btn-little" style="--accent:#16a34a">
+    <span class="nav-icon">🟢</span>Little
+  </button>
+  <button onclick="showTab('barnyard')" id="mob-btn-barnyard" style="--accent:#0369a1">
+    <span class="nav-icon">🔵</span>Barnyard
+  </button>
+  <button onclick="showTab('browntop')" id="mob-btn-browntop" style="--accent:#be123c">
+    <span class="nav-icon">🔴</span>Browntop
+  </button>
+</nav>
+
 <!-- MAIN -->
 <main id="main">
 
@@ -510,14 +613,17 @@
 <div id="tab-overview" class="tab-content active" style="--accent:#d97706;--accent-light:#fef3c7">
 
   <div class="hero" style="background: linear-gradient(135deg,#fef3c7 0%,white 70%)">
-    <div class="millet-tag">● Siridhanya System</div>
-    <h2>The Five Positive Millets</h2>
-    <p class="scientific">Dr. Khadar Vali's Classification of Healing Grains</p>
-    <p class="summary">
-      Dr. Khadar Vali identified five "Siridhanya" (positive millets) — grains with a Carbohydrate-to-Fiber ratio below 10.
-      This single property ensures slow glucose release, deep organ cleansing, and restoration of health from its root causes.
-      Each millet specialises in cleansing a different organ system, making rotation across all five essential for complete health.
-    </p>
+    <div class="hero-text">
+      <div class="millet-tag">● Siridhanya System</div>
+      <h2>The Five Positive Millets</h2>
+      <p class="scientific">Dr. Khadar Vali's Classification of Healing Grains</p>
+      <p class="summary">
+        Dr. Khadar Vali identified five "Siridhanya" (positive millets) — grains with a Carbohydrate-to-Fiber ratio below 10.
+        This single property ensures slow glucose release, deep organ cleansing, and restoration of health from its root causes.
+        Each millet specialises in cleansing a different organ system, making rotation across all five essential for complete health.
+      </p>
+    </div>
+    <img class="hero-image" src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Millets.jpg/400px-Millets.jpg" alt="Millets" onerror="this.style.display='none'">
   </div>
 
   <div class="content">
@@ -532,30 +638,35 @@
       <div class="section-header"><h3>At a Glance — All Five Millets</h3></div>
       <div class="overview-grid">
         <div class="millet-overview-card" style="--mc:#d97706" onclick="showTab('foxtail')">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Foxtail_millet_Setaria_italica.jpg/400px-Foxtail_millet_Setaria_italica.jpg" alt="Foxtail Millet" onerror="this.style.display='none'">
           <h3>Foxtail Millet</h3>
           <div class="ov-sci">Setaria italica • Navane / Korra / Tenai</div>
           <div class="ov-cleanse">🧠 Cleanses Nervous &amp; Respiratory System</div>
           <p class="ov-desc">The most balanced of the five Siridhanyas. Rich in protein (12%) and fiber (8%). Base food for lung cancer, Parkinson's, asthma, and anemia. Especially beneficial for lung tissue cleansing.</p>
         </div>
         <div class="millet-overview-card" style="--mc:#7c3aed" onclick="showTab('kodo')">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Kodo_millet.jpg/400px-Kodo_millet.jpg" alt="Kodo Millet" onerror="this.style.display='none'">
           <h3>Kodo Millet</h3>
           <div class="ov-sci">Paspalum scrobiculatum • Arka / Arikelu / Varagu</div>
           <div class="ov-cleanse">🩸 Cleanses Bone Marrow</div>
           <p class="ov-desc">Specialises in blood production. Heals blood cancer, anemia, low platelet count, and blood-related diseases. Also highly effective for diabetes, kidney problems, and joint swelling.</p>
         </div>
         <div class="millet-overview-card" style="--mc:#16a34a" onclick="showTab('little')">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Little_Millet.jpg/400px-Little_Millet.jpg" alt="Little Millet" onerror="this.style.display='none'">
           <h3>Little Millet</h3>
           <div class="ov-sci">Panicum sumatrense • Saame / Samulu / Samai</div>
           <div class="ov-cleanse">🌿 Cleanses Reproductive Organs</div>
           <p class="ov-desc">The primary grain for all reproductive health issues — PCOD, fibroids, infertility, irregular periods, low sperm count. Also excellent for thyroid, hormonal imbalances, and lymphatic system.</p>
         </div>
         <div class="millet-overview-card" style="--mc:#0369a1" onclick="showTab('barnyard')">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Echinochloa_frumentacea_W_IMG_2775.jpg/400px-Echinochloa_frumentacea_W_IMG_2775.jpg" alt="Barnyard Millet" onerror="this.style.display='none'">
           <h3>Barnyard Millet</h3>
           <div class="ov-sci">Echinochloa frumentacea • Oodhalu / Udhalu / Sanwa</div>
           <div class="ov-cleanse">🫀 Cleanses Liver &amp; Soft Organs</div>
           <p class="ov-desc">Primary cleanser for liver, kidneys, urinary bladder and gallbladder. Treats jaundice, hepatitis A/B/C, liver cirrhosis. Iron-rich — used in North India and Nepal during fasting and post-natal recovery.</p>
         </div>
         <div class="millet-overview-card" style="--mc:#be123c" onclick="showTab('browntop')">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Brachiaria_ramosa_W_IMG_0573.jpg/400px-Brachiaria_ramosa_W_IMG_0573.jpg" alt="Browntop Millet" onerror="this.style.display='none'">
           <h3>Browntop Millet</h3>
           <div class="ov-sci">Brachiaria ramosa • Korale / Andu korralu / Makra</div>
           <div class="ov-cleanse">✨ Detoxifies Entire Body (Head to Toe)</div>
@@ -566,21 +677,55 @@
 
     <div>
       <div class="section-header"><h3>Carb:Fiber Ratio Comparison</h3></div>
-      <div class="conditions-table">
-        <table>
-          <thead><tr><th>Grain</th><th>Category</th><th>Carb:Fiber Ratio</th><th>Note</th></tr></thead>
-          <tbody>
-            <tr><td>Browntop Millet</td><td>✅ Positive (Siridhanya)</td><td><span class="days-pill" style="background:#be123c">5.54</span></td><td>Lowest ratio — strongest detoxifier</td></tr>
-            <tr><td>Kodo Millet</td><td>✅ Positive (Siridhanya)</td><td><span class="days-pill" style="background:#7c3aed">~6</span></td><td>Bone marrow cleanser</td></tr>
-            <tr><td>Little Millet</td><td>✅ Positive (Siridhanya)</td><td><span class="days-pill" style="background:#16a34a">~6</span></td><td>Reproductive cleanser</td></tr>
-            <tr><td>Foxtail Millet</td><td>✅ Positive (Siridhanya)</td><td><span class="days-pill" style="background:#d97706">~7</span></td><td>Most balanced grain</td></tr>
-            <tr><td>Barnyard Millet</td><td>✅ Positive (Siridhanya)</td><td><span class="days-pill" style="background:#0369a1">~7</span></td><td>Liver cleanser</td></tr>
-            <tr><td>Finger Millet (Ragi)</td><td>⚪ Neutral</td><td>~12</td><td>Okay for healthy people</td></tr>
-            <tr><td>Pearl Millet (Bajra)</td><td>⚪ Neutral</td><td>~14</td><td>Okay for healthy people</td></tr>
-            <tr><td>Wheat</td><td>❌ Negative</td><td>63.5</td><td>Avoid completely</td></tr>
-            <tr><td>Paddy Rice</td><td>❌ Negative</td><td>395</td><td>Causes glucose spike</td></tr>
-          </tbody>
-        </table>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px">
+        <div class="ratio-chart">
+          <div class="ratio-row">
+            <span class="ratio-label">Browntop Millet</span>
+            <div class="ratio-bar-wrap"><div class="ratio-bar" style="width:5.54%;background:#be123c"></div></div>
+            <span class="ratio-value">5.54</span>
+          </div>
+          <div class="ratio-row">
+            <span class="ratio-label">Kodo Millet</span>
+            <div class="ratio-bar-wrap"><div class="ratio-bar" style="width:6%;background:#7c3aed"></div></div>
+            <span class="ratio-value">~6</span>
+          </div>
+          <div class="ratio-row">
+            <span class="ratio-label">Little Millet</span>
+            <div class="ratio-bar-wrap"><div class="ratio-bar" style="width:6%;background:#16a34a"></div></div>
+            <span class="ratio-value">~6</span>
+          </div>
+          <div class="ratio-row">
+            <span class="ratio-label">Foxtail Millet</span>
+            <div class="ratio-bar-wrap"><div class="ratio-bar" style="width:7%;background:#d97706"></div></div>
+            <span class="ratio-value">~7</span>
+          </div>
+          <div class="ratio-row">
+            <span class="ratio-label">Barnyard Millet</span>
+            <div class="ratio-bar-wrap"><div class="ratio-bar" style="width:7%;background:#0369a1"></div></div>
+            <span class="ratio-value">~7</span>
+          </div>
+          <div class="ratio-row">
+            <span class="ratio-label">Finger Millet (Ragi)</span>
+            <div class="ratio-bar-wrap"><div class="ratio-bar" style="width:12%;background:#9ca3af"></div></div>
+            <span class="ratio-value">~12</span>
+          </div>
+          <div class="ratio-row">
+            <span class="ratio-label">Pearl Millet (Bajra)</span>
+            <div class="ratio-bar-wrap"><div class="ratio-bar" style="width:14%;background:#9ca3af"></div></div>
+            <span class="ratio-value">~14</span>
+          </div>
+          <div class="ratio-row">
+            <span class="ratio-label">Wheat</span>
+            <div class="ratio-bar-wrap"><div class="ratio-bar" style="width:63.5%;background:#ef4444"></div></div>
+            <span class="ratio-value">63.5</span>
+          </div>
+          <div class="ratio-row">
+            <span class="ratio-label">Paddy Rice</span>
+            <div class="ratio-bar-wrap"><div class="ratio-bar" style="width:100%;background:#dc2626"></div></div>
+            <span class="ratio-value">395 ⚠</span>
+          </div>
+        </div>
+        <p style="font-size:11px;color:var(--muted);margin-top:16px">* Bar widths are scaled proportionally (capped at 100% for Paddy Rice). Positive Siridhanya millets shown in their accent colour; neutral in gray; negative in red.</p>
       </div>
     </div>
 
@@ -588,23 +733,75 @@
       <h4>🍵 Ambali — The Elixir</h4>
       <p>Fermented millet porridge (Ambali / Khameer) is the most potent form of consuming Siridhanya. Soak any positive millet for 6–8 hours, cook as a thin gruel, cover with a clean cotton/khadi cloth, and ferment for 7–8 hours. This fermentation produces probiotics, corrects gut microbiome imbalance, and is the key to natural Vitamin B12 synthesis. For serious chronic conditions, consuming Ambali for all 3 meals for 6–9 weeks accelerates recovery.</p>
     </div>
+
+    <div>
+      <div class="section-header"><h3>Weekly Rotation Schedule</h3><div class="badge">Recommended Pattern</div></div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:20px">Rotate all five Siridhanyas across the week. Each millet cleanses a different organ system — eating all five ensures whole-body healing.</p>
+      <div class="weekly-grid">
+        <div class="day-card" style="--dc:#d97706">
+          <span class="day-name">Monday</span>
+          <span class="day-emoji">🧠</span>
+          <span class="day-millet">Foxtail</span>
+          <div class="day-dot"></div>
+        </div>
+        <div class="day-card" style="--dc:#7c3aed">
+          <span class="day-name">Tuesday</span>
+          <span class="day-emoji">🩸</span>
+          <span class="day-millet">Kodo</span>
+          <div class="day-dot"></div>
+        </div>
+        <div class="day-card" style="--dc:#16a34a">
+          <span class="day-name">Wednesday</span>
+          <span class="day-emoji">🌿</span>
+          <span class="day-millet">Little Millet</span>
+          <div class="day-dot"></div>
+        </div>
+        <div class="day-card" style="--dc:#0369a1">
+          <span class="day-name">Thursday</span>
+          <span class="day-emoji">🫀</span>
+          <span class="day-millet">Barnyard</span>
+          <div class="day-dot"></div>
+        </div>
+        <div class="day-card" style="--dc:#be123c">
+          <span class="day-name">Friday</span>
+          <span class="day-emoji">✨</span>
+          <span class="day-millet">Browntop</span>
+          <div class="day-dot"></div>
+        </div>
+        <div class="day-card" style="--dc:#64748b">
+          <span class="day-name">Saturday</span>
+          <span class="day-emoji">🔄</span>
+          <span class="day-millet">Rotate any 2</span>
+          <div class="day-dot"></div>
+        </div>
+        <div class="day-card" style="--dc:#92400e">
+          <span class="day-name">Sunday</span>
+          <span class="day-emoji">🍵</span>
+          <span class="day-millet">Rest / Ambali</span>
+          <div class="day-dot"></div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
 <!-- ═══════════════ FOXTAIL ═══════════════ -->
 <div id="tab-foxtail" class="tab-content" style="--accent:#d97706;--accent-light:#fef3c7">
   <div class="hero">
-    <div class="millet-tag">● Positive Millet</div>
-    <h2>Foxtail Millet</h2>
-    <p class="scientific">Setaria italica — "The Most Balanced Siridhanya"</p>
-    <p class="summary">Sweet, slightly bitter in taste. Considered the most balanced of the five Siridhanyas with all nutrients in right proportion. Especially effective at cleansing the nervous system and respiratory system. Contains 12% protein and 8% fiber. Base food for lung cancer, Parkinson's disease, asthma and anemia.</p>
-    <div class="hero-meta">
-      <div class="meta-chip"><span class="label">Taste</span><span class="value">Sweet, Bitter</span></div>
-      <div class="meta-chip"><span class="label">Carb:Fiber Ratio</span><span class="value">&lt;10 (Single Digit)</span></div>
-      <div class="meta-chip"><span class="label">Protein</span><span class="value">12%</span></div>
-      <div class="meta-chip"><span class="label">Fiber</span><span class="value">8%</span></div>
-      <div class="meta-chip"><span class="label">Soaking Time</span><span class="value">6+ hours</span></div>
+    <div class="hero-text">
+      <div class="millet-tag">● Positive Millet</div>
+      <h2>Foxtail Millet</h2>
+      <p class="scientific">Setaria italica — "The Most Balanced Siridhanya"</p>
+      <p class="summary">Sweet, slightly bitter in taste. Considered the most balanced of the five Siridhanyas with all nutrients in right proportion. Especially effective at cleansing the nervous system and respiratory system. Contains 12% protein and 8% fiber. Base food for lung cancer, Parkinson's disease, asthma and anemia.</p>
+      <div class="hero-meta">
+        <div class="meta-chip"><span class="label">Taste</span><span class="value">Sweet, Bitter</span></div>
+        <div class="meta-chip"><span class="label">Carb:Fiber Ratio</span><span class="value">&lt;10 (Single Digit)</span></div>
+        <div class="meta-chip"><span class="label">Protein</span><span class="value">12%</span></div>
+        <div class="meta-chip"><span class="label">Fiber</span><span class="value">8%</span></div>
+        <div class="meta-chip"><span class="label">Soaking Time</span><span class="value">6+ hours</span></div>
+      </div>
     </div>
+    <img class="hero-image" src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Foxtail_millet_Setaria_italica.jpg/400px-Foxtail_millet_Setaria_italica.jpg" alt="Foxtail Millet" onerror="this.style.display='none'">
   </div>
 
   <div class="content">
@@ -720,16 +917,19 @@
 <!-- ═══════════════ KODO ═══════════════ -->
 <div id="tab-kodo" class="tab-content" style="--accent:#7c3aed;--accent-light:#ede9fe">
   <div class="hero">
-    <div class="millet-tag">● Positive Millet</div>
-    <h2>Kodo Millet</h2>
-    <p class="scientific">Paspalum scrobiculatum — "The Blood Cleanser"</p>
-    <p class="summary">Sweet, bitter and acrid in taste. Kodo millet specialises in cleansing the bone marrow — the body's blood production centre. Any health issue related to blood components (anemia, blood cancer, low platelets) can be addressed by this millet. Highly nutritious for children and effective for diabetes, kidney problems and joint diseases.</p>
-    <div class="hero-meta">
-      <div class="meta-chip"><span class="label">Taste</span><span class="value">Sweet, Bitter, Acrid</span></div>
-      <div class="meta-chip"><span class="label">Carb:Fiber Ratio</span><span class="value">&lt;10 (Single Digit)</span></div>
-      <div class="meta-chip"><span class="label">Soaking</span><span class="value">6+ hours</span></div>
-      <div class="meta-chip"><span class="label">Water ratio</span><span class="value">1:3 (millet:water)</span></div>
+    <div class="hero-text">
+      <div class="millet-tag">● Positive Millet</div>
+      <h2>Kodo Millet</h2>
+      <p class="scientific">Paspalum scrobiculatum — "The Blood Cleanser"</p>
+      <p class="summary">Sweet, bitter and acrid in taste. Kodo millet specialises in cleansing the bone marrow — the body's blood production centre. Any health issue related to blood components (anemia, blood cancer, low platelets) can be addressed by this millet. Highly nutritious for children and effective for diabetes, kidney problems and joint diseases.</p>
+      <div class="hero-meta">
+        <div class="meta-chip"><span class="label">Taste</span><span class="value">Sweet, Bitter, Acrid</span></div>
+        <div class="meta-chip"><span class="label">Carb:Fiber Ratio</span><span class="value">&lt;10 (Single Digit)</span></div>
+        <div class="meta-chip"><span class="label">Soaking</span><span class="value">6+ hours</span></div>
+        <div class="meta-chip"><span class="label">Water ratio</span><span class="value">1:3 (millet:water)</span></div>
+      </div>
     </div>
+    <img class="hero-image" src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Kodo_millet.jpg/400px-Kodo_millet.jpg" alt="Kodo Millet" onerror="this.style.display='none'">
   </div>
 
   <div class="content">
@@ -840,16 +1040,19 @@
 <!-- ═══════════════ LITTLE MILLET ═══════════════ -->
 <div id="tab-little" class="tab-content" style="--accent:#16a34a;--accent-light:#dcfce7">
   <div class="hero">
-    <div class="millet-tag">● Positive Millet</div>
-    <h2>Little Millet</h2>
-    <p class="scientific">Panicum sumatrense — "The Reproductive Healer"</p>
-    <p class="summary">Sweet in taste. Little millet has the unique ability to cleanse the reproductive organs. All health issues related to the reproductive system in both men and women — PCOD, fibroids, infertility, oligospermia — can be resolved by consumption of this grain. The primary millet recommended for thyroid, PCOD, hormonal imbalances, and cancer of the brain, throat, blood, thyroid and pancreas.</p>
-    <div class="hero-meta">
-      <div class="meta-chip"><span class="label">Taste</span><span class="value">Sweet</span></div>
-      <div class="meta-chip"><span class="label">Carb:Fiber Ratio</span><span class="value">&lt;10 (Single Digit)</span></div>
-      <div class="meta-chip"><span class="label">Water Ratio</span><span class="value">1 : 2 to 2.5</span></div>
-      <div class="meta-chip"><span class="label">Soaking</span><span class="value">6+ hours</span></div>
+    <div class="hero-text">
+      <div class="millet-tag">● Positive Millet</div>
+      <h2>Little Millet</h2>
+      <p class="scientific">Panicum sumatrense — "The Reproductive Healer"</p>
+      <p class="summary">Sweet in taste. Little millet has the unique ability to cleanse the reproductive organs. All health issues related to the reproductive system in both men and women — PCOD, fibroids, infertility, oligospermia — can be resolved by consumption of this grain. The primary millet recommended for thyroid, PCOD, hormonal imbalances, and cancer of the brain, throat, blood, thyroid and pancreas.</p>
+      <div class="hero-meta">
+        <div class="meta-chip"><span class="label">Taste</span><span class="value">Sweet</span></div>
+        <div class="meta-chip"><span class="label">Carb:Fiber Ratio</span><span class="value">&lt;10 (Single Digit)</span></div>
+        <div class="meta-chip"><span class="label">Water Ratio</span><span class="value">1 : 2 to 2.5</span></div>
+        <div class="meta-chip"><span class="label">Soaking</span><span class="value">6+ hours</span></div>
+      </div>
     </div>
+    <img class="hero-image" src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Little_Millet.jpg/400px-Little_Millet.jpg" alt="Little Millet" onerror="this.style.display='none'">
   </div>
 
   <div class="content">
@@ -956,16 +1159,19 @@
 <!-- ═══════════════ BARNYARD ═══════════════ -->
 <div id="tab-barnyard" class="tab-content" style="--accent:#0369a1;--accent-light:#e0f2fe">
   <div class="hero">
-    <div class="millet-tag">● Positive Millet</div>
-    <h2>Barnyard Millet</h2>
-    <p class="scientific">Echinochloa frumentacea — "The Liver Cleanser"</p>
-    <p class="summary">Sweet in taste. Barnyard millet has incredible capacity to cleanse the liver — so all liver-related diseases can be cured by this millet. It also cleanses all soft organs: kidneys, urinary bladder, and gallbladder. Rich in iron, it is traditionally used during religious fasting in North India and given to pregnant and post-natal women in Uttarakhand and Nepal for iron replenishment and breast milk production.</p>
-    <div class="hero-meta">
-      <div class="meta-chip"><span class="label">Taste</span><span class="value">Sweet</span></div>
-      <div class="meta-chip"><span class="label">Carb:Fiber Ratio</span><span class="value">&lt;10 (Single Digit)</span></div>
-      <div class="meta-chip"><span class="label">Water Ratio</span><span class="value">1 : 2 to 2.5</span></div>
-      <div class="meta-chip"><span class="label">Soaking</span><span class="value">6+ hours</span></div>
+    <div class="hero-text">
+      <div class="millet-tag">● Positive Millet</div>
+      <h2>Barnyard Millet</h2>
+      <p class="scientific">Echinochloa frumentacea — "The Liver Cleanser"</p>
+      <p class="summary">Sweet in taste. Barnyard millet has incredible capacity to cleanse the liver — so all liver-related diseases can be cured by this millet. It also cleanses all soft organs: kidneys, urinary bladder, and gallbladder. Rich in iron, it is traditionally used during religious fasting in North India and given to pregnant and post-natal women in Uttarakhand and Nepal for iron replenishment and breast milk production.</p>
+      <div class="hero-meta">
+        <div class="meta-chip"><span class="label">Taste</span><span class="value">Sweet</span></div>
+        <div class="meta-chip"><span class="label">Carb:Fiber Ratio</span><span class="value">&lt;10 (Single Digit)</span></div>
+        <div class="meta-chip"><span class="label">Water Ratio</span><span class="value">1 : 2 to 2.5</span></div>
+        <div class="meta-chip"><span class="label">Soaking</span><span class="value">6+ hours</span></div>
+      </div>
     </div>
+    <img class="hero-image" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Echinochloa_frumentacea_W_IMG_2775.jpg/400px-Echinochloa_frumentacea_W_IMG_2775.jpg" alt="Barnyard Millet" onerror="this.style.display='none'">
   </div>
 
   <div class="content">
@@ -1074,17 +1280,20 @@
 <!-- ═══════════════ BROWNTOP ═══════════════ -->
 <div id="tab-browntop" class="tab-content" style="--accent:#be123c;--accent-light:#ffe4e6">
   <div class="hero">
-    <div class="millet-tag">● Positive Millet</div>
-    <h2>Browntop Millet</h2>
-    <p class="scientific">Brachiaria ramosa — "The Universal Detoxifier"</p>
-    <p class="summary">One of the most traditional crops. Browntop millet can detoxify each and every part of the human body from head to toe. It has the lowest Carb:Fiber ratio of all five Siridhanyas (5.54), making it the most effective. The consumption of this grain cures all ailments related to the alimentary canal — constipation, gastric ulcers, piles, fissures. Most remarkably, it is the ONE AND ONLY grain that can provide relief from ALL types of cancers.</p>
-    <div class="hero-meta">
-      <div class="meta-chip"><span class="label">Carb:Fiber Ratio</span><span class="value">5.54 (Lowest)</span></div>
-      <div class="meta-chip"><span class="label">Carbohydrate</span><span class="value">69.37g / 100g</span></div>
-      <div class="meta-chip"><span class="label">Fiber</span><span class="value">12.5g / 100g</span></div>
-      <div class="meta-chip"><span class="label">Soaking</span><span class="value">6–8 hours mandatory</span></div>
-      <div class="meta-chip"><span class="label">Water Ratio</span><span class="value">1 : 2 to 2.5</span></div>
+    <div class="hero-text">
+      <div class="millet-tag">● Positive Millet</div>
+      <h2>Browntop Millet</h2>
+      <p class="scientific">Brachiaria ramosa — "The Universal Detoxifier"</p>
+      <p class="summary">One of the most traditional crops. Browntop millet can detoxify each and every part of the human body from head to toe. It has the lowest Carb:Fiber ratio of all five Siridhanyas (5.54), making it the most effective. The consumption of this grain cures all ailments related to the alimentary canal — constipation, gastric ulcers, piles, fissures. Most remarkably, it is the ONE AND ONLY grain that can provide relief from ALL types of cancers.</p>
+      <div class="hero-meta">
+        <div class="meta-chip"><span class="label">Carb:Fiber Ratio</span><span class="value">5.54 (Lowest)</span></div>
+        <div class="meta-chip"><span class="label">Carbohydrate</span><span class="value">69.37g / 100g</span></div>
+        <div class="meta-chip"><span class="label">Fiber</span><span class="value">12.5g / 100g</span></div>
+        <div class="meta-chip"><span class="label">Soaking</span><span class="value">6–8 hours mandatory</span></div>
+        <div class="meta-chip"><span class="label">Water Ratio</span><span class="value">1 : 2 to 2.5</span></div>
+      </div>
     </div>
+    <img class="hero-image" src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Brachiaria_ramosa_W_IMG_0573.jpg/400px-Brachiaria_ramosa_W_IMG_0573.jpg" alt="Browntop Millet" onerror="this.style.display='none'">
   </div>
 
   <div class="content">
@@ -1202,8 +1411,11 @@
 function showTab(name) {
   document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('#sidebar nav button').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('#mobile-nav button').forEach(b => b.classList.remove('active'));
   document.getElementById('tab-' + name).classList.add('active');
   document.getElementById('btn-' + name).classList.add('active');
+  var mobBtn = document.getElementById('mob-btn-' + name);
+  if (mobBtn) mobBtn.classList.add('active');
   document.getElementById('main').scrollTop = 0;
 }
 
